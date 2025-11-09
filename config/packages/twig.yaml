@@ -1,0 +1,11 @@
+twig:
+    file_name_pattern: '*.twig'
+    form_themes: ['bootstrap_5_layout.html.twig']
+    globals:
+        site_name: '%env(SITE_NAME)%'
+        admin_email: '%env(ADMIN_EMAIL)%'
+        admin_email_sender: '%env(ADMIN_EMAIL_SENDER)%'
+
+when@test:
+    twig:
+        strict_variables: true

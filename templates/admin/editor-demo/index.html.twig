@@ -1,0 +1,131 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Démonstrations de l'Éditeur Personnalisé{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-pencil-square me-2"></i>Démonstrations de l'Éditeur Personnalisé
+                </h1>
+            </div>
+
+            <div class="row">
+                <!-- Exemple basique -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-file-text text-primary me-2"></i>Exemple Basique
+                            </h5>
+                            <p class="card-text">
+                                Démonstration simple de l'éditeur avec intégration du gestionnaire de médias.
+                                Idéal pour débuter avec l'éditeur personnalisé.
+                            </p>
+                            <ul class="list-unstyled text-muted small">
+                                <li><i class="bi bi-check text-success me-1"></i> Barre d'outils complète</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Intégration médias</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Hauteur personnalisée</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('admin_editor_demo_basic') }}" class="btn btn-primary btn-sm">
+                                <i class="bi bi-arrow-right me-1"></i>Voir l'exemple
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exemple avancé -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-gear text-success me-2"></i>Exemple Avancé
+                            </h5>
+                            <p class="card-text">
+                                Utilisation avancée avec sauvegarde automatique, multiples éditeurs
+                                et configuration personnalisée pour différents cas d'usage.
+                            </p>
+                            <ul class="list-unstyled text-muted small">
+                                <li><i class="bi bi-check text-success me-1"></i> Sauvegarde automatique</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Multiples éditeurs</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Configurations variées</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('admin_editor_demo_advanced') }}" class="btn btn-success btn-sm">
+                                <i class="bi bi-arrow-right me-1"></i>Voir l'exemple
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Exemple programmatique -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="bi bi-code text-warning me-2"></i>Intégration JavaScript
+                            </h5>
+                            <p class="card-text">
+                                Contrôle programmatique de l'éditeur via JavaScript.
+                                Parfait pour les intégrations avancées et les applications SPA.
+                            </p>
+                            <ul class="list-unstyled text-muted small">
+                                <li><i class="bi bi-check text-success me-1"></i> API JavaScript</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Contrôle programmatique</li>
+                                <li><i class="bi bi-check text-success me-1"></i> Événements personnalisés</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ path('admin_editor_demo_programmatic') }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-arrow-right me-1"></i>Voir l'exemple
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guide d'utilisation -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="bi bi-book text-info me-2"></i>Guide d'utilisation rapide
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Dans vos formulaires Symfony :</h6>
+                                    <pre class="bg-light p-3 rounded small"><code>use App\Form\Type\MediaTextareaType;
+
+$builder->add('content', MediaTextareaType::class, [
+    'label' => 'Contenu',
+    'enable_media' => true,
+    'enable_editor' => true,
+    'editor_height' => 400
+]);</code></pre>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Initialisation JavaScript manuelle :</h6>
+                                    <pre class="bg-light p-3 rounded small"><code>$('#mon-textarea').customEditor({
+    height: 300,
+    enableMedia: true,
+    enableAutoSave: true,
+    autoSaveInterval: 30000
+});</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,344 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Éditeur Personnalisé - Exemple Avancé{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-gear me-2"></i>Exemple Avancé
+                </h1>
+                <a href="{{ path('admin_editor_demo_index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Retour aux exemples
+                </a>
+            </div>
+
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Fonctionnalités avancées activées :</strong>
+                Sauvegarde automatique toutes les 10-15 secondes, configurations multiples, 
+                et intégration AJAX pour la sauvegarde en temps réel.
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Document avec multiples éditeurs</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(form) }}
+                                <div class="mb-4">
+                                    {{ form_row(form.title) }}
+                                </div>
+
+                                <!-- Description courte -->
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label class="form-label">{{ form.description.vars.label }}</label>
+                                        <small class="text-muted">Sans médias, sauvegarde auto 10s</small>
+                                    </div>
+                                    {{ form_widget(form.description) }}
+                                </div>
+
+                                <!-- Contenu principal -->
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label class="form-label">{{ form.content.vars.label }}</label>
+                                        <small class="text-muted">Avec médias, sauvegarde auto 15s</small>
+                                    </div>
+                                    {{ form_widget(form.content) }}
+                                </div>
+
+                                <!-- Notes internes -->
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <label class="form-label">{{ form.notes.vars.label }}</label>
+                                        <small class="text-muted">Compact, toutes fonctionnalités</small>
+                                    </div>
+                                    {{ form_widget(form.notes) }}
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    {{ form_row(form.submit) }}
+                                    
+                                    <div>
+                                        <button type="button" class="btn btn-outline-info me-2" onclick="fillDemoContent()">
+                                            <i class="bi bi-magic me-1"></i>Remplir avec du contenu de démo
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" onclick="toggleAutoSaveStatus()">
+                                            <i class="bi bi-clock me-1"></i>Statut sauvegarde auto
+                                        </button>
+                                    </div>
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone de statut -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Statut de sauvegarde automatique</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="autosave-status">
+                                <div class="d-flex align-items-center">
+                                    <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
+                                        <span class="visually-hidden">Chargement...</span>
+                                    </div>
+                                    Initialisation de la sauvegarde automatique...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Statistiques en temps réel</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="editor-stats">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="h5 mb-0" id="total-words">0</div>
+                                        <small class="text-muted">Mots</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h5 mb-0" id="total-chars">0</div>
+                                        <small class="text-muted">Caractères</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h5 mb-0" id="total-saves">0</div>
+                                        <small class="text-muted">Sauvegardes</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let autoSaveCount = 0;
+let autoSaveEnabled = true;
+
+$(document).ready(function() {
+    // Configurer la sauvegarde automatique pour chaque éditeur
+    $('textarea.custom-editor').each(function() {
+        const $textarea = $(this);
+        const editor = $textarea.data('customEditor');
+        
+        if (editor && $textarea.data('enable-auto-save')) {
+            // Configurer les options de sauvegarde automatique
+            editor.options.enableAutoSave = true;
+            editor.options.autoSaveInterval = parseInt($textarea.data('auto-save-interval')) || 30000;
+            editor.options.onAutoSave = function(content) {
+                if (autoSaveEnabled) {
+                    saveContentAjax({
+                        field: $textarea.attr('name'),
+                        content: content
+                    });
+                }
+            };
+            
+            // Démarrer la sauvegarde automatique
+            editor.setupAutoSave();
+            
+            // Mettre à jour les statistiques en temps réel
+            editor.options.onChange = function(content) {
+                updateStatistics();
+            };
+        }
+    });
+    
+    // Initialiser le statut
+    updateAutoSaveStatus();
+    updateStatistics();
+});
+
+function saveContentAjax(data) {
+    $.ajax({
+        url: '{{ path('admin_editor_demo_ajax_save') }}',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            if (response.success) {
+                autoSaveCount++;
+                updateAutoSaveStatus('success', response.message);
+                updateStatistics();
+            }
+        },
+        error: function() {
+            updateAutoSaveStatus('error', 'Erreur lors de la sauvegarde automatique');
+        }
+    });
+}
+
+function updateAutoSaveStatus(type = 'info', message = null) {
+    const statusDiv = $('#autosave-status');
+    let html = '';
+    
+    switch(type) {
+        case 'success':
+            html = `
+                <div class="d-flex align-items-center text-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    ${message || 'Sauvegarde réussie'}
+                    <small class="ms-auto text-muted">${new Date().toLocaleTimeString()}</small>
+                </div>
+            `;
+            break;
+        case 'error':
+            html = `
+                <div class="d-flex align-items-center text-danger">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    ${message || 'Erreur de sauvegarde'}
+                </div>
+            `;
+            break;
+        default:
+            html = `
+                <div class="d-flex align-items-center text-info">
+                    <i class="bi bi-clock me-2"></i>
+                    Sauvegarde automatique ${autoSaveEnabled ? 'activée' : 'désactivée'}
+                    <small class="ms-auto text-muted">Sauvegardes: ${autoSaveCount}</small>
+                </div>
+            `;
+    }
+    
+    statusDiv.html(html);
+}
+
+function updateStatistics() {
+    let totalWords = 0;
+    let totalChars = 0;
+    
+    $('textarea.custom-editor').each(function() {
+        const editor = $(this).data('customEditor');
+        if (editor) {
+            const text = editor.contentElement.text();
+            totalWords += text.trim() ? text.trim().split(/\s+/).length : 0;
+            totalChars += text.length;
+        }
+    });
+    
+    $('#total-words').text(totalWords);
+    $('#total-chars').text(totalChars);
+    $('#total-saves').text(autoSaveCount);
+}
+
+function toggleAutoSaveStatus() {
+    autoSaveEnabled = !autoSaveEnabled;
+    updateAutoSaveStatus();
+    
+    const action = autoSaveEnabled ? 'activée' : 'désactivée';
+    
+    const toast = $(`
+        <div class="toast align-items-center text-white ${autoSaveEnabled ? 'bg-success' : 'bg-warning'} border-0 position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999;" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-${autoSaveEnabled ? 'check' : 'pause'}-circle me-2"></i>
+                    Sauvegarde automatique ${action}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `);
+    
+    $('body').append(toast);
+    
+    if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+        new bootstrap.Toast(toast[0]).show();
+    } else {
+        toast.show();
+        setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
+    }
+}
+
+function fillDemoContent() {
+    const demoContents = {
+        description: `
+            <p>Ceci est une <strong>description courte</strong> qui démontre les capacités de l'éditeur 
+            sans fonctionnalité de média. Elle dispose néanmoins de toutes les autres fonctions de formatage.</p>
+        `,
+        content: `
+            <h1>Document principal</h1>
+            <p>Ce document illustre toutes les fonctionnalités avancées de l'éditeur personnalisé 
+            avec intégration complète du gestionnaire de médias.</p>
+            
+            <h2>Fonctionnalités disponibles</h2>
+            <ul>
+                <li><strong>Formatage riche</strong> : gras, italique, souligné</li>
+                <li><em>Titres hiérarchiques</em> : H1, H2, H3</li>
+                <li>Listes : à puces et numérotées</li>
+                <li>Intégration médias complète</li>
+            </ul>
+            
+            <blockquote>
+                "La sauvegarde automatique garantit qu'aucune modification ne sera perdue,
+                même en cas de problème technique."
+            </blockquote>
+            
+            <p>Utilisez la barre d'outils pour <code>insérer des médias</code> directement 
+            depuis le gestionnaire intégré.</p>
+        `,
+        notes: `
+            <h3>Notes internes</h3>
+            <p>Ces notes sont destinées à un usage interne et disposent 
+            également de toutes les fonctionnalités de l'éditeur.</p>
+            
+            <ol>
+                <li>Vérifier la cohérence du contenu</li>
+                <li>Valider les médias insérés</li>
+                <li>Contrôler la mise en forme</li>
+            </ol>
+        `
+    };
+    
+    Object.keys(demoContents).forEach(function(fieldName) {
+        const $field = $(`[name*="${fieldName}"]`);
+        const editor = $field.data('customEditor');
+        if (editor) {
+            editor.setContent(demoContents[fieldName]);
+        }
+    });
+    
+    updateStatistics();
+    
+    // Notification
+    const toast = $(`
+        <div class="toast align-items-center text-white bg-success border-0 position-fixed" 
+             style="top: 20px; right: 20px; z-index: 9999;" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-magic me-2"></i>Contenu de démonstration inséré dans tous les éditeurs !
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `);
+    
+    $('body').append(toast);
+    
+    if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+        new bootstrap.Toast(toast[0]).show();
+    } else {
+        toast.show();
+        setTimeout(() => toast.fadeOut(() => toast.remove()), 4000);
+    }
+}
+</script>
+{% endblock %}

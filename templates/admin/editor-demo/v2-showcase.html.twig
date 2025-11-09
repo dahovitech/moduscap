@@ -1,0 +1,476 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Custom Editor v2.0 - Démonstration avec Redimensionnement d'Images{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-magic me-2"></i>Custom Editor v2.0
+                    </h1>
+                    <p class="text-muted mb-0">Démonstration avec redimensionnement d'images et drag & drop</p>
+                </div>
+                <div>
+                    <span class="badge bg-success fs-6">v2.0</span>
+                    <a href="{{ path('admin_editor_demo_index') }}" class="btn btn-outline-secondary ms-2">
+                        <i class="bi bi-arrow-left me-1"></i>Retour
+                    </a>
+                </div>
+            </div>
+
+            <!-- Nouvelles fonctionnalités -->
+            <div class="alert alert-primary mb-4">
+                <h5><i class="bi bi-stars me-2"></i>✨ Nouvelles Fonctionnalités v2.0</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="mb-0">
+                            <li><strong>🔧 Redimensionnement d'images</strong> - Cliquez et glissez les poignées</li>
+                            <li><strong>🎯 Drag & Drop</strong> - Déposez vos images directement</li>
+                            <li><strong>🛠 Interface modernisée</strong> - Modals Bootstrap améliorer</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="mb-0">
+                            <li><strong>🔔 Notifications toast</strong> - Feedback utilisateur en temps réel</li>
+                            <li><strong>⌨️ Raccourcis clavier</strong> - Navigation rapide</li>
+                            <li><strong>⚡ Performance optimisée</strong> - Debouncing et APIs modernes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions d'utilisation -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-mouse text-primary" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Redimensionnement</h6>
+                            <small class="text-muted">Cliquez sur une image pour voir les poignées de redimensionnement</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-upload text-success" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Drag & Drop</h6>
+                            <small class="text-muted">Glissez-déposez des images depuis votre ordinateur</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="bi bi-keyboard text-warning" style="font-size: 2rem;"></i>
+                            <h6 class="mt-2">Raccourcis</h6>
+                            <small class="text-muted">Ctrl+S, Ctrl+Shift+F, Ctrl+Shift+U, Échap</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire de test -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>Test de l'Éditeur v2.0
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Contrôles de configuration -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Largeur max images</label>
+                            <select id="max-width-select" class="form-select form-select-sm">
+                                <option value="400">400px</option>
+                                <option value="600">600px</option>
+                                <option value="800" selected>800px</option>
+                                <option value="1200">1200px</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Largeur min images</label>
+                            <select id="min-width-select" class="form-select form-select-sm">
+                                <option value="50" selected>50px</option>
+                                <option value="100">100px</option>
+                                <option value="200">200px</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Auto-save</label>
+                            <select id="autosave-interval" class="form-select form-select-sm">
+                                <option value="10000">10 secondes</option>
+                                <option value="30000" selected>30 secondes</option>
+                                <option value="60000">1 minute</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="button" class="btn btn-primary btn-sm w-100" id="reload-editor">
+                                <i class="bi bi-arrow-clockwise me-1"></i>Appliquer
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Zone d'édition -->
+                    <div class="mb-3">
+                        <label for="demo-editor" class="form-label">
+                            <strong>Zone d'édition avec toutes les fonctionnalités v2.0</strong>
+                        </label>
+                        <textarea id="demo-editor" class="form-control" style="height: 500px;">
+<h2>🎨 Bienvenue dans Custom Editor v2.0</h2>
+<p>Cette nouvelle version apporte des améliorations majeures pour la gestion des images :</p>
+
+<h3>🔧 Redimensionnement d'Images Interactif</h3>
+<p>Cliquez sur l'image ci-dessous pour faire apparaître les poignées de redimensionnement :</p>
+<img src="https://picsum.photos/600/400?random=1" alt="Image de démonstration" style="max-width: 600px; width: 100%; height: auto; margin: 10px 0;" data-resizable="true">
+<p><em>✨ Glissez les poignées bleues pour redimensionner tout en conservant les proportions !</em></p>
+
+<h3>🎯 Drag & Drop d'Images</h3>
+<p>Faites glisser une image depuis votre ordinateur directement dans cette zone d'édition. Les formats supportés sont : JPG, PNG, GIF, WebP.</p>
+
+<div style="border: 2px dashed #dee2e6; padding: 20px; text-align: center; margin: 15px 0; background: #f8f9fa;">
+    <i class="bi bi-cloud-upload" style="font-size: 2rem; color: #6c757d;"></i><br>
+    <strong>Zone de dépôt</strong><br>
+    <small class="text-muted">Glissez-déposez vos images ici</small>
+</div>
+
+<h3>✨ Autres Améliorations v2.0</h3>
+<ul>
+  <li><strong>Double-clic</strong> sur une image pour éditer ses propriétés (URL, alt, largeur)</li>
+  <li><strong>Modals Bootstrap</strong> au lieu des anciens prompts()</li>
+  <li><strong>Prévisualisation d'images</strong> avant insertion</li>
+  <li><strong>Validation d'URLs</strong> automatique</li>
+  <li><strong>Notifications toast</strong> pour le feedback utilisateur</li>
+  <li><strong>Raccourcis clavier</strong> pour une navigation rapide</li>
+</ul>
+
+<h3>⌨️ Raccourcis Clavier</h3>
+<p>Utilisez ces raccourcis pour une navigation rapide :</p>
+<ul>
+  <li><kbd>Ctrl+S</kbd> - Sauvegarde manuelle</li>
+  <li><kbd>Ctrl+Shift+F</kbd> - Basculer en plein écran</li>
+  <li><kbd>Ctrl+Shift+U</kbd> - Basculer le mode source</li>
+  <li><kbd>Échap</kbd> - Désélectionner l'image active</li>
+</ul>
+
+<blockquote>
+💡 <strong>Conseil Pro :</strong> Double-cliquez sur n'importe quelle image pour accéder à un panneau de propriétés complet avec options de suppression et de redimensionnement précis !
+</blockquote>
+
+<h3>🚀 Testez dès maintenant !</h3>
+<p>Insérez une nouvelle image en cliquant sur le bouton <strong>Image</strong> dans la barre d'outils, ou faites simplement glisser une image depuis votre ordinateur !</p>
+                        </textarea>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="btn-toolbar justify-content-between">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success" id="get-content">
+                                <i class="bi bi-eye me-1"></i>Voir le Contenu
+                            </button>
+                            <button type="button" class="btn btn-warning" id="insert-sample">
+                                <i class="bi bi-plus-lg me-1"></i>Insérer un Exemple
+                            </button>
+                            <button type="button" class="btn btn-info" id="test-features">
+                                <i class="bi bi-magic me-1"></i>Test des Fonctionnalités
+                            </button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary" id="clear-content">
+                                <i class="bi bi-trash me-1"></i>Effacer
+                            </button>
+                            <button type="button" class="btn btn-outline-primary" id="save-content">
+                                <i class="bi bi-download me-1"></i>Sauvegarder
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistiques en temps réel -->
+            <div class="row mt-4">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary mb-1">Mots</h5>
+                            <h3 id="word-count" class="text-primary">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-success mb-1">Caractères</h5>
+                            <h3 id="char-count" class="text-success">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-warning mb-1">Images</h5>
+                            <h3 id="image-count" class="text-warning">0</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <h5 class="card-title text-info mb-1">Sauvegardes</h5>
+                            <h3 id="save-count" class="text-info">0</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Journal des événements -->
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="bi bi-journal-text me-2"></i>Journal des Événements v2.0
+                    </h6>
+                    <button class="btn btn-sm btn-outline-secondary" id="clear-log">
+                        <i class="bi bi-trash me-1"></i>Effacer
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="event-log" style="height: 200px; overflow-y: auto; background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9em;">
+                        <div class="text-muted">
+                            <i class="bi bi-info-circle me-2"></i>Les événements de l'éditeur v2.0 apparaîtront ici...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let editor = null;
+    let saveCount = 0;
+    
+    // Fonction de logging améliorée
+    function logEvent(message, type = 'info', icon = 'info-circle') {
+        const log = document.getElementById('event-log');
+        const timestamp = new Date().toLocaleTimeString();
+        const colorClass = {
+            'info': 'text-info',
+            'success': 'text-success', 
+            'warning': 'text-warning',
+            'danger': 'text-danger',
+            'primary': 'text-primary'
+        }[type] || 'text-info';
+        
+        log.innerHTML += `<div class="${colorClass}">
+            <i class="bi bi-${icon} me-2"></i>[${timestamp}] ${message}
+        </div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+    
+    // Mise à jour des statistiques
+    function updateStats() {
+        if (!editor) return;
+        
+        const content = editor.getContent();
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = content;
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        
+        const wordCount = textContent.trim() ? textContent.trim().split(/\s+/).length : 0;
+        const charCount = textContent.length;
+        const imageCount = tempDiv.querySelectorAll('img').length;
+        
+        document.getElementById('word-count').textContent = wordCount;
+        document.getElementById('char-count').textContent = charCount;
+        document.getElementById('image-count').textContent = imageCount;
+    }
+    
+    // Initialisation de l'éditeur
+    function initializeEditor() {
+        const maxWidth = parseInt(document.getElementById('max-width-select').value);
+        const minWidth = parseInt(document.getElementById('min-width-select').value);
+        const autoSaveInterval = parseInt(document.getElementById('autosave-interval').value);
+        
+        // Détruire l'ancien éditeur
+        if (editor) {
+            editor.destroy();
+            logEvent('Ancien éditeur détruit', 'warning', 'x-circle');
+        }
+        
+        // Initialiser le nouvel éditeur v2.0
+        $('#demo-editor').customEditor({
+            height: 500,
+            enableImageResize: true,        // ✨ NOUVEAU
+            enableDragDrop: true,           // ✨ NOUVEAU
+            maxImageWidth: maxWidth,        // ✨ NOUVEAU
+            minImageWidth: minWidth,        // ✨ NOUVEAU
+            enableAutoSave: true,
+            autoSaveInterval: autoSaveInterval,
+            enableFullscreen: true,
+            enableWordCount: true,
+            enableSourceMode: true,
+            toolbar: [
+                'bold', 'italic', 'underline', 'strikethrough', '|',
+                'h1', 'h2', 'h3', 'paragraph', '|',
+                'link', 'unlink', '|',
+                'image', 'media', '|',
+                'unorderedList', 'orderedList', '|',
+                'blockquote', 'code', '|',
+                'removeFormat', 'undo', 'redo', '|',
+                'fullscreen', 'source', 'wordcount'
+            ],
+            onChange: function(content) {
+                updateStats();
+                logEvent(`Contenu modifié (${content.length} caractères)`, 'info', 'pencil');
+            },
+            onAutoSave: function(content) {
+                saveCount++;
+                document.getElementById('save-count').textContent = saveCount;
+                logEvent(`💾 Sauvegarde automatique #${saveCount}`, 'success', 'check-circle');
+                
+                // Simulation sauvegarde serveur
+                setTimeout(() => {
+                    logEvent('✅ Confirmé côté serveur', 'success', 'cloud-check');
+                }, 500);
+            },
+            onImageResize: function(action, url, dimensions) {  // ✨ NOUVEAU CALLBACK
+                switch(action) {
+                    case 'inserted':
+                        logEvent(`🖼️ Image insérée: ${url.substring(0, 40)}...`, 'primary', 'image');
+                        break;
+                    case 'resized':
+                        logEvent(`📏 Redimensionnée: ${Math.round(dimensions.width)}×${Math.round(dimensions.height)}px`, 'warning', 'arrows-angle-expand');
+                        break;
+                    case 'dropped':
+                        logEvent('📥 Image déposée par drag & drop', 'success', 'upload');
+                        break;
+                }
+                updateStats();
+            }
+        });
+        
+        editor = $('#demo-editor').data('customEditor');
+        updateStats();
+        logEvent('🚀 Custom Editor v2.0 initialisé avec succès', 'success', 'rocket');
+        logEvent(`⚙️ Config: Max=${maxWidth}px, Min=${minWidth}px, AutoSave=${autoSaveInterval/1000}s`, 'info', 'gear');
+    }
+    
+    // Initialisation au chargement
+    initializeEditor();
+    
+    // Gestionnaires d'événements
+    document.getElementById('reload-editor').addEventListener('click', function() {
+        logEvent('🔄 Rechargement de l\'éditeur avec nouvelle config...', 'warning', 'arrow-clockwise');
+        initializeEditor();
+    });
+    
+    document.getElementById('get-content').addEventListener('click', function() {
+        if (editor) {
+            const content = editor.getContent();
+            logEvent(`📄 Contenu récupéré (${content.length} caractères)`, 'info', 'eye');
+            
+            // Modal Bootstrap pour afficher le contenu
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Contenu HTML Généré</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <pre style="max-height: 500px; overflow-y: auto; background: #f8f9fa; padding: 15px; border-radius: 8px;"><code>${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</code></pre>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-primary" onclick="navigator.clipboard.writeText(\`${content.replace(/`/g, '\\`')}\`)">Copier</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+            modal.addEventListener('hidden.bs.modal', () => modal.remove());
+        }
+    });
+    
+    document.getElementById('insert-sample').addEventListener('click', function() {
+        if (editor) {
+            const sampleImages = [
+                'https://picsum.photos/500/300?random=' + Math.floor(Math.random() * 1000),
+                'https://picsum.photos/400/250?random=' + Math.floor(Math.random() * 1000),
+                'https://picsum.photos/600/350?random=' + Math.floor(Math.random() * 1000)
+            ];
+            const randomImage = sampleImages[Math.floor(Math.random() * sampleImages.length)];
+            
+            const sampleContent = `
+<h3>🎨 Exemple inséré à ${new Date().toLocaleTimeString()}</h3>
+<p>Voici une image de test que vous pouvez redimensionner :</p>
+<img src="${randomImage}" alt="Image d'exemple" style="max-width: 400px; width: 100%; height: auto; margin: 10px 0;" data-resizable="true">
+<p><em>✨ Cliquez sur l'image pour voir les poignées de redimensionnement !</em></p>
+<p><strong>Double-cliquez</strong> pour éditer ses propriétés.</p>
+            `;
+            editor.insertHTML(sampleContent);
+            logEvent('📝 Exemple de contenu avec image inséré', 'primary', 'plus-circle');
+        }
+    });
+    
+    document.getElementById('test-features').addEventListener('click', function() {
+        if (editor) {
+            logEvent('🧪 Test des fonctionnalités v2.0...', 'info', 'flask');
+            
+            // Test des notifications
+            editor.showSuccess('✅ Test notification de succès !');
+            setTimeout(() => {
+                editor.showError('❌ Test notification d\'erreur !');
+            }, 1000);
+            setTimeout(() => {
+                editor.showNotification('ℹ️ Test notification d\'information', 'info');
+            }, 2000);
+            
+            logEvent('🔔 Notifications de test lancées', 'warning', 'bell');
+        }
+    });
+    
+    document.getElementById('clear-content').addEventListener('click', function() {
+        if (editor && confirm('Êtes-vous sûr de vouloir effacer tout le contenu ?')) {
+            editor.setContent('<p>Contenu effacé...</p>');
+            logEvent('🗑️ Contenu effacé par l\'utilisateur', 'danger', 'trash');
+        }
+    });
+    
+    document.getElementById('save-content').addEventListener('click', function() {
+        if (editor) {
+            // Simulation d'une sauvegarde manuelle
+            const content = editor.getContent();
+            logEvent('💾 Sauvegarde manuelle déclenchée', 'success', 'download');
+            
+            // Simuler un appel AJAX
+            setTimeout(() => {
+                saveCount++;
+                document.getElementById('save-count').textContent = saveCount;
+                logEvent('✅ Sauvegarde manuelle réussie', 'success', 'check-circle-fill');
+            }, 800);
+        }
+    });
+    
+    document.getElementById('clear-log').addEventListener('click', function() {
+        document.getElementById('event-log').innerHTML = '<div class="text-muted"><i class="bi bi-info-circle me-2"></i>Journal effacé...</div>';
+    });
+    
+    // Message de bienvenue
+    setTimeout(() => {
+        logEvent('🎉 Bienvenue dans Custom Editor v2.0 !', 'primary', 'star');
+        logEvent('💡 Essayez de cliquer sur une image puis de la redimensionner', 'info', 'lightbulb');
+    }, 1000);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'user.profile.title'|trans }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">{{ 'user.profile.heading'|trans }}</h1>
+                <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> {{ 'action.back_to_dashboard'|trans }}
+                </a>
+            </div>
+
+            {# Flash Messages #}
+            {% for flash_error in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ flash_error|trans }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'action.close'|trans }}"></button>
+                </div>
+            {% endfor %}
+
+            {% for flash_success in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ flash_success|trans }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="{{ 'action.close'|trans }}"></button>
+                </div>
+            {% endfor %}
+
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">{{ 'user.profile.form_title'|trans }}</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(form.firstName) }}
+                                    {{ form_widget(form.firstName) }}
+                                    {{ form_errors(form.firstName) }}
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    {{ form_label(form.lastName) }}
+                                    {{ form_widget(form.lastName) }}
+                                    {{ form_errors(form.lastName) }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email) }}
+                                {{ form_errors(form.email) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <h6>{{ 'user.form.password.change_title'|trans }}</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.plainPassword.first) }}
+                                        {{ form_widget(form.plainPassword.first) }}
+                                        {{ form_errors(form.plainPassword.first) }}
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        {{ form_label(form.plainPassword.second) }}
+                                        {{ form_widget(form.plainPassword.second) }}
+                                        {{ form_errors(form.plainPassword.second) }}
+                                    </div>
+                                </div>
+                                <small class="form-text text-muted">
+                                    {{ 'user.profile.password.help'|trans }}
+                                </small>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary">
+                                    <i class="bi bi-x"></i> {{ 'action.cancel'|trans }}
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-floppy"></i> {{ 'action.save_profile'|trans }}
+                                </button>
+                            </div>
+
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">{{ 'user.profile.account_info.title'|trans }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>{{ 'user.profile.roles'|trans }} :</strong><br>
+                                        {% for role in user.roles %}
+                                            <span class="badge {{ include('admin/user/_role_badge.html.twig', {role: role}) }} me-1">
+                                                {{ ('user.roles.' ~ role|lower)|trans }}
+                                            </span>
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>{{ 'user.profile.status'|trans }} :</strong><br>
+                                        <span class="badge {{ user.isActive ? 'bg-success' : 'bg-secondary' }}">
+                                            {{ user.isActive ? 'user.status.active'|trans : 'user.status.inactive'|trans }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>{{ 'user.profile.member_since'|trans }} :</strong><br>
+                                        {{ user.createdAt|format_datetime('medium', 'none', locale=app.request.locale) }}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if user.lastLoginAt %}
+                                        <p><strong>{{ 'user.profile.last_login'|trans }} :</strong><br>
+                                            {{ user.lastLoginAt|format_datetime('medium', 'short', locale=app.request.locale) }}
+                                        </p>
+                                    {% else %}
+                                        <p><strong>{{ 'user.profile.last_login'|trans }} :</strong><br>
+                                            <em class="text-muted">{{ 'user.profile.first_login'|trans }}</em>
+                                        </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
