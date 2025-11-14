@@ -163,7 +163,7 @@ admin.category:
   
   # Onglets
   general_info: "Informations générales"
-  translations: "Traductions"
+  translations_label: "Traductions"
 
 # Filtres
 admin.filter:
