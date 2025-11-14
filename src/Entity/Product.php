@@ -96,7 +96,7 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductMedia::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $productMedia;
 
-    #[ORM\ManyToMany(targetEntity: ProductOption::class, inversBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: ProductOption::class, inversedBy: 'products')]
     #[ORM\JoinTable(name: 'product_available_options')]
     private Collection $availableOptions;
 
