@@ -472,7 +472,7 @@
                 </li>
                 
                 <li class="nav-item">
-                    <a href="{{ path('admin_setting_index') }}" class="nav-link {{ app.request.get('_route')|slice(0, 17) == 'admin_setting' ? 'active' : '' }}">
+                    <a href="{{ path('admin_setting') }}" class="nav-link {{ app.request.get('_route')|slice(0, 17) == 'admin_setting' ? 'active' : '' }}">
                         <i class="fas fa-cog"></i>
                         {{ 'admin.navigation.settings'|trans }}
                     </a>

@@ -126,14 +126,14 @@ admin.product:
   seo: "SEO"
   
   # Translations
-  translations:
+  translations_tab:
     select_language: "Select a language"
     no_translations: "No translations available"
     add_translation: "Add translation"
     edit_translation: "Edit translation"
   
   # Media
-  media:
+  product_media:
     main_image: "Main image"
     gallery: "Gallery"
     technical_images: "Technical images"
