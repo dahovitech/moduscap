@@ -121,15 +121,12 @@
                         <i class="bi bi-gear-fill me-2"></i>{{ 'admin.navigation.settings'|trans }}
                     </a>
                 </li>
-                <!-- Temporarily removed - OptionController not created yet -->
-                <!-- 
                 <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_option' %} active{% endif %}"
-                       href="#">
+                       href="{{ path('admin_option_index') }}">
                         <i class="bi bi-list-check me-2"></i>{{ 'admin.navigation.options'|trans }}
                     </a>
                 </li>
-                -->
             </ul>
 
             <hr class="text-white-50">

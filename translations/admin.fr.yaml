@@ -328,3 +328,121 @@ admin.confirmation.detailed.delete_category_title: "Supprimer la catégorie"
 admin.confirmation.detailed.delete_category_message: "Êtes-vous sûr de vouloir supprimer la catégorie '%{name}' ? Cette action est irréversible."
 admin.confirmation.detailed.leave_page_title: "Quitter la page"
 admin.confirmation.detailed.leave_page_message: "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter cette page ?"
+
+# === OPTIONS ===
+# Actions
+admin.option.actions.new_group: "Nouveau groupe"
+admin.option.actions.new_option: "Nouvelle option"
+admin.option.actions.add_option: "Ajouter une option"
+admin.option.actions.add_first_option: "Ajouter la première option"
+admin.option.actions.edit_group: "Modifier le groupe"
+admin.option.actions.edit_option: "Modifier l'option"
+admin.option.actions.delete_group: "Supprimer le groupe"
+admin.option.actions.delete_option: "Supprimer l'option"
+admin.option.actions.create_first: "Créer votre premier groupe d'options"
+admin.option.actions.save: "Enregistrer"
+admin.option.actions.update: "Mettre à jour"
+admin.option.actions.cancel: "Annuler"
+
+# État vide
+admin.option.empty_state.title: "Aucun groupe d'options"
+admin.option.empty_state.description: "Commencez par créer votre premier groupe d'options pour vos produits."
+admin.option.empty_options: "Aucune option dans ce groupe"
+
+# Groupes d'options
+admin.option.group_new.title: "Nouveau groupe d'options"
+admin.option.group_edit.title: "Modifier le groupe d'options"
+admin.option.group_info.title: "Informations du groupe"
+admin.option.group.code: "Code"
+admin.option.group.type: "Type"
+admin.option.group.required: "Obligatoire"
+admin.option.group.active: "Actif"
+admin.option.group.options_count: "Nombre d'options"
+admin.option.group.created: "Créé le"
+admin.option.group.updated: "Mis à jour le"
+admin.option.group.name: "Nom"
+admin.option.group.description: "Description"
+admin.option.group.name_placeholder: "Nom du groupe d'options"
+admin.option.group.description_placeholder: "Description du groupe d'options"
+admin.option.group.options_in_group: "Options du groupe"
+admin.option.group_translations: "Traductions du groupe"
+
+# Options individuelles
+admin.option.option_new.title: "Nouvelle option"
+admin.option.option_edit.title: "Modifier l'option"
+admin.option.option_info.title: "Informations de l'option"
+admin.option.option.code: "Code"
+admin.option.option.name: "Nom"
+admin.option.option.description: "Description"
+admin.option.option.price: "Prix"
+admin.option.option.active: "Actif"
+admin.option.option.sort_order: "Ordre de tri"
+admin.option.option.created: "Créée le"
+admin.option.option.updated: "Mise à jour le"
+admin.option.option.products_count: "Produits associés"
+admin.option.option.used_in_products: "Utilisée dans les produits"
+admin.option.option.group_options: "Options du même groupe"
+admin.option.option.no_price: "Aucun prix"
+admin.option.option.name_placeholder: "Nom de l'option"
+admin.option.option.description_placeholder: "Description de l'option"
+
+# Propriétés d'options
+admin.option.required: "Obligatoire"
+admin.option.inactive: "Inactif"
+admin.option.active: "Actif"
+admin.option.yes: "Oui"
+admin.option.no: "Non"
+
+# Types d'input
+admin.option.input_types.select: "Liste déroulante"
+admin.option.input_types.radio: "Boutons radio"
+admin.option.input_types.checkbox: "Cases à cocher"
+admin.option.input_types.multiselect: "Sélection multiple"
+
+# Groupes
+admin.option.groups.new: "Nouveau groupe"
+admin.option.groups.edit: "Modifier le groupe"
+admin.option.groups.delete: "Supprimer le groupe"
+admin.option.groups.list: "Liste des groupes"
+
+# Tableau
+admin.option.table.code: "Code"
+admin.option.table.name: "Nom"
+admin.option.table.price: "Prix"
+admin.option.table.active: "Actif"
+admin.option.table.actions: "Actions"
+admin.option.table.type: "Type"
+admin.option.table.required: "Obligatoire"
+
+# Modales de suppression
+admin.option.delete_group.title: "Supprimer le groupe d'options"
+admin.option.delete_group.message: "Êtes-vous sûr de vouloir supprimer le groupe d'options '%{name}' ? Cette action supprimera également toutes les options associées. Cette action est irréversible."
+admin.option.delete_option.title: "Supprimer l'option"
+admin.option.delete_option.message: "Êtes-vous sûr de vouloir supprimer l'option '%{name}' ? Cette action est irréversible."
+
+# Messages d'aide
+admin.option.help.title: "Aide"
+admin.option.help.types: "Types d'input"
+admin.option.help.tips: "Conseils"
+admin.option.help.tip_code: "Le code doit être unique et ne contenir que des lettres, chiffres et tirets."
+admin.option.help.tip_required: "Cochez cette case si ce groupe d'options doit être obligatoirement sélectionné."
+admin.option.help.tip_sort: "L'ordre de tri détermine l'ordre d'affichage des groupes et options."
+admin.option.help.tip_price: "Le prix peut être positif (surcharge) ou négatif (remise). Laissez à 0.00 pour aucun impact sur le prix."
+admin.option.help.tip_code_option: "Le code de l'option doit être unique dans le groupe."
+admin.option.help.tip_translations: "Traduisez le nom et la description dans toutes les langues actives."
+
+# Types d'input - Aide
+admin.option.group_new.help_types: "Types d'input disponibles"
+admin.option.help.type_select: "Liste déroulante à choix unique"
+admin.option.help.type_radio: "Boutons radio (choix unique)"
+admin.option.help.type_checkbox: "Cases à cocher (choix multiple)"
+admin.option.help.type_multiselect: "Liste déroulante à choix multiple"
+
+# Sélection de langue et traductions
+admin.option.translations: "Traductions"
+admin.option.no_active_languages: "Aucune langue active trouvée. Activez au moins une langue pour créer des traductions."
+admin.option.no_translations: "Aucune traduction trouvée."
+admin.option.option_new.help_price: "Configuration du prix"
+admin.option.option_new.existing_options: "Options existantes dans ce groupe"
+admin.option.option_new.no_existing_options: "Aucune option dans ce groupe pour le moment"
+admin.option.option_edit.group: "Groupe"
