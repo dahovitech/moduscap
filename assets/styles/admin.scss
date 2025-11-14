@@ -2,7 +2,6 @@
 @use "bootstrap/scss/bootstrap" as *;
 @use "bootstrap-icons/font/bootstrap-icons.css" as *;
 
-
 :root {
     --bs-primary: #6f42c1;
     --bs-secondary: #6c757d;
@@ -15,6 +14,52 @@
     --bs-border-color: #333333;
 }
 
+.nav-tabs {
+    border-bottom: 2px solid #e9ecef;
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    color: #6c757d;
+}
+
+.nav-tabs .nav-link.active {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.translations-container .nav-tabs .nav-link {
+    margin-right: 0.25rem;
+}
+
+.nav-link {
+    color: #495057;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 0;
+}
+
+.nav-link:hover {
+    background: #f8f9fa;
+    color: #0d6efd;
+}
+
+.nav-link.active {
+    background: #e3f2fd;
+    color: #0d6efd;
+    border-right: 3px solid #0d6efd;
+}
+
+.nav-link i {
+    width: 20px;
+    margin-right: 0.75rem;
+    text-align: center;
+}
 .admin-sidebar {
     position: fixed;
     top: 0;
@@ -107,7 +152,7 @@
 .media-item:hover {
     border-color: var(--bs-primary);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .media-item img {
@@ -122,7 +167,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     color: white;
     display: flex;
     align-items: center;
@@ -140,7 +185,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 0.5rem;
     font-size: 0.8rem;

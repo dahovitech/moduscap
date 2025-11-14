@@ -1,6 +1,8 @@
 //import './bootstrap.js';
 import * as bootstrap from 'bootstrap';
 import $ from 'jquery';
+import DataTable from 'datatables.net';
+import 'datatables.net-bs5';
 
 
 window.bootstrap = bootstrap;
@@ -15,8 +17,13 @@ import './js/components/media-picker.js';
 import './js/components/custom-editor.js';
 import './js/components/media-selector.js';
 
+// Active DataTables sur les tables
+$(() => {
+    $('#myTable').DataTable();
+});
+
 // Initialisation automatique des composants
-$(document).ready(function() {
+$(() => {
     // Initialiser les éditeurs personnalisés
     $('textarea.custom-editor').each(function() {
         const $textarea = $(this);

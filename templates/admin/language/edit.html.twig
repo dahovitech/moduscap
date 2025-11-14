@@ -103,8 +103,8 @@
                 <dl class="row mb-0">
                     <dt class="col-sm-4">{{ 'language.table.status'|trans({}, 'admin') }} :</dt>
                     <dd class="col-sm-8">
-                        <span class="badge bg-{{ language.active ? 'success' : 'secondary' }}">
-                            {{ language.active ? 'common.status.active'|trans({}, 'admin') : 'common.status.inactive'|trans({}, 'admin') }}
+                        <span class="badge bg-{{ language.isActive ? 'success' : 'secondary' }}">
+                            {{ language.isActive ? 'common.status.active'|trans({}, 'admin') : 'common.status.inactive'|trans({}, 'admin') }}
                         </span>
                         {% if language.default %}
                             <span class="badge bg-primary ms-1">{{ 'common.status.default'|trans({}, 'admin') }}</span>

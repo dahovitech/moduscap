@@ -42,8 +42,8 @@
 
                     <dt class="col-sm-3">{{ 'language.table.status'|trans({}, 'admin') }} :</dt>
                     <dd class="col-sm-9">
-                        <span class="badge bg-{{ language.active ? 'success' : 'secondary' }}">
-                            {{ language.active ? 'common.status.active'|trans({}, 'admin') : 'common.status.inactive'|trans({}, 'admin') }}
+                        <span class="badge bg-{{ language.isActive ? 'success' : 'secondary' }}">
+                            {{ language.isActive ? 'common.status.active'|trans({}, 'admin') : 'common.status.inactive'|trans({}, 'admin') }}
                         </span>
                         {% if language.default %}
                             <span class="badge bg-primary ms-1">{{ 'common.status.default'|trans({}, 'admin') }}</span>
@@ -80,7 +80,7 @@
                             <input type="hidden" name="_token" value="{{ csrf_token('set_default' ~ language.id) }}">
                             <button type="submit"
                                     class="btn btn-warning w-100"
-                                    {% if not language.active %}disabled title="{{ 'language.cannot_set_default_inactive'|trans({}, 'admin') }}"{% endif %}>
+                                    {% if not language.isActive %}disabled title="{{ 'language.cannot_set_default_inactive'|trans({}, 'admin') }}"{% endif %}>
                                 <i class="bi bi-star me-2"></i>{{ 'action.set_default'|trans({}, 'admin') }}
                             </button>
                         </form>
@@ -89,10 +89,10 @@
                     <form method="post" action="{{ path('admin_language_toggle_status', {id: language.id}) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token('toggle_status' ~ language.id) }}">
                         <button type="submit"
-                                class="btn btn-{{ language.active ? 'warning' : 'success' }} w-100"
-                                {% if language.default and language.active %}disabled title="{{ 'language.cannot_disable_default'|trans({}, 'admin') }}"{% endif %}>
-                            <i class="bi bi-{{ language.active ? 'pause' : 'play' }}-fill me-2"></i>
-                            {{ language.active ? 'action.deactivate'|trans({}, 'admin') : 'action.activate'|trans({}, 'admin') }}
+                                class="btn btn-{{ language.isActive ? 'warning' : 'success' }} w-100"
+                                {% if language.default and language.isActive %}disabled title="{{ 'language.cannot_disable_default'|trans({}, 'admin') }}"{% endif %}>
+                            <i class="bi bi-{{ language.isActive ? 'pause' : 'play' }}-fill me-2"></i>
+                            {{ language.isActive ? 'action.deactivate'|trans({}, 'admin') : 'action.activate'|trans({}, 'admin') }}
                         </button>
                     </form>
                 </div>

@@ -42,7 +42,7 @@
                             {% for language in get_languages() %}
                                 <li>
                                     <a class="dropdown-item{{ app.request.locale == language.code ? ' active' : '' }}"
-                                       href="{{ path('language_switch', {'locale': language.code}) }}">
+                                       href="{{ path('locale_switch', {'_locale': language.code}) }}">
                                         <span class="badge bg-primary me-2">{{ language.code|upper }}</span>
                                         {{ language.nativeName }}
                                         {% if language.isDefault() %}
@@ -82,31 +82,49 @@
                 <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') == 'admin_dashboard' %} active{% endif %}"
                        href="{{ path('admin_dashboard') }}">
-                        <i class="bi bi-house-fill me-2"></i>{{ 'navigation.dashboard'|trans({}, 'admin') }}
+                        <i class="bi bi-house-fill me-2"></i>{{ 'admin.navigation.dashboard'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if app.request.get('_route') starts with 'admin_product_' %} active{% endif %}"
+                       href="{{ path('admin_product_index') }}">
+                        <i class="bi bi-box-seam me-2"></i>{{ 'admin.navigation.products'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if app.request.get('_route') starts with 'admin_category_' %} active{% endif %}"
+                       href="{{ path('admin_category_index') }}">
+                        <i class="bi bi-tags-fill me-2"></i>{{ 'admin.navigation.categories'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_media_' %} active{% endif %}"
                        href="{{ path('admin_media_index') }}">
-                        <i class="bi bi-images me-2"></i>{{ 'navigation.media'|trans({}, 'admin') }}
+                        <i class="bi bi-images me-2"></i>{{ 'admin.navigation.medias'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_language_' %} active{% endif %}"
                        href="{{ path('admin_language_index') }}">
-                        <i class="bi bi-globe me-2"></i>{{ 'navigation.languages'|trans({}, 'admin') }}
+                        <i class="bi bi-translate me-2"></i>{{ 'admin.navigation.translations'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_user_' %} active{% endif %}"
                        href="{{ path('admin_user_index') }}">
-                        <i class="bi bi-people-fill me-2"></i>{{ 'navigation.users'|trans({}, 'admin') }}
+                        <i class="bi bi-people-fill me-2"></i>{{ 'admin.navigation.users'|trans }}
                     </a>
                 </li>
-                 <li class="nav-item">
+                <li class="nav-item">
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_setting' %} active{% endif %}"
                        href="{{ path('admin_setting') }}">
-                        <i class="bi bi-globe me-2"></i>{{ 'navigation.setting'|trans({}, 'admin') }}
+                        <i class="bi bi-gear-fill me-2"></i>{{ 'admin.navigation.settings'|trans }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{% if app.request.get('_route') starts with 'admin_option' %} active{% endif %}"
+                       href="{{ path('admin_option_index') }}">
+                        <i class="bi bi-list-check me-2"></i>{{ 'admin.navigation.options'|trans }}
                     </a>
                 </li>
             </ul>
@@ -116,12 +134,12 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('admin_user_profile') }}">
-                        <i class="bi bi-person-circle me-2"></i>{{ 'navigation.profile'|trans({}, 'admin') }}
+                        <i class="bi bi-person-circle me-2"></i>{{ 'admin.common.profile'|trans }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('app_logout') }}">
-                        <i class="bi bi-box-arrow-right me-2"></i>{{ 'navigation.logout'|trans({}, 'admin') }}
+                        <i class="bi bi-box-arrow-right me-2"></i>{{ 'admin.common.logout'|trans }}
                     </a>
                 </li>
             </ul>
@@ -218,6 +236,7 @@
             });
         }
     </script>
+    
 {% endblock %}
 </body>
 </html>

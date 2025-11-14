@@ -34,7 +34,7 @@
                     </thead>
                     <tbody>
                         {% for language in languages %}
-                        <tr class="{% if not language.active %}table-secondary{% endif %}">
+                        <tr class="{% if not language.isActive %}table-secondary{% endif %}">
                             <td>
                                 <span class="badge bg-primary">{{ language.code|upper }}</span>
                             </td>
@@ -45,7 +45,7 @@
                                 {{ language.nativeName }}
                             </td>
                             <td>
-                                {% if language.active %}
+                                {% if language.isActive %}
                                     <span class="badge bg-success">{{ 'language.status.active'|trans }}</span>
                                 {% else %}
                                     <span class="badge bg-secondary">{{ 'language.status.inactive'|trans }}</span>
@@ -60,7 +60,7 @@
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-warning"
                                                 title="{{ 'language.action.set_default'|trans }}"
-                                                {% if not language.active %}disabled{% endif %}>
+                                                {% if not language.isActive %}disabled{% endif %}>
                                             <i class="bi bi-star"></i>
                                         </button>
                                     </form>
@@ -84,10 +84,10 @@
                                     <form method="post" action="{{ path('admin_language_toggle_status', {id: language.id}) }}" class="d-inline">
                                         <input type="hidden" name="_token" value="{{ csrf_token('toggle_status' ~ language.id) }}">
                                         <button type="submit"
-                                                class="btn btn-sm btn-outline-{{ language.active ? 'warning' : 'success' }}"
-                                                title="{{ language.active ? 'action.deactivate'|trans : 'action.activate'|trans }}"
-                                                {% if language.default and language.active %}disabled title="{{ 'language.cannot_disable_default'|trans }}"{% endif %}>
-                                            <i class="bi bi-{{ language.active ? 'pause' : 'play' }}-fill"></i>
+                                                class="btn btn-sm btn-outline-{{ language.isActive ? 'warning' : 'success' }}"
+                                                title="{{ language.isActive ? 'action.deactivate'|trans : 'action.activate'|trans }}"
+                                                {% if language.default and language.isActive %}disabled title="{{ 'language.cannot_disable_default'|trans }}"{% endif %}>
+                                            <i class="bi bi-{{ language.isActive ? 'pause' : 'play' }}-fill"></i>
                                         </button>
                                     </form>
                                     {% if not language.default %}
