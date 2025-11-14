@@ -64,7 +64,7 @@ class ProductController extends AbstractController
         $product->setUpdatedAt(new \DateTime());
         
         // Initialiser les traductions pour toutes les langues actives
-        $languages = $this->languageRepository->findBy(['active' => true]);
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
         
         foreach ($languages as $language) {
             $translation = new ProductTranslation();
