@@ -36,34 +36,58 @@ final class Version20251114223015 extends AbstractMigration
         
         // Migration de materials vers materialsDetail (existant)
         $this->addSql("
-            UPDATE product_translations pt 
-            INNER JOIN products p ON pt.product_id = p.id 
-            SET pt.materials_detail = p.materials 
-            WHERE p.materials IS NOT NULL AND pt.materials_detail IS NULL
+            UPDATE product_translations 
+            SET materials_detail = (
+                SELECT materials 
+                FROM products 
+                WHERE products.id = product_translations.product_id
+            )
+            WHERE product_translations.product_id IN (
+                SELECT id FROM products WHERE materials IS NOT NULL
+            )
+            AND materials_detail IS NULL
         ");
         
         // Migration de equipment vers equipmentDetail (existant)
         $this->addSql("
-            UPDATE product_translations pt 
-            INNER JOIN products p ON pt.product_id = p.id 
-            SET pt.equipment_detail = p.equipment 
-            WHERE p.equipment IS NOT NULL AND pt.equipment_detail IS NULL
+            UPDATE product_translations 
+            SET equipment_detail = (
+                SELECT equipment 
+                FROM products 
+                WHERE products.id = product_translations.product_id
+            )
+            WHERE product_translations.product_id IN (
+                SELECT id FROM products WHERE equipment IS NOT NULL
+            )
+            AND equipment_detail IS NULL
         ");
         
         // Migration de specifications vers specifications (nouveau)
         $this->addSql("
-            UPDATE product_translations pt 
-            INNER JOIN products p ON pt.product_id = p.id 
-            SET pt.specifications = p.specifications 
-            WHERE p.specifications IS NOT NULL AND pt.specifications IS NULL
+            UPDATE product_translations 
+            SET specifications = (
+                SELECT specifications 
+                FROM products 
+                WHERE products.id = product_translations.product_id
+            )
+            WHERE product_translations.product_id IN (
+                SELECT id FROM products WHERE specifications IS NOT NULL
+            )
+            AND specifications IS NULL
         ");
         
         // Migration de advantages vers advantages (nouveau)
         $this->addSql("
-            UPDATE product_translations pt 
-            INNER JOIN products p ON pt.product_id = p.id 
-            SET pt.advantages = p.advantages 
-            WHERE p.advantages IS NOT NULL AND pt.advantages IS NULL
+            UPDATE product_translations 
+            SET advantages = (
+                SELECT advantages 
+                FROM products 
+                WHERE products.id = product_translations.product_id
+            )
+            WHERE product_translations.product_id IN (
+                SELECT id FROM products WHERE advantages IS NOT NULL
+            )
+            AND advantages IS NULL
         ");
         
         // Étape 3: Supprimer les colonnes redondantes de products
@@ -87,44 +111,40 @@ final class Version20251114223015 extends AbstractMigration
         $this->addSql('ALTER TABLE products ADD advantages TEXT DEFAULT NULL');
         
         // Étape 2: Récupérer les données depuis product_translations (une seule langue par produit)
-        // Pour matériaux
+        // Pour materials
         $this->addSql("
-            INSERT INTO products (id, materials) 
+            INSERT OR REPLACE INTO products (id, materials)
             SELECT DISTINCT p.id, pt.materials_detail
             FROM products p
             INNER JOIN product_translations pt ON p.id = pt.product_id
             WHERE pt.materials_detail IS NOT NULL
-            ON DUPLICATE KEY UPDATE materials = VALUES(materials)
         ");
         
         // Pour equipment
         $this->addSql("
-            INSERT INTO products (id, equipment) 
+            INSERT OR REPLACE INTO products (id, equipment)
             SELECT DISTINCT p.id, pt.equipment_detail
             FROM products p
             INNER JOIN product_translations pt ON p.id = pt.product_id
             WHERE pt.equipment_detail IS NOT NULL
-            ON DUPLICATE KEY UPDATE equipment = VALUES(equipment)
         ");
         
         // Pour specifications
         $this->addSql("
-            INSERT INTO products (id, specifications) 
+            INSERT OR REPLACE INTO products (id, specifications)
             SELECT DISTINCT p.id, pt.specifications
             FROM products p
             INNER JOIN product_translations pt ON p.id = pt.product_id
             WHERE pt.specifications IS NOT NULL
-            ON DUPLICATE KEY UPDATE specifications = VALUES(specifications)
         ");
         
         // Pour advantages  
         $this->addSql("
-            INSERT INTO products (id, advantages) 
+            INSERT OR REPLACE INTO products (id, advantages)
             SELECT DISTINCT p.id, pt.advantages
             FROM products p
             INNER JOIN product_translations pt ON p.id = pt.product_id
             WHERE pt.advantages IS NOT NULL
-            ON DUPLICATE KEY UPDATE advantages = VALUES(advantages)
         ");
         
         // Étape 3: Supprimer les colonnes de product_translations
