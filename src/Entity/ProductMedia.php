@@ -4,16 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ProductMediaRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Attribute as Gedmo;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ProductMediaRepository::class)
- * @ORM\Table(name="product_media", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_product_media", columns={"product_id", "media_id"})
- * })
- */
-#[Gedmo\Timestampable]
+#[ORM\Entity(repositoryClass: ProductMediaRepository::class)]
+#[ORM\Table(name: 'product_media', uniqueConstraints: [
+    new ORM\UniqueConstraint(name: 'unique_product_media', columns: ['product_id', 'media_id'])
+])]
 class ProductMedia
 {
     #[ORM\Id]

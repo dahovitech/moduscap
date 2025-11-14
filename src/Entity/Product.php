@@ -6,14 +6,11 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Attribute as Gedmo;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ProductRepository::class)
- * @ORM\Table(name="products")
- */
-#[Gedmo\Timestampable]
+#[ORM\Entity(repositoryClass: ProductRepository::class)]
+#[ORM\Table(name: 'products')]
 class Product
 {
     #[ORM\Id]
@@ -24,7 +21,7 @@ class Product
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 100)]
-    #[Gedmo\Slug]
+    #[Gedmo\Slug(fields: ['code'])]
     private string $code;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]

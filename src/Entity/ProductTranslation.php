@@ -4,16 +4,13 @@ namespace App\Entity;
 
 use App\Repository\ProductTranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Attribute as Gedmo;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=ProductTranslationRepository::class)
- * @ORM\Table(name="product_translations", uniqueConstraints={
- *     @ORM\UniqueConstraint(name="unique_product_translation", columns={"product_id", "language_id"})
- * })
- */
-#[Gedmo\Timestampable]
+#[ORM\Entity(repositoryClass: ProductTranslationRepository::class)]
+#[ORM\Table(name: 'product_translations', uniqueConstraints: [
+    new ORM\UniqueConstraint(name: 'unique_product_translation', columns: ['product_id', 'language_id'])
+])]
 class ProductTranslation
 {
     #[ORM\Id]
