@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des Catégories - MODUSCAP{% endblock %}
+{% block title %}{{ 'admin.category.management_title'|trans }} - MODUSCAP{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-1">Gestion des Catégories</h1>
-            <p class="text-muted">Organisez votre catalogue de produits par catégories</p>
+            <h1 class="h3 mb-1">{{ 'admin.category.management_title'|trans }}</h1>
+            <p class="text-muted">{{ 'admin.category.management_description'|trans }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ path('admin_category_new') }}" class="btn btn-primary btn-lg">
-                <i class="fas fa-plus me-2"></i>Nouvelle Catégorie
+                <i class="fas fa-plus me-2"></i>{{ 'admin.category.new_button'|trans }}
             </a>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="card-body">
             <form method="get" class="row g-3">
                 <div class="col-md-10">
-                    <label for="search" class="form-label">Rechercher une catégorie</label>
+                    <label for="search" class="form-label">{{ 'admin.filter.search_category'|trans }}</label>
                     <input type="text" class="form-control" id="search" name="search" 
                            value="{{ current_search }}" placeholder="Code ou nom de la catégorie...">
                 </div>

@@ -25,76 +25,76 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('code', TextType::class, [
-                'label' => 'Code produit',
+                'label' => ('admin.product.code'|trans),
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Ex: MODUS001',
+                    'placeholder' => ('admin.product.code_placeholder'|trans),
                     'pattern' => '^[A-Za-z0-9_-]+$',
-                    'title' => 'Seuls les lettres, chiffres, tirets et underscores sont autorisés'
+                    'title' => ('admin.product.code_title'|trans)
                 ],
-                'help' => 'Identifiant unique du produit'
+                'help' => ('admin.product.code_help'|trans)
             ])
             ->add('category', EntityType::class, [
                 'class' => ProductCategory::class,
                 'choice_label' => 'name',
-                'label' => 'Catégorie'
+                'label' => ('admin.product.category'|trans)
             ])
             ->add('basePrice', MoneyType::class, [
-                'label' => 'Prix de base (€)',
+                'label' => ('admin.product.base_price'|trans),
                 'currency' => 'EUR',
                 'required' => false,
-                'help' => 'Prix de base du produit'
+                'help' => ('admin.product.base_price_help'|trans)
             ])
             ->add('surface', TextType::class, [
-                'label' => 'Surface (m²)',
+                'label' => ('admin.product.surface'|trans),
                 'required' => false
             ])
             ->add('dimensions', TextType::class, [
-                'label' => 'Dimensions',
+                'label' => ('admin.product.dimensions'|trans),
                 'required' => false,
-                'help' => 'Ex: 6m × 4,7m × 2,8m'
+                'help' => ('admin.product.dimensions_help'|trans)
             ])
             ->add('rooms', IntegerType::class, [
-                'label' => 'Nombre de pièces',
+                'label' => ('admin.product.rooms'|trans),
                 'required' => false,
                 'data' => 1
             ])
             ->add('height', IntegerType::class, [
-                'label' => 'Hauteur (cm)',
+                'label' => ('admin.product.height'|trans),
                 'required' => false
             ])
             ->add('materials', TextareaType::class, [
-                'label' => 'Matériaux',
+                'label' => ('admin.product.materials'|trans),
                 'required' => false,
                 'attr' => ['rows' => 3]
             ])
             ->add('equipment', TextareaType::class, [
-                'label' => 'Équipements',
+                'label' => ('admin.product.equipment'|trans),
                 'required' => false,
                 'attr' => ['rows' => 3]
             ])
             ->add('specifications', TextareaType::class, [
-                'label' => 'Spécifications techniques',
+                'label' => ('admin.product.specifications'|trans),
                 'required' => false,
                 'attr' => ['rows' => 3]
             ])
             ->add('advantages', TextareaType::class, [
-                'label' => 'Avantages',
+                'label' => ('admin.product.advantages'|trans),
                 'required' => false,
                 'attr' => ['rows' => 3]
             ])
             ->add('technicalSpecs', TextareaType::class, [
-                'label' => 'Spécifications techniques détaillées',
+                'label' => ('admin.product.technical_specs_detailed'|trans),
                 'required' => false,
                 'attr' => ['rows' => 4]
             ])
             ->add('assemblyTime', IntegerType::class, [
-                'label' => 'Temps d\'assemblage (jours)',
+                'label' => ('admin.product.assembly_time'|trans),
                 'required' => false
             ])
             ->add('energyClass', ChoiceType::class, [
-                'label' => 'Classe énergétique',
+                'label' => ('admin.product.energy_class'|trans),
                 'required' => false,
                 'choices' => [
                     'A+++' => 'A+++',
@@ -108,39 +108,39 @@ class ProductType extends AbstractType
                 ]
             ])
             ->add('warrantyStructure', IntegerType::class, [
-                'label' => 'Garantie structure (ans)',
+                'label' => ('admin.product.warranty_structure'|trans),
                 'required' => false,
                 'data' => 10
             ])
             ->add('warrantyEquipment', IntegerType::class, [
-                'label' => 'Garantie équipements (ans)',
+                'label' => ('admin.product.warranty_equipment'|trans),
                 'required' => false,
                 'data' => 5
             ])
             ->add('isActive', CheckboxType::class, [
-                'label' => 'Produit actif',
+                'label' => ('admin.product.active_product'|trans),
                 'required' => false
             ])
             ->add('isFeatured', CheckboxType::class, [
-                'label' => 'Produit mis en avant',
+                'label' => ('admin.product.featured'|trans),
                 'required' => false
             ])
             ->add('isCustomizable', CheckboxType::class, [
-                'label' => 'Produit personnalisable',
+                'label' => ('admin.product.customizable'|trans),
                 'required' => false,
                 'data' => true
             ])
             ->add('sortOrder', IntegerType::class, [
-                'label' => 'Ordre d\'affichage',
+                'label' => ('admin.product.sort_order'|trans),
                 'data' => 0
             ])
             ->add('availableOptions', EntityType::class, [
                 'class' => ProductOption::class,
                 'choice_label' => 'name',
-                'label' => 'Options disponibles',
+                'label' => ('admin.product.available_options'|trans),
                 'multiple' => true,
                 'required' => false,
-                'help' => 'Sélectionnez les options disponibles pour ce produit'
+                'help' => ('admin.product.available_options_help'|trans)
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => ProductTranslationType::class,
@@ -148,19 +148,19 @@ class ProductType extends AbstractType
                 'allow_add' => false,
                 'allow_delete' => false,
                 'by_reference' => false,
-                'label' => 'Traductions',
+                'label' => ('admin.product.translations'|trans),
                 'attr' => [
                     'class' => 'translations-container'
                 ]
             ])
             ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
-                'label' => 'Enregistrer',
+                'label' => ('admin.common.save'|trans),
                 'attr' => [
                     'class' => 'btn btn-primary btn-lg me-2'
                 ]
             ])
             ->add('save_and_continue', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
-                'label' => 'Enregistrer et continuer',
+                'label' => ('admin.common.save_and_continue'|trans),
                 'attr' => [
                     'class' => 'btn btn-secondary'
                 ]

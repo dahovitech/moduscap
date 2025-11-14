@@ -19,67 +19,67 @@ class ProductTranslationType extends AbstractType
             ->add('language', EntityType::class, [
                 'class' => Language::class,
                 'choice_label' => 'name',
-                'label' => 'Langue'
+                'label' => ('admin.product.language'|trans)
             ])
             ->add('name', TextType::class, [
-                'label' => 'Nom du produit',
+                'label' => ('admin.product.product_name'|trans),
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control form-control-lg',
-                    'placeholder' => 'Ex: Produit MODUS Premium'
+                    'placeholder' => ('admin.product.name_placeholder'|trans)
                 ]
             ])
             ->add('shortDescription', TextType::class, [
-                'label' => 'Description courte',
+                'label' => ('admin.product.short_description'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Résumé en une phrase'
+                    'placeholder' => ('admin.product.short_description_placeholder'|trans)
                 ]
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'Description complète',
+                'label' => ('admin.product.full_description'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 5,
-                    'placeholder' => 'Description détaillée du produit...'
+                    'placeholder' => ('admin.product.description_placeholder'|trans)
                 ]
             ])
             ->add('concept', TextareaType::class, [
-                'label' => 'Concept & Design',
+                'label' => ('admin.product.concept_design'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => 'Concept et aspects design du produit...'
+                    'placeholder' => ('admin.product.concept_placeholder'|trans)
                 ]
             ])
             ->add('materialsDetail', TextareaType::class, [
-                'label' => 'Matériaux utilisés',
+                'label' => ('admin.product.materials_used'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => 'Détails sur les matériaux et leur qualité...'
+                    'placeholder' => ('admin.product.materials_detail_placeholder'|trans)
                 ]
             ])
             ->add('equipmentDetail', TextareaType::class, [
-                'label' => 'Équipements inclus',
+                'label' => ('admin.product.equipment_included'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => 'Liste détaillée des équipements fournis...'
+                    'placeholder' => ('admin.product.equipment_detail_placeholder'|trans)
                 ]
             ])
             ->add('performanceDetails', TextareaType::class, [
-                'label' => 'Performances',
+                'label' => ('admin.product.performance'|trans),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => 'Spécifications techniques et performances...'
+                    'placeholder' => ('admin.product.performance_placeholder'|trans)
                 ]
             ]);
     }

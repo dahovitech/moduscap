@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau Produit - MODUSCAP{% endblock %}
+{% block title %}{{ 'admin.product.new_page_title'|trans }} - MODUSCAP{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
@@ -9,13 +9,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ path('admin_product_index') }}">Produits</a>
+                        <a href="{{ path('admin_product_index') }}">{{ 'admin.navigation.products'|trans }}</a>
                     </li>
-                    <li class="breadcrumb-item active">Nouveau</li>
+                    <li class="breadcrumb-item active">{{ 'admin.common.new'|trans }}</li>
                 </ol>
             </nav>
-            <h1 class="h3 mb-1">Créer un Nouveau Produit</h1>
-            <p class="text-muted">Ajoutez un nouveau produit à votre catalogue MODUSCAP</p>
+            <h1 class="h3 mb-1">{{ 'admin.product.new_title'|trans }}</h1>
+            <p class="text-muted">{{ 'admin.product.new_description'|trans }}</p>
         </div>
     </div>
 
@@ -27,14 +27,14 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-info-circle me-2"></i>Informations Générales
+                        <i class="fas fa-info-circle me-2"></i>{{ 'admin.product.general_info'|trans }}
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.code, {
-                                'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: MODUS001'},
+                                'attr': {'class': 'form-control form-control-lg', 'placeholder': ('admin.product.code_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -49,13 +49,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.basePrice, {
-                                'attr': {'class': 'form-control', 'placeholder': '0.00'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.price_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.surface, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 25.5'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.surface_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -64,13 +64,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.dimensions, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 6m × 4,7m × 2,8m'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.dimensions_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.rooms, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 3'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.rooms_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -79,13 +79,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.height, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 280'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.height_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.assemblyTime, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 5'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.assembly_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -97,7 +97,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i>Spécifications Techniques
+                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -140,8 +140,8 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-globe me-2"></i>Contenu Multilingue
-                        <small class="text-muted">Saisissez le contenu dans toutes les langues actives</small>
+                        <i class="fas fa-globe me-2"></i>{{ 'admin.product.multilingual_content'|trans }}
+                        <small class="text-muted">{{ 'admin.product.multilingual_instruction'|trans }}</small>
                     </h5>
                 </div>
                 <div class="card-body">
@@ -161,7 +161,7 @@
                                          class="me-2 rounded">
                                     {{ language.name }}
                                     {% if not language.active %}
-                                        <span class="badge bg-warning text-dark ms-1">Inactif</span>
+                                        <span class="badge bg-warning text-dark ms-1">{{ 'admin.common.inactive'|trans }}</span>
                                     {% endif %}
                                 </button>
                             </li>
@@ -178,82 +178,82 @@
                                 
                                 <div class="row">
                                     <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">Nom du produit</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.product_name'|trans }}</label>
                                         <input type="text" 
                                                class="form-control form-control-lg" 
                                                name="product[translations][{{ loop.index0 }}][name]" 
                                                value="{{ translation.name }}"
-                                               placeholder="Nom du produit en {{ language.name }}"
+                                               placeholder="{{ ('admin.product.product_name_placeholder'|trans)|replace({'%language%': language.name}) }}"
                                                {{ not language.active ? 'disabled' : '' }}>
                                         <div class="form-text">
-                                            Nom qui apparaîtra sur le site pour {{ language.name }}
+                                            {{ ('admin.product.name_help_for'|trans)|replace({'%language%': language.name}) }}
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">Description courte</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.short_description'|trans }}</label>
                                         <input type="text" 
                                                class="form-control" 
                                                name="product[translations][{{ loop.index0 }}][shortDescription]" 
                                                value="{{ translation.shortDescription }}"
-                                               placeholder="Résumé en une phrase (optionnel)"
+                                               placeholder="{{ 'admin.product.short_description_placeholder'|trans }}"
                                                {{ not language.active ? 'disabled' : '' }}>
                                         <div class="form-text">
-                                            Description courte pour les aperçus et listes
+                                            {{ 'admin.product.short_description_help_text'|trans }}
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">Description complète</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.full_description'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][description]" 
                                                   rows="5"
-                                                  placeholder="Description détaillée du produit en {{ language.name }}"
+                                                  placeholder="{{ ('admin.product.full_description_placeholder'|trans)|replace({'%language%': language.name}) }}"
                                                   {{ not language.active ? 'disabled' : '' }}>{{ translation.description }}</textarea>
                                         <div class="form-text">
-                                            Description complète du produit
+                                            {{ 'admin.product.full_description_help_text'|trans }}
                                         </div>
                                     </div>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Concept & Design</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.concept_design'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][concept]" 
                                                   rows="3"
-                                                  placeholder="Concept et aspects design..."
+                                                  placeholder="{{ 'admin.product.concept_placeholder'|trans }}"
                                                   {{ not language.active ? 'disabled' : '' }}>{{ translation.concept }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Matériaux détaillés</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.detailed_materials'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][materialsDetail]" 
                                                   rows="3"
-                                                  placeholder="Détails sur les matériaux..."
+                                                  placeholder="{{ 'admin.product.materials_placeholder_detailed'|trans }}"
                                                   {{ not language.active ? 'disabled' : '' }}>{{ translation.materialsDetail }}</textarea>
                                     </div>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Équipements détaillés</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.detailed_equipment'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
                                                   rows="3"
-                                                  placeholder="Liste détaillée des équipements..."
+                                                  placeholder="{{ 'admin.product.equipment_placeholder_detailed'|trans }}"
                                                   {{ not language.active ? 'disabled' : '' }}>{{ translation.equipmentDetail }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">Performances</label>
+                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][performanceDetails]" 
                                                   rows="3"
-                                                  placeholder="Spécifications techniques et performances..."
+                                                  placeholder="{{ 'admin.product.performance_placeholder'|trans }}"
                                                   {{ not language.active ? 'disabled' : '' }}>{{ translation.performanceDetails }}</textarea>
                                     </div>
                                 </div>
@@ -270,34 +270,34 @@
 
         <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- Statuts -->
+            <!-- {{ 'admin.product.statuses'|trans }} -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-toggle-on me-2"></i>Statuts
+                        <i class="fas fa-toggle-on me-2"></i>{{ 'admin.product.statuses'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
                     {{ form_row(form.isActive, {
                         'attr': {'class': 'form-check-input'},
                         'label_attr': {'class': 'form-check-label'},
-                        'label': 'Produit actif'
+                        'label': ('admin.product.active_product'|trans)
                     }) }}
-                    <div class="form-text mb-3">Le produit sera visible sur le site</div>
+                    <div class="form-text mb-3">{{ 'admin.product.active_help'|trans }}</div>
                     
                     {{ form_row(form.isFeatured, {
                         'attr': {'class': 'form-check-input'},
                         'label_attr': {'class': 'form-check-label'},
-                        'label': 'Mis en avant'
+                        'label': ('admin.product.featured'|trans)
                     }) }}
-                    <div class="form-text mb-3">Le produit apparaîtra en priorité</div>
+                    <div class="form-text mb-3">{{ 'admin.product.featured_help'|trans }}</div>
                     
                     {{ form_row(form.isCustomizable, {
                         'attr': {'class': 'form-check-input'},
                         'label_attr': {'class': 'form-check-label'},
-                        'label': 'Personnalisable'
+                        'label': ('admin.product.customizable'|trans)
                     }) }}
-                    <div class="form-text">Le client pourra personnaliser ce produit</div>
+                    <div class="form-text">{{ 'admin.product.customizable_help'|trans }}</div>
                 </div>
             </div>
 
@@ -305,7 +305,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-shield-alt me-2"></i>Garanties
+                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.warranties'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -317,13 +317,13 @@
                     <div class="row mt-3">
                         <div class="col-6">
                             {{ form_row(form.warrantyStructure, {
-                                'attr': {'class': 'form-control', 'placeholder': '10'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.warranty_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-6">
                             {{ form_row(form.warrantyEquipment, {
-                                'attr': {'class': 'form-control', 'placeholder': '5'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.warranty_equipment_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -335,7 +335,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-plus-circle me-2"></i>Options Disponibles
+                        <i class="fas fa-plus-circle me-2"></i>{{ 'admin.product.available_options'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -343,7 +343,7 @@
                         'attr': {'class': 'form-select', 'size': '6'},
                         'label_attr': {'class': 'form-label fw-bold'}
                     }) }}
-                    <div class="form-text">Sélectionnez les options qui peuvent être ajoutées à ce produit</div>
+                    <div class="form-text">{{ 'admin.product.available_options_help'|trans }}</div>
                 </div>
             </div>
 
@@ -351,15 +351,15 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-sort me-2"></i>Affichage
+                        <i class="fas fa-sort me-2"></i>{{ 'admin.product.display'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
                     {{ form_row(form.sortOrder, {
-                        'attr': {'class': 'form-control', 'placeholder': '0'},
+                        'attr': {'class': 'form-control', 'placeholder': ('admin.product.sort_order_placeholder'|trans)},
                         'label_attr': {'class': 'form-label fw-bold'}
                     }) }}
-                    <div class="form-text">Ordre d'affichage dans les listes (0 = premier)</div>
+                    <div class="form-text">{{ 'admin.product.sort_order_help'|trans }}</div>
                 </div>
             </div>
         </div>
@@ -368,7 +368,7 @@
     <!-- Boutons d'action -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <a href="{{ path('admin_product_index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+            <i class="fas fa-arrow-left me-2"></i>{{ 'admin.common.back_to_list'|trans }}
         </a>
         
         <div class="d-flex gap-2">
@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         } catch (e) {
-            console.log('Erreur lors de la restauration du brouillon:', e);
+            console.log('{{ 'admin.product.restore_draft_error'|trans }}', e);
         }
     }
     

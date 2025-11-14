@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.code }} - Modifier{% endblock %}
+{% block title %}{{ product.code }} - {{ 'admin.product.edit_page_title'|trans }}{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
@@ -9,23 +9,23 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ path('admin_product_index') }}">Produits</a>
+                        <a href="{{ path('admin_product_index') }}">{{ 'admin.navigation.products'|trans }}</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a href="{{ path('admin_product_show', {'id': product.id}) }}">{{ product.code }}</a>
                     </li>
-                    <li class="breadcrumb-item active">Modifier</li>
+                    <li class="breadcrumb-item active">{{ 'admin.common.edit'|trans }}</li>
                 </ol>
             </nav>
-            <h1 class="h3 mb-1">Modifier le Produit</h1>
-            <p class="text-muted">Éditez les informations du produit MODUSCAP</p>
+            <h1 class="h3 mb-1">{{ 'admin.product.edit_title'|trans }}</h1>
+            <p class="text-muted">{{ 'admin.product.edit_description'|trans }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ path('admin_product_show', {'id': product.id}) }}" class="btn btn-outline-primary">
-                <i class="fas fa-eye me-2"></i>Aperçu
+                <i class="fas fa-eye me-2"></i>{{ 'admin.product.preview'|trans }}
             </a>
             <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
-                <i class="fas fa-arrow-left me-2"></i>Retour
+                <i class="fas fa-arrow-left me-2"></i>{{ 'admin.common.back'|trans }}
             </button>
         </div>
     </div>
@@ -34,9 +34,9 @@
     <div class="alert alert-info d-flex align-items-center">
         <i class="fas fa-info-circle me-3 fa-lg"></i>
         <div>
-            <strong>Dernière modification:</strong> {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : product.createdAt ? product.createdAt|date('d/m/Y H:i') : 'Inconnue' }}
+            <strong>{{ 'admin.product.last_modification'|trans }}:</strong> {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : product.createdAt ? product.createdAt|date('d/m/Y H:i') : ('admin.common.unknown'|trans) }}
             {% if product.updatedAt != product.createdAt %}
-                <br><small>Créé le: {{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : 'Inconnue' }}</small>
+                <br><small>{{ 'admin.product.created_at'|trans }}: {{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : ('admin.common.unknown'|trans) }}</small>
             {% endif %}
         </div>
     </div>
@@ -55,14 +55,14 @@
                         {{ form_widget(form.isActive, {
                             'attr': {'class': 'form-check-input'}
                         }) }}
-                        <label class="form-check-label">Produit actif</label>
+                        <label class="form-check-label">{{ 'admin.product.active_product'|trans }}</label>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.code, {
-                                'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Ex: MODUS001'},
+                                'attr': {'class': 'form-control form-control-lg', 'placeholder': ('admin.product.code_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -77,13 +77,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.basePrice, {
-                                'attr': {'class': 'form-control', 'placeholder': '0.00'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.price_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.surface, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 25.5'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.surface_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -92,13 +92,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.dimensions, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 6m × 4,7m × 2,8m'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.dimensions_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.rooms, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 3'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.rooms_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -107,13 +107,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             {{ form_row(form.height, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 280'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.height_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
                         <div class="col-md-6">
                             {{ form_row(form.assemblyTime, {
-                                'attr': {'class': 'form-control', 'placeholder': 'Ex: 5'},
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.assembly_placeholder'|trans)},
                                 'label_attr': {'class': 'form-label fw-bold'}
                             }) }}
                         </div>
@@ -125,7 +125,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i>Spécifications Techniques
+                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -168,7 +168,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-globe me-2"></i>Contenu Multilingue
+                        <i class="fas fa-globe me-2"></i>{{ 'admin.product.multilingual_content'|trans }}
                         <small class="text-muted">Modifiez le contenu dans toutes les langues</small>
                     </h5>
                 </div>
@@ -436,7 +436,7 @@
                         <i class="fas fa-copy me-2"></i>Dupliquer le produit
                     </button>
                     <button type="button" class="btn btn-outline-secondary" onclick="quickPreview()">
-                        <i class="fas fa-eye me-2"></i>Aperçu rapide
+                        <i class="fas fa-eye me-2"></i>{{ 'admin.product.preview'|trans }} rapide
                     </button>
                     <button type="button" class="btn btn-outline-dark" onclick="exportProduct()">
                         <i class="fas fa-download me-2"></i>Exporter JSON

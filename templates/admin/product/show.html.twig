@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.code }} - Détails Produit{% endblock %}
+{% block title %}{{ product.code }} - {{ 'admin.product.details_page_title'|trans }}{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
@@ -9,23 +9,23 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="{{ path('admin_product_index') }}">Produits</a>
+                        <a href="{{ path('admin_product_index') }}">{{ 'admin.navigation.products'|trans }}</a>
                     </li>
                     <li class="breadcrumb-item active">{{ product.code }}</li>
                 </ol>
             </nav>
             <h1 class="h3 mb-1">{{ product.code }}</h1>
-            <p class="text-muted">Détails du produit MODUSCAP</p>
+            <p class="text-muted">{{ 'admin.product.details_description'|trans }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-warning">
-                <i class="fas fa-edit me-2"></i>Modifier
+                <i class="fas fa-edit me-2"></i>{{ 'admin.common.edit'|trans }}
             </a>
             <button type="button" class="btn btn-secondary" onclick="duplicateProduct({{ product.id }})">
-                <i class="fas fa-copy me-2"></i>Dupliquer
+                <i class="fas fa-copy me-2"></i>{{ 'admin.product.duplicate'|trans }}
             </button>
             <button type="button" class="btn btn-danger" onclick="confirmDelete({{ product.id }})">
-                <i class="fas fa-trash me-2"></i>Supprimer
+                <i class="fas fa-trash me-2"></i>{{ 'admin.common.delete'|trans }}
             </button>
         </div>
     </div>
@@ -52,23 +52,23 @@
                         <div class="d-flex gap-2">
                             {% if product.isActive %}
                                 <span class="badge bg-success">
-                                    <i class="fas fa-check-circle me-1"></i>Actif
+                                    <i class="fas fa-check-circle me-1"></i>{{ 'admin.common.active'|trans }}
                                 </span>
                             {% else %}
                                 <span class="badge bg-danger">
-                                    <i class="fas fa-times-circle me-1"></i>Inactif
+                                    <i class="fas fa-times-circle me-1"></i>{{ 'admin.common.inactive'|trans }}
                                 </span>
                             {% endif %}
                             
                             {% if product.isFeatured %}
                                 <span class="badge bg-warning text-dark">
-                                    <i class="fas fa-star me-1"></i>Mis en avant
+                                    <i class="fas fa-star me-1"></i>{{ 'admin.product.featured'|trans }}
                                 </span>
                             {% endif %}
                             
                             {% if product.isCustomizable %}
                                 <span class="badge bg-info">
-                                    <i class="fas fa-cog me-1"></i>Personnalisable
+                                    <i class="fas fa-cog me-1"></i>{{ 'admin.product.customizable'|trans }}
                                 </span>
                             {% endif %}
                         </div>
@@ -122,13 +122,13 @@
                                 
                                 {% if translation.shortDescription %}
                                     <div class="alert alert-info">
-                                        <strong>Description courte:</strong> {{ translation.shortDescription }}
+                                        <strong>{{ 'admin.product.short_description'|trans }}:</strong> {{ translation.shortDescription }}
                                     </div>
                                 {% endif %}
                                 
                                 {% if translation.description %}
                                     <div class="mb-4">
-                                        <h5><i class="fas fa-file-text me-2"></i>Description</h5>
+                                        <h5><i class="fas fa-file-text me-2"></i>{{ 'admin.product.description'|trans }}</h5>
                                         <div class="border rounded p-3 bg-light">
                                             {{ translation.description|replace({"\n": "<br>"|raw})|raw }}
                                         </div>
@@ -137,7 +137,7 @@
                                 
                                 {% if translation.concept %}
                                     <div class="mb-4">
-                                        <h5><i class="fas fa-lightbulb me-2"></i>Concept & Design</h5>
+                                        <h5><i class="fas fa-lightbulb me-2"></i>{{ 'admin.product.concept_design'|trans }}</h5>
                                         <div class="border rounded p-3 bg-light">
                                             {{ translation.concept|replace({"\n": "<br>"|raw})|raw }}
                                         </div>
@@ -146,7 +146,7 @@
                                 
                                 {% if translation.materialsDetail %}
                                     <div class="mb-4">
-                                        <h5><i class="fas fa-tools me-2"></i>Matériaux</h5>
+                                        <h5><i class="fas fa-tools me-2"></i>{{ 'admin.product.materials'|trans }}</h5>
                                         <div class="border rounded p-3 bg-light">
                                             {{ translation.materialsDetail|replace({"\n": "<br>"|raw})|raw }}
                                         </div>
@@ -155,7 +155,7 @@
                                 
                                 {% if translation.equipmentDetail %}
                                     <div class="mb-4">
-                                        <h5><i class="fas fa-cogs me-2"></i>Équipements</h5>
+                                        <h5><i class="fas fa-cogs me-2"></i>{{ 'admin.product.equipment'|trans }}</h5>
                                         <div class="border rounded p-3 bg-light">
                                             {{ translation.equipmentDetail|replace({"\n": "<br>"|raw})|raw }}
                                         </div>
@@ -164,7 +164,7 @@
                                 
                                 {% if translation.performanceDetails %}
                                     <div class="mb-4">
-                                        <h5><i class="fas fa-chart-line me-2"></i>Performances</h5>
+                                        <h5><i class="fas fa-chart-line me-2"></i>{{ 'admin.product.performance'|trans }}</h5>
                                         <div class="border rounded p-3 bg-light">
                                             {{ translation.performanceDetails|replace({"\n": "<br>"|raw})|raw }}
                                         </div>
@@ -174,7 +174,7 @@
                                 {% if not (translation.name or translation.description or translation.concept or translation.materialsDetail or translation.equipmentDetail or translation.performanceDetails) %}
                                     <div class="text-center py-4 text-muted">
                                         <i class="fas fa-file-alt fa-2x mb-2"></i>
-                                        <p>Aucun contenu disponible pour {{ language.name }}</p>
+                                        <p>{{ ('admin.product.no_content_for'|trans)|replace({'%language%': language.name}) }}</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -190,46 +190,46 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-info-circle me-2"></i>Informations Générales
+                        <i class="fas fa-info-circle me-2"></i>{{ 'admin.product.general_info'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm">
                         <tr>
-                            <td><strong>Code</strong></td>
+                            <td><strong>{{ 'admin.product.code'|trans }}</strong></td>
                             <td><code>{{ product.code }}</code></td>
                         </tr>
                         <tr>
-                            <td><strong>Catégorie</strong></td>
+                            <td><strong>{{ 'admin.product.category'|trans }}</strong></td>
                             <td>{{ product.category.name }}</td>
                         </tr>
                         {% if product.surface %}
                             <tr>
-                                <td><strong>Surface</strong></td>
+                                <td><strong>{{ 'admin.product.surface'|trans }}</strong></td>
                                 <td>{{ product.surface }} m²</td>
                             </tr>
                         {% endif %}
                         {% if product.dimensions %}
                             <tr>
-                                <td><strong>Dimensions</strong></td>
+                                <td><strong>{{ 'admin.product.dimensions'|trans }}</strong></td>
                                 <td>{{ product.dimensions }}</td>
                             </tr>
                         {% endif %}
                         {% if product.rooms %}
                             <tr>
-                                <td><strong>Pièces</strong></td>
+                                <td><strong>{{ 'admin.product.rooms'|trans }}</strong></td>
                                 <td>{{ product.rooms }}</td>
                             </tr>
                         {% endif %}
                         {% if product.height %}
                             <tr>
-                                <td><strong>Hauteur</strong></td>
+                                <td><strong>{{ 'admin.product.height'|trans }}</strong></td>
                                 <td>{{ product.height }} cm</td>
                             </tr>
                         {% endif %}
                         {% if product.assemblyTime %}
                             <tr>
-                                <td><strong>Assemblage</strong></td>
+                                <td><strong>{{ 'admin.product.assembly_time'|trans }}</strong></td>
                                 <td>{{ product.assemblyTime }} jours</td>
                             </tr>
                         {% endif %}
@@ -241,44 +241,44 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-shield-alt me-2"></i>Statuts & Garanties
+                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.statuses_warranties'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm">
                         <tr>
-                            <td><strong>Statut</strong></td>
+                            <td><strong>{{ 'admin.product.status'|trans }}</strong></td>
                             <td>
                                 {% if product.isActive %}
-                                    <span class="badge bg-success">Actif</span>
+                                    <span class="badge bg-success">{{ 'admin.common.active'|trans }}</span>
                                 {% else %}
-                                    <span class="badge bg-danger">Inactif</span>
+                                    <span class="badge bg-danger">{{ 'admin.common.inactive'|trans }}</span>
                                 {% endif %}
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>Mis en avant</strong></td>
+                            <td><strong>{{ 'admin.product.featured'|trans }}</strong></td>
                             <td>
                                 {% if product.isFeatured %}
-                                    <span class="badge bg-warning text-dark">Oui</span>
+                                    <span class="badge bg-warning text-dark">{{ 'admin.common.yes'|trans }}</span>
                                 {% else %}
-                                    <span class="text-muted">Non</span>
+                                    <span class="text-muted">{{ 'admin.common.no'|trans }}</span>
                                 {% endif %}
                             </td>
                         </tr>
                         <tr>
-                            <td><strong>Personnalisable</strong></td>
+                            <td><strong>{{ 'admin.product.customizable'|trans }}</strong></td>
                             <td>
                                 {% if product.isCustomizable %}
                                     <span class="badge bg-info">Oui</span>
                                 {% else %}
-                                    <span class="text-muted">Non</span>
+                                    <span class="text-muted">{{ 'admin.common.no'|trans }}</span>
                                 {% endif %}
                             </td>
                         </tr>
                         {% if product.energyClass %}
                             <tr>
-                                <td><strong>Classe énergétique</strong></td>
+                                <td><strong>{{ 'admin.product.energy_class'|trans }}</strong></td>
                                 <td>
                                     <span class="badge bg-primary">{{ product.energyClass }}</span>
                                 </td>
@@ -286,18 +286,18 @@
                         {% endif %}
                         {% if product.warrantyStructure %}
                             <tr>
-                                <td><strong>Garantie structure</strong></td>
+                                <td><strong>{{ 'admin.product.warranty_structure'|trans }}</strong></td>
                                 <td>{{ product.warrantyStructure }} ans</td>
                             </tr>
                         {% endif %}
                         {% if product.warrantyEquipment %}
                             <tr>
-                                <td><strong>Garantie équipements</strong></td>
+                                <td><strong>{{ 'admin.product.warranty_equipment'|trans }}</strong></td>
                                 <td>{{ product.warrantyEquipment }} ans</td>
                             </tr>
                         {% endif %}
                         <tr>
-                            <td><strong>Ordre d'affichage</strong></td>
+                            <td><strong>{{ 'admin.product.sort_order'|trans }}</strong></td>
                             <td>{{ product.sortOrder }}</td>
                         </tr>
                     </table>
@@ -309,34 +309,34 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
-                            <i class="fas fa-list me-2"></i>Détails Techniques
+                            <i class="fas fa-list me-2"></i>{{ 'admin.product.technical_details'|trans }}
                         </h6>
                     </div>
                     <div class="card-body">
                         {% if product.materials %}
                             <div class="mb-3">
-                                <h6><i class="fas fa-cube me-1"></i>Matériaux</h6>
+                                <h6><i class="fas fa-cube me-1"></i>{{ 'admin.product.materials'|trans }}</h6>
                                 <p class="text-muted small">{{ product.materials|replace({"\n": "<br>"|raw})|raw }}</p>
                             </div>
                         {% endif %}
                         
                         {% if product.equipment %}
                             <div class="mb-3">
-                                <h6><i class="fas fa-cogs me-1"></i>Équipements</h6>
+                                <h6><i class="fas fa-cogs me-1"></i>{{ 'admin.product.equipment'|trans }}</h6>
                                 <p class="text-muted small">{{ product.equipment|replace({"\n": "<br>"|raw})|raw }}</p>
                             </div>
                         {% endif %}
                         
                         {% if product.specifications %}
                             <div class="mb-3">
-                                <h6><i class="fas fa-wrench me-1"></i>Spécifications</h6>
+                                <h6><i class="fas fa-wrench me-1"></i>{{ 'admin.product.specifications'|trans }}</h6>
                                 <p class="text-muted small">{{ product.specifications|replace({"\n": "<br>"|raw})|raw }}</p>
                             </div>
                         {% endif %}
                         
                         {% if product.advantages %}
                             <div class="mb-3">
-                                <h6><i class="fas fa-thumbs-up me-1"></i>Avantages</h6>
+                                <h6><i class="fas fa-thumbs-up me-1"></i>{{ 'admin.product.advantages'|trans }}</h6>
                                 <p class="text-muted small">{{ product.advantages|replace({"\n": "<br>"|raw})|raw }}</p>
                             </div>
                         {% endif %}
@@ -349,7 +349,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h6 class="card-title mb-0">
-                            <i class="fas fa-plus-circle me-2"></i>Options Disponibles
+                            <i class="fas fa-plus-circle me-2"></i>{{ 'admin.product.available_options'|trans }}
                         </h6>
                     </div>
                     <div class="card-body">
@@ -368,17 +368,17 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-calendar me-2"></i>Dates
+                        <i class="fas fa-calendar me-2"></i>{{ 'admin.product.dates'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm">
                         <tr>
-                            <td><strong>Créé le</strong></td>
+                            <td><strong>{{ 'admin.product.created_at'|trans }}</strong></td>
                             <td>{{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '' }}</td>
                         </tr>
                         <tr>
-                            <td><strong>Modifié le</strong></td>
+                            <td><strong>{{ 'admin.product.updated_at'|trans }}</strong></td>
                             <td>{{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : '' }}</td>
                         </tr>
                     </table>
@@ -393,21 +393,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmation de suppression</h5>
+                <h5 class="modal-title">{{ 'admin.product.delete_confirmation_title'|trans }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer le produit <strong>{{ product.code }}</strong> ?</p>
+                <p>{{ ('admin.product.delete_confirmation_message'|trans)|replace({'%code%': product.code}) }}</p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle me-2"></i>
-                    Cette action est irréversible et supprimera toutes les données associées.
+                    {{ 'admin.product.delete_warning_text'|trans }}
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'admin.common.cancel'|trans }}</button>
                 <form id="deleteForm" method="post" style="display: inline;">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
-                    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+                    <button type="submit" class="btn btn-danger">{{ 'admin.product.delete_permanently'|trans }}</button>
                 </form>
             </div>
         </div>
@@ -426,7 +426,7 @@ function confirmDelete(productId) {
 }
 
 function duplicateProduct(productId) {
-    if (confirm('Voulez-vous dupliquer ce produit ?')) {
+    if (confirm('{{ 'admin.product.duplicate_confirmation'|trans }}')) {
         fetch(`/admin/products/duplicate/${productId}`, {
             method: 'POST',
             headers: {
@@ -440,12 +440,12 @@ function duplicateProduct(productId) {
                 // Redirection vers la page d'édition du produit dupliqué
                 window.location.href = `/admin/products/${data.productId}/edit`;
             } else {
-                alert('Erreur lors de la duplication du produit');
+                alert('{{ 'admin.product.duplicate_error'|trans }}');
             }
         })
         .catch(error => {
-            console.error('Erreur:', error);
-            alert('Erreur lors de la duplication du produit');
+            console.error('{{ 'admin.product.duplicate_error_console'|trans }}', error);
+            alert('{{ 'admin.product.duplicate_error'|trans }}');
         });
     }
 }
