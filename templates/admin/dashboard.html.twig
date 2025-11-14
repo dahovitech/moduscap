@@ -120,8 +120,8 @@
                                 {% endif %}
                             </div>
                             <div>
-                                <span class="badge bg-{{ language.active ? 'success' : 'secondary' }}">
-                                    {{ language.active ? ('common.status.active'|trans({}, 'admin')) : ('common.status.inactive'|trans({}, 'admin')) }}
+                                <span class="badge bg-{{ language.isActive ? 'success' : 'secondary' }}">
+                                    {{ language.isActive ? ('common.status.active'|trans({}, 'admin')) : ('common.status.inactive'|trans({}, 'admin')) }}
                                 </span>
                             </div>
                         </div>

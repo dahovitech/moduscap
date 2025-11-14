@@ -212,7 +212,7 @@
                                                name="product[translations][{{ loop.index0 }}][name]" 
                                                value="{{ translation.name }}"
                                                placeholder="{{ ('admin.product.product_name_placeholder'|trans)|replace({'%language%': language.name}) }}"
-                                               {{ not language.active ? 'disabled' : '' }}>
+                                               {{ not language.isActive ? 'disabled' : '' }}>
                                         <div class="form-text">
                                             {{ ('admin.product.name_display_info'|trans)|replace({'%language%': language.name}) }}
                                         </div>
@@ -227,7 +227,7 @@
                                                name="product[translations][{{ loop.index0 }}][shortDescription]" 
                                                value="{{ translation.shortDescription }}"
                                                placeholder="{{ 'admin.product.short_description_placeholder'|trans }}"
-                                               {{ not language.active ? 'disabled' : '' }}>
+                                               {{ not language.isActive ? 'disabled' : '' }}>
                                         <div class="form-text">
                                             {{ 'admin.product.short_description_info'|trans }}
                                         </div>
@@ -241,7 +241,7 @@
                                                   name="product[translations][{{ loop.index0 }}][description]" 
                                                   rows="5"
                                                   placeholder="{{ ('admin.product.description_placeholder'|trans)|replace({'%language%': language.name}) }}"
-                                                  {{ not language.active ? 'disabled' : '' }}>{{ translation.description }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.description }}</textarea>
                                         <div class="form-text">
                                             {{ 'admin.product.description_info'|trans }}
                                         </div>
@@ -255,7 +255,7 @@
                                                   name="product[translations][{{ loop.index0 }}][concept]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.concept_placeholder'|trans }}"
-                                                  {{ not language.active ? 'disabled' : '' }}>{{ translation.concept }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.concept }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold">{{ 'admin.product.materials_detail'|trans }}</label>
@@ -263,7 +263,7 @@
                                                   name="product[translations][{{ loop.index0 }}][materialsDetail]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.materials_detail_placeholder'|trans }}"
-                                                  {{ not language.active ? 'disabled' : '' }}>{{ translation.materialsDetail }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.materialsDetail }}</textarea>
                                     </div>
                                 </div>
                                 
@@ -274,7 +274,7 @@
                                                   name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.equipment_detail_placeholder'|trans }}"
-                                                  {{ not language.active ? 'disabled' : '' }}>{{ translation.equipmentDetail }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.equipmentDetail }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}"
@@ -282,7 +282,7 @@
                                                   name="product[translations][{{ loop.index0 }}][performanceDetails]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.performance_placeholder'|trans }}"
-                                                  {{ not language.active ? 'disabled' : '' }}>{{ translation.performanceDetails }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.performanceDetails }}</textarea>
                                     </div>
                                 </div>
                                 
