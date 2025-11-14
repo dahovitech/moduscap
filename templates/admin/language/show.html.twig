@@ -1,7 +1,7 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}
-    {{ language.name }} - {{ 'admin.title'|trans({}, 'admin') }} - {{ site_name }} 
+    {{ language.name }} - {{ 'admin.title'|trans({}, 'admin') }} - {{ setting('siteName') }} 
 {% endblock %}
 
 {% block body %}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% block page_title %}{{ 'auth.page_title'|trans }}{% endblock %} - {{ site_name }}{% endblock %}</title>
+    <title>{% block title %}{% block page_title %}{{ 'auth.page_title'|trans }}{% endblock %} - {{ setting('siteName') }}{% endblock %}</title>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png"/>
 
     {% block meta %}

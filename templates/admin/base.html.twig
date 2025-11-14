@@ -2,7 +2,7 @@
 <html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{{ 'admin.title'|trans }} - {{ site_name }} {% endblock %}</title>
+    <title>{% block title %}{{ 'admin.title'|trans }} - {{ setting('siteName') }} {% endblock %}</title>
     <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -24,7 +24,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="navbar-brand" href="{{ path('admin_dashboard') }}">
-                    <img width="200" src="{{asset('images/logo-light.png') }}" alt="{{site_name}}">
+                    <img width="200" src="{{asset('images/logo-light.png') }}" alt="{{setting('siteName')}}">
                 </a>
             </div>
 
@@ -101,6 +101,12 @@
                     <a class="nav-link{% if app.request.get('_route') starts with 'admin_user_' %} active{% endif %}"
                        href="{{ path('admin_user_index') }}">
                         <i class="bi bi-people-fill me-2"></i>{{ 'navigation.users'|trans({}, 'admin') }}
+                    </a>
+                </li>
+                 <li class="nav-item">
+                    <a class="nav-link{% if app.request.get('_route') starts with 'admin_setting' %} active{% endif %}"
+                       href="{{ path('admin_setting') }}">
+                        <i class="bi bi-globe me-2"></i>{{ 'navigation.setting'|trans({}, 'admin') }}
                     </a>
                 </li>
             </ul>
