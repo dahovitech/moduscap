@@ -425,28 +425,28 @@
                 <li class="nav-item">
                     <a href="{{ path('admin_dashboard') }}" class="nav-link {{ app.request.get('_route') == 'admin_dashboard' ? 'active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i>
-                        Tableau de bord
+                        {{ 'admin.navigation.dashboard'|trans }}
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a href="{{ path('admin_product_index') }}" class="nav-link {{ app.request.get('_route')|slice(0, 14) == 'admin_product' ? 'active' : '' }}">
                         <i class="fas fa-box"></i>
-                        Produits
+                        {{ 'admin.navigation.products'|trans }}
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a href="{{ path('admin_category_index') }}" class="nav-link {{ app.request.get('_route')|slice(0, 16) == 'admin_category' ? 'active' : '' }}">
                         <i class="fas fa-tags"></i>
-                        Catégories
+                        {{ 'admin.navigation.categories'|trans }}
                     </a>
                 </li>
                 
                 <li class="nav-item">
                     <a href="{{ path('admin_option_index') }}" class="nav-link {{ app.request.get('_route')|slice(0, 15) == 'admin_option' ? 'active' : '' }}">
                         <i class="fas fa-sliders-h"></i>
-                        Options
+                        {{ 'admin.navigation.options'|trans }}
                     </a>
                 </li>
                 
@@ -460,7 +460,7 @@
                 <li class="nav-item">
                     <a href="{{ path('admin_media_index') }}" class="nav-link {{ app.request.get('_route')|slice(0, 15) == 'admin_media' ? 'active' : '' }}">
                         <i class="fas fa-images"></i>
-                        Médias
+                        {{ 'admin.navigation.medias'|trans }}
                     </a>
                 </li>
                 
