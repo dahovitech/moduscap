@@ -360,7 +360,8 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block extra_javascripts %}
+{{parent()}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Validation en temps réel du code produit

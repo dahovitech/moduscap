@@ -415,7 +415,8 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block extra_javascripts %}
+{{parent()}}
 <script>
 function confirmDelete(productId) {
     const deleteForm = document.getElementById('deleteForm');

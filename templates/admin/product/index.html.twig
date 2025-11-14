@@ -269,7 +269,8 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block extra_javascripts %}
+{{parent()}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Sélection de tous les checkboxes

@@ -467,7 +467,8 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block extra_javascripts %}
+{{parent()}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Détection des changements pour l'autosave

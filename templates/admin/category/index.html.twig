@@ -262,7 +262,8 @@
 </div>
 {% endblock %}
 
-{% block javascripts %}
+{% block extra_javascripts %}
+{{parent()}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Auto-submit du formulaire de recherche
