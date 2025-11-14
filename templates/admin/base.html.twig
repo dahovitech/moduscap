@@ -42,7 +42,7 @@
                             {% for language in get_languages() %}
                                 <li>
                                     <a class="dropdown-item{{ app.request.locale == language.code ? ' active' : '' }}"
-                                       href="{{ path('admin_language_switch', {'locale': language.code}) }}">
+                                       href="{{ path('locale_switch', {'_locale': language.code}) }}">
                                         <span class="badge bg-primary me-2">{{ language.code|upper }}</span>
                                         {{ language.nativeName }}
                                         {% if language.isDefault() %}
