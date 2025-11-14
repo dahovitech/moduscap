@@ -127,13 +127,8 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <!-- Onglets des langues - Utilise les langues actives disponibles -->
-                    {% set languages = [
-                        {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷'},
-                        {'code': 'en', 'name': 'English', 'flag': '🇬🇧'},
-                        {'code': 'es', 'name': 'Español', 'flag': '🇪🇸'},
-                        {'code': 'de', 'name': 'Deutsch', 'flag': '🇩🇪'}
-                    ] %}
+                    <!-- Onglets des langues - Utilise les langues actives disponibles via l'extension Twig -->
+                    {% set languages = get_languages() %}
                     
                     <ul class="nav nav-tabs" id="languageTabs" role="tablist">
                         {% for language in languages %}
