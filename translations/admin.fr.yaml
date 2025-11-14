@@ -214,3 +214,121 @@ admin.ui:
   slider: "Curseur"
   date_picker: "Sélecteur de date"
   time_picker: "Sélecteur d'heure"
+
+# Sections détaillées produit
+admin.product.sections:
+  general_info: "Informations générales"
+  multilingual_content: "Contenu multilingue"
+  product_names: "Noms des produits"
+  product_descriptions: "Descriptions des produits"
+  concept: "Concept"
+  materials: "Matériaux"
+  equipment: "Équipement"
+  performance: "Performances"
+  advanced_statuses: "Statuts avancés"
+  is_active: "Produit actif"
+  is_customizable: "Personnalisable"
+  can_be_built_on_site: "Montage sur site"
+  warranty: "Garantie et performance"
+  structure_warranty: "Garantie structure (années)"
+  equipment_warranty: "Garantie équipement (années)"
+  thermal_performance: "Performance thermique"
+  available_options: "Options disponibles"
+  display_order: "Ordre d'affichage"
+  sort_order: "Ordre de tri"
+  information_table: "Tableau d'informations"
+  quick_actions: "Actions rapides"
+  performance_indicators: "Indicateurs de performance"
+  construction_time: "Temps de construction"
+  surface_area: "Surface au sol"
+
+# Messages JavaScript produits
+admin.product.js_messages:
+  unsaved_changes: "Vous avez des modifications non enregistrées"
+  confirm_leave: "Êtes-vous sûr de vouloir quitter cette page ? Toutes les modifications non enregistrées seront perdues."
+  draft_saving: "Sauvegarde du brouillon en cours..."
+  draft_saved: "Brouillon sauvegardé"
+  duplicate_confirm: "Êtes-vous sûr de vouloir dupliquer ce produit ?"
+  error_duplicate: "Erreur lors de la duplication du produit"
+  success_duplicate: "Produit dupliqué avec succès"
+  confirm_deletion: "Confirmer la suppression du produit"
+  confirm_delete: "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible."
+  order_updated: "Ordre mis à jour avec succès"
+  error_update: "Erreur lors de la mise à jour"
+  performance_saved: "Performances sauvegardées avec succès"
+  error_performance: "Erreur lors de la sauvegarde des performances"
+
+# Catégories - liste et actions
+admin.category.list:
+  title: "Gestion des catégories"
+  search_placeholder: "Rechercher par nom, code ou description..."
+  total_categories: "Total des catégories"
+  active_categories: "Catégories actives"
+  featured_categories: "Catégories mises en avant"
+  no_categories: "Aucune catégorie trouvée"
+  no_search_results: "Aucun résultat pour votre recherche"
+  categories_found: "%{count} catégorie(s) trouvée(s)"
+  created_on: "Créée le %{date}"
+  updated_on: "Modifiée le %{date}"
+  show_all: "Tout afficher"
+  hide_all: "Tout masquer"
+  active_status: "Actif"
+  inactive_status: "Inactif"
+  order_number: "N° %{number}"
+  created_date: "Créée le %{date}"
+  
+# Actions catégories
+admin.category.actions:
+  edit_category: "Modifier la catégorie"
+  duplicate_category: "Dupliquer la catégorie"
+  delete_category: "Supprimer la catégorie"
+  view_details: "Voir les détails"
+  quick_edit: "Modification rapide"
+  set_order: "Définir l'ordre"
+
+# Modal de suppression catégorie
+admin.category.delete_modal:
+  title: "Supprimer la catégorie"
+  message: "Êtes-vous sûr de vouloir supprimer la catégorie '%{name}' ? Cette action est irréversible."
+  confirm_delete: "Supprimer"
+  cancel: "Annuler"
+  error_delete: "Erreur lors de la suppression de la catégorie"
+
+# Messages JavaScript catégories
+admin.category.js_messages:
+  delete_error: "Erreur lors de la suppression de la catégorie"
+  duplicate_confirm: "Êtes-vous sûr de vouloir dupliquer cette catégorie ?"
+  success_duplicate: "Catégorie dupliquée avec succès"
+  error_duplicate: "Erreur lors de la duplication de la catégorie"
+  reorder_error: "Erreur lors de la réorganisation des catégories"
+  order_updated: "Ordre mis à jour avec succès"
+
+# États vides
+admin.empty_states:
+  no_products: "Aucun produit disponible"
+  no_categories: "Aucune catégorie disponible"
+  no_users: "Aucun utilisateur disponible"
+  no_media: "Aucun média disponible"
+  create_first: "Créer votre premier %{item}"
+  add_some: "Ajoutez du contenu pour commencer"
+  nothing_here: "Rien à afficher ici"
+
+# Messages de statut
+admin.status:
+  loading: "Chargement..."
+  processing: "Traitement en cours..."
+  saving: "Sauvegarde en cours..."
+  updating: "Mise à jour en cours..."
+  deleting: "Suppression en cours..."
+  completed: "Terminé"
+  failed: "Échec"
+  pending: "En attente"
+
+# Messages de confirmation détaillés
+admin.confirmation.detailed:
+  delete_product_title: "Supprimer le produit"
+  delete_product_message: "Êtes-vous sûr de vouloir supprimer le produit '%{name}' ? Cette action supprimera également tous les médias et traductions associés. Cette action est irréversible."
+  delete_category_title: "Supprimer la catégorie"
+  delete_category_message: "Êtes-vous sûr de vouloir supprimer la catégorie '%{name}' ? Cette action est irréversible."
+  leave_page_title: "Quitter la page"
+  leave_page_message: "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter cette page ?"
