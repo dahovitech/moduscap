@@ -17,57 +17,50 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProductCategoryType extends AbstractType
-{
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('code', TextType::class, [
-                'label' => $this->translator->trans('admin.category.code'),
+                'label' => 'admin.category.code',
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => $this->translator->trans('admin.category.code_placeholder'),
+                    'placeholder' => 'admin.category.code_placeholder',
                     'pattern' => '^[A-Za-z0-9_-]+$',
-                    'title' => $this->translator->trans('admin.category.code_title')
+                    'title' => 'admin.category.code_title'
                 ],
-                'help' => $this->translator->trans('admin.category.code_help')
+                'help' => 'admin.category.code_help'
             ])
             ->add('basePrice', MoneyType::class, [
-                'label' => $this->translator->trans('admin.category.base_price'),
+                'label' => 'admin.category.base_price',
                 'currency' => 'EUR',
                 'required' => false,
-                'help' => $this->translator->trans('admin.category.base_price_help'),
+                'help' => 'admin.category.base_price_help',
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => $this->translator->trans('admin.category.price_placeholder')
+                    'placeholder' => 'admin.category.price_placeholder'
                 ]
             ])
             ->add('isActive', CheckboxType::class, [
-                'label' => $this->translator->trans('admin.category.active_category'),
+                'label' => 'admin.category.active_category',
                 'required' => false,
                 'attr' => ['class' => 'form-check-input'],
                 'label_attr' => ['class' => 'form-check-label']
             ])
             ->add('isFeatured', CheckboxType::class, [
-                'label' => $this->translator->trans('admin.category.featured_category'),
+                'label' => 'admin.category.featured_category',
                 'required' => false,
                 'attr' => ['class' => 'form-check-input'],
                 'label_attr' => ['class' => 'form-check-label']
             ])
             ->add('sortOrder', IntegerType::class, [
-                'label' => $this->translator->trans('admin.category.sort_order'),
+                'label' => 'admin.category.sort_order',
                 'data' => 0,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => $this->translator->trans('admin.category.sort_order_placeholder')
+                    'placeholder' => 'admin.category.sort_order_placeholder'
                 ],
-                'help' => $this->translator->trans('admin.category.sort_order_help')
+                'help' => 'admin.category.sort_order_help'
             ])
             ->add('translations', CollectionType::class, [
                 'entry_type' => ProductCategoryTranslationType::class,
@@ -75,19 +68,19 @@ class ProductCategoryType extends AbstractType
                 'allow_add' => false,
                 'allow_delete' => false,
                 'by_reference' => false,
-                'label' => $this->translator->trans('admin.category.translations'),
+                'label' => 'admin.category.translations',
                 'attr' => [
                     'class' => 'translations-container'
                 ]
             ])
             ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
-                'label' => $this->translator->trans('admin.common.save'),
+                'label' => 'admin.common.save',
                 'attr' => [
                     'class' => 'btn btn-primary btn-lg me-2'
                 ]
             ])
             ->add('save_and_continue', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
-                'label' => $this->translator->trans('admin.common.save_and_continue'),
+                'label' => 'admin.common.save_and_continue',
                 'attr' => [
                     'class' => 'btn btn-secondary'
                 ]
