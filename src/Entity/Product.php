@@ -39,17 +39,7 @@ class Product
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $height = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $materials = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $equipment = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $specifications = null;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $advantages = null;
+    // Materials, equipment, specifications, advantages fields moved to ProductTranslation entity for multilingual support
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $technicalSpecs = null;
@@ -185,49 +175,8 @@ class Product
         return $this;
     }
 
-    public function getMaterials(): ?string
-    {
-        return $this->materials;
-    }
-
-    public function setMaterials(?string $materials): static
-    {
-        $this->materials = $materials;
-        return $this;
-    }
-
-    public function getEquipment(): ?string
-    {
-        return $this->equipment;
-    }
-
-    public function setEquipment(?string $equipment): static
-    {
-        $this->equipment = $equipment;
-        return $this;
-    }
-
-    public function getSpecifications(): ?string
-    {
-        return $this->specifications;
-    }
-
-    public function setSpecifications(?string $specifications): static
-    {
-        $this->specifications = $specifications;
-        return $this;
-    }
-
-    public function getAdvantages(): ?string
-    {
-        return $this->advantages;
-    }
-
-    public function setAdvantages(?string $advantages): static
-    {
-        $this->advantages = $advantages;
-        return $this;
-    }
+    // getMaterials, setMaterials, getEquipment, setEquipment, getSpecifications, setSpecifications, getAdvantages, setAdvantages
+    // methods removed - fields moved to ProductTranslation entity for multilingual support
 
     public function getTechnicalSpecs(): ?string
     {
