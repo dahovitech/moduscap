@@ -1,20 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des Produits - MODUSCAP{% endblock %}
+{% block title %}{{ 'admin.product.title'|trans }} - MODUSCAP{% endblock %}
 
 {% block body %}
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-1">Gestion des Produits</h1>
-            <p class="text-muted">Gérez votre catalogue de produits MODUSCAP</p>
+            <h1 class="h3 mb-1">{{ 'admin.product.list_title'|trans }}</h1>
+            <p class="text-muted">{{ 'admin.product.description'|trans }}</p>
         </div>
         <div class="d-flex gap-2">
             <a href="{{ path('admin_product_new') }}" class="btn btn-primary btn-lg">
-                <i class="fas fa-plus me-2"></i>Nouveau Produit
+                <i class="fas fa-plus me-2"></i>{{ 'admin.common.create'|trans }} {{ 'admin.product.title'|trans }}
             </a>
             <button type="button" class="btn btn-outline-secondary" data-bs-toggle="collapse" data-bs-target="#filters">
-                <i class="fas fa-filter me-2"></i>Filtres
+                <i class="fas fa-filter me-2"></i>{{ 'admin.filter.title'|trans }}
             </button>
         </div>
     </div>
@@ -24,12 +24,12 @@
         <div class="card card-body">
             <form method="get" class="row g-3">
                 <div class="col-md-6">
-                    <label for="search" class="form-label">Recherche</label>
+                    <label for="search" class="form-label">{{ 'admin.common.search'|trans }}</label>
                     <input type="text" class="form-control" id="search" name="search" 
-                           value="{{ current_search }}" placeholder="Code ou nom du produit...">
+                           value="{{ current_search }}" placeholder="{{ 'admin.filter.search_placeholder'|trans }}">
                 </div>
                 <div class="col-md-4">
-                    <label for="category" class="form-label">Catégorie</label>
+                    <label for="category" class="form-label">{{ 'admin.product.category'|trans }}</label>
                     <select class="form-select" id="category" name="category">
                         <option value="">Toutes les catégories</option>
                         {% for category in categories %}
@@ -103,7 +103,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="h4 mb-0">{{ categories|length }}</div>
-                            <div class="small">Catégories</div>
+                            <div class="small">{{ 'admin.product.category'|trans }}</div>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-tags fa-2x opacity-75"></i>
@@ -120,10 +120,10 @@
             <h5 class="mb-0">Liste des Produits</h5>
             <div class="d-flex gap-2">
                 <select class="form-select form-select-sm" id="bulkAction">
-                    <option value="">Actions groupées</option>
-                    <option value="activate">Activer</option>
-                    <option value="deactivate">Désactiver</option>
-                    <option value="delete">Supprimer</option>
+                    <option value="">{{ 'admin.common.grouped_actions'|trans }}</option>
+                    <option value="activate">{{ 'admin.common.activate'|trans }}</option>
+                    <option value="deactivate">{{ 'admin.common.deactivate'|trans }}</option>
+                    <option value="delete">{{ 'admin.common.delete'|trans }}</option>
                 </select>
                 <button class="btn btn-sm btn-outline-primary" onclick="exportProducts()">
                     <i class="fas fa-download me-1"></i>Exporter
@@ -139,14 +139,14 @@
                                 <th width="40">
                                     <input type="checkbox" class="form-check-input" id="selectAll">
                                 </th>
-                                <th>Code</th>
-                                <th>Nom</th>
-                                <th>Catégorie</th>
-                                <th>Prix</th>
-                                <th>Statut</th>
-                                <th>Mis en avant</th>
-                                <th>Date création</th>
-                                <th width="150">Actions</th>
+                                <th>{{ 'admin.product.code'|trans }}</th>
+                                <th>{{ 'admin.product.name'|trans }}</th>
+                                <th>{{ 'admin.product.category'|trans }}</th>
+                                <th>{{ 'admin.product.base_price'|trans }}</th>
+                                <th>{{ 'admin.product.status'|trans }}</th>
+                                <th>{{ 'admin.product.is_featured'|trans }}</th>
+                                <th>{{ 'admin.common.creation_date'|trans }}</th>
+                                <th width="150">{{ 'admin.common.actions'|trans }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -202,15 +202,15 @@
                                     <td>
                                         <div class="btn-group btn-group-sm" role="group">
                                             <a href="{{ path('admin_product_show', {'id': product.id}) }}" 
-                                               class="btn btn-outline-primary" title="Voir">
+                                               class="btn btn-outline-primary" title="{{ 'admin.common.view'|trans }}">
                                                 <i class="fas fa-eye"></i>
                                             </a>
                                             <a href="{{ path('admin_product_edit', {'id': product.id}) }}" 
-                                               class="btn btn-outline-warning" title="Modifier">
+                                               class="btn btn-outline-warning" title="{{ 'admin.common.edit'|trans }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <button type="button" class="btn btn-outline-danger" 
-                                                    onclick="confirmDelete({{ product.id }})" title="Supprimer">
+                                                    onclick="confirmDelete({{ product.id }})" title="{{ 'admin.common.delete'|trans }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -258,10 +258,10 @@
                 Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible.
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'admin.common.cancel'|trans }}</button>
                 <form id="deleteForm" method="post" style="display: inline;">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
-                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                    <button type="submit" class="btn btn-danger">{{ 'admin.common.delete'|trans }}</button>
                 </form>
             </div>
         </div>
