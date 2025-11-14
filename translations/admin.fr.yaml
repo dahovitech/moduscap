@@ -1,0 +1,216 @@
+# Traductions pour l'interface admin MODUSCAP
+
+# Navigation
+admin.navigation:
+  dashboard: "Tableau de bord"
+  products: "Produits"
+  categories: "Catégories"
+  options: "Options"
+  medias: "Médias"
+  settings: "Paramètres"
+  users: "Utilisateurs"
+
+# Messages généraux
+admin.common:
+  create: "Créer"
+  edit: "Modifier"
+  save: "Enregistrer"
+  cancel: "Annuler"
+  delete: "Supprimer"
+  duplicate: "Dupliquer"
+  view: "Voir"
+  search: "Rechercher"
+  filter: "Filtrer"
+  reset: "Réinitialiser"
+  yes: "Oui"
+  no: "Non"
+  active: "Actif"
+  inactive: "Inactif"
+  featured: "Mis en avant"
+  status: "Statut"
+  actions: "Actions"
+  back: "Retour"
+  next: "Suivant"
+  previous: "Précédent"
+  upload: "Télécharger"
+  preview: "Aperçu"
+  loading: "Chargement..."
+  success: "Succès"
+  error: "Erreur"
+  warning: "Attention"
+  info: "Information"
+
+# Messages de validation
+admin.validation:
+  required: "Ce champ est obligatoire"
+  invalid_email: "Adresse email invalide"
+  min_length: "Longueur minimum : %{min} caractères"
+  max_length: "Longueur maximum : %{max} caractères"
+  invalid_number: "Veuillez saisir un nombre valide"
+  invalid_date: "Date invalide"
+
+# Messages de confirmation
+admin.confirmation:
+  delete_title: "Confirmer la suppression"
+  delete_message: "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+  duplicate_title: "Confirmer la duplication"
+  duplicate_message: "Êtes-vous sûr de vouloir dupliquer cet élément ?"
+  save_title: "Confirmer l'enregistrement"
+  save_message: "Voulez-vous enregistrer les modifications ?"
+
+# Messages de succès
+admin.success:
+  created: "Élément créé avec succès"
+  updated: "Élément mis à jour avec succès"
+  deleted: "Élément supprimé avec succès"
+  duplicated: "Élément dupliqué avec succès"
+  saved: "Modifications enregistrées avec succès"
+
+# Messages d'erreur
+admin.error:
+  creation_failed: "Erreur lors de la création"
+  update_failed: "Erreur lors de la mise à jour"
+  deletion_failed: "Erreur lors de la suppression"
+  duplicate_failed: "Erreur lors de la duplication"
+  generic_error: "Une erreur s'est produite"
+
+# Pagination
+admin.pagination:
+  showing: "Affichage de %{start} à %{end} sur %{total} éléments"
+  per_page: "Éléments par page"
+  first: "Premier"
+  last: "Dernier"
+  previous: "Précédent"
+  next: "Suivant"
+
+# Produits
+admin.product:
+  title: "Gestion des produits"
+  create_title: "Créer un nouveau produit"
+  edit_title: "Modifier le produit"
+  view_title: "Détails du produit"
+  list_title: "Liste des produits"
+  
+  # Champs
+  code: "Code produit"
+  name: "Nom"
+  description: "Description"
+  short_description: "Description courte"
+  concept: "Concept"
+  base_price: "Prix de base"
+  surface: "Surface"
+  dimensions: "Dimensions"
+  rooms: "Nombre de pièces"
+  height: "Hauteur"
+  materials: "Matériaux"
+  equipment: "Équipement"
+  specifications: "Spécifications"
+  advantages: "Avantages"
+  technical_specs: "Spécifications techniques"
+  assembly_time: "Temps de montage"
+  energy_class: "Classe énergétique"
+  warranty_structure: "Garantie structure"
+  warranty_equipment: "Garantie équipement"
+  category: "Catégorie"
+  is_active: "Actif"
+  is_featured: "Mis en avant"
+  is_customizable: "Personnalisable"
+  sort_order: "Ordre de tri"
+  status: "Statut"
+  
+  # Onglets
+  general_info: "Informations générales"
+  translations: "Traductions"
+  media: "Médias"
+  options: "Options"
+  seo: "SEO"
+  
+  # Traductions
+  translations:
+    select_language: "Sélectionner une langue"
+    no_translations: "Aucune traduction disponible"
+    add_translation: "Ajouter une traduction"
+    edit_translation: "Modifier la traduction"
+  
+  # Médias
+  media:
+    main_image: "Image principale"
+    gallery: "Galerie"
+    technical_images: "Images techniques"
+    upload_image: "Télécharger une image"
+    drag_drop: "Glissez-déposez vos fichiers ici"
+    no_media: "Aucun média sélectionné"
+    remove_media: "Supprimer le média"
+    set_main: "Définir comme image principale"
+
+# Catégories
+admin.category:
+  title: "Gestion des catégories"
+  create_title: "Créer une nouvelle catégorie"
+  edit_title: "Modifier la catégorie"
+  list_title: "Liste des catégories"
+  
+  # Champs
+  code: "Code catégorie"
+  name: "Nom"
+  description: "Description"
+  short_description: "Description courte"
+  base_price: "Prix de base"
+  is_active: "Active"
+  is_featured: "Mise en avant"
+  sort_order: "Ordre de tri"
+  parent_category: "Catégorie parente"
+  
+  # Onglets
+  general_info: "Informations générales"
+  translations: "Traductions"
+
+# Filtres
+admin.filter:
+  title: "Filtres"
+  search_placeholder: "Rechercher par nom, code..."
+  category_filter: "Filtrer par catégorie"
+  status_filter: "Filtrer par statut"
+  active_only: "Actifs uniquement"
+  inactive_only: "Inactifs uniquement"
+  featured_only: "Mis en avant uniquement"
+  all_categories: "Toutes les catégories"
+  all_status: "Tous les statuts"
+  clear_filters: "Effacer les filtres"
+
+# Formulaires
+admin.form:
+  submit: "Soumettre"
+  reset: "Réinitialiser"
+  required_field: "Champ requis"
+  optional_field: "Champ optionnel"
+  character_count: "%{count} caractères"
+  minimum_characters: "Minimum %{min} caractères"
+  maximum_characters: "Maximum %{max} caractères"
+  invalid_format: "Format invalide"
+
+# Interface utilisateur
+admin.ui:
+  tabs: "Onglets"
+  accordion: "Accordéon"
+  modal: "Fenêtre modale"
+  dropdown: "Menu déroulant"
+  tooltip: "Info-bulle"
+  breadcrumb: "Fil d'Ariane"
+  notification: "Notification"
+  progress_bar: "Barre de progression"
+  spinner: "Chargement"
+  avatar: "Avatar"
+  badge: "Badge"
+  chip: "Chip"
+  card: "Carte"
+  button: "Bouton"
+  input: "Champ de saisie"
+  select: "Liste déroulante"
+  textarea: "Zone de texte"
+  checkbox: "Case à cocher"
+  radio_button: "Bouton radio"
+  switch: "Interrupteur"
+  slider: "Curseur"
+  date_picker: "Sélecteur de date"
+  time_picker: "Sélecteur d'heure"

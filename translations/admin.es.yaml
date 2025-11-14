@@ -1,0 +1,216 @@
+# Traducciones de la interfaz de administración de MODUSCAP - Español
+
+# Navegación
+admin.navigation:
+  dashboard: "Panel de control"
+  products: "Productos"
+  categories: "Categorías"
+  options: "Opciones"
+  medias: "Medios"
+  settings: "Configuración"
+  users: "Usuarios"
+
+# Mensajes generales
+admin.common:
+  create: "Crear"
+  edit: "Editar"
+  save: "Guardar"
+  cancel: "Cancelar"
+  delete: "Eliminar"
+  duplicate: "Duplicar"
+  view: "Ver"
+  search: "Buscar"
+  filter: "Filtrar"
+  reset: "Restablecer"
+  yes: "Sí"
+  no: "No"
+  active: "Activo"
+  inactive: "Inactivo"
+  featured: "Destacado"
+  status: "Estado"
+  actions: "Acciones"
+  back: "Atrás"
+  next: "Siguiente"
+  previous: "Anterior"
+  upload: "Subir"
+  preview: "Vista previa"
+  loading: "Cargando..."
+  success: "Éxito"
+  error: "Error"
+  warning: "Advertencia"
+  info: "Información"
+
+# Mensajes de validación
+admin.validation:
+  required: "Este campo es obligatorio"
+  invalid_email: "Dirección de correo electrónico inválida"
+  min_length: "Longitud mínima: %{min} caracteres"
+  max_length: "Longitud máxima: %{max} caracteres"
+  invalid_number: "Por favor ingrese un número válido"
+  invalid_date: "Fecha inválida"
+
+# Mensajes de confirmación
+admin.confirmation:
+  delete_title: "Confirmar eliminación"
+  delete_message: "¿Está seguro de que desea eliminar este elemento? Esta acción es irreversible."
+  duplicate_title: "Confirmar duplicación"
+  duplicate_message: "¿Está seguro de que desea duplicar este elemento?"
+  save_title: "Confirmar guardado"
+  save_message: "¿Desea guardar los cambios?"
+
+# Mensajes de éxito
+admin.success:
+  created: "Elemento creado exitosamente"
+  updated: "Elemento actualizado exitosamente"
+  deleted: "Elemento eliminado exitosamente"
+  duplicated: "Elemento duplicado exitosamente"
+  saved: "Cambios guardados exitosamente"
+
+# Mensajes de error
+admin.error:
+  creation_failed: "Error al crear"
+  update_failed: "Error al actualizar"
+  deletion_failed: "Error al eliminar"
+  duplicate_failed: "Error al duplicar"
+  generic_error: "Ocurrió un error"
+
+# Paginación
+admin.pagination:
+  showing: "Mostrando %{start} a %{end} de %{total} elementos"
+  per_page: "Elementos por página"
+  first: "Primero"
+  last: "Último"
+  previous: "Anterior"
+  next: "Siguiente"
+
+# Productos
+admin.product:
+  title: "Gestión de productos"
+  create_title: "Crear nuevo producto"
+  edit_title: "Editar producto"
+  view_title: "Detalles del producto"
+  list_title: "Lista de productos"
+  
+  # Campos
+  code: "Código de producto"
+  name: "Nombre"
+  description: "Descripción"
+  short_description: "Descripción corta"
+  concept: "Concepto"
+  base_price: "Precio base"
+  surface: "Superficie"
+  dimensions: "Dimensiones"
+  rooms: "Número de habitaciones"
+  height: "Altura"
+  materials: "Materiales"
+  equipment: "Equipo"
+  specifications: "Especificaciones"
+  advantages: "Ventajas"
+  technical_specs: "Especificaciones técnicas"
+  assembly_time: "Tiempo de montaje"
+  energy_class: "Clase energética"
+  warranty_structure: "Garantía de estructura"
+  warranty_equipment: "Garantía de equipo"
+  category: "Categoría"
+  is_active: "Activo"
+  is_featured: "Destacado"
+  is_customizable: "Personalizable"
+  sort_order: "Orden de clasificación"
+  status: "Estado"
+  
+  # Pestañas
+  general_info: "Información general"
+  translations: "Traducciones"
+  media: "Medios"
+  options: "Opciones"
+  seo: "SEO"
+  
+  # Traducciones
+  translations:
+    select_language: "Seleccionar un idioma"
+    no_translations: "No hay traducciones disponibles"
+    add_translation: "Agregar traducción"
+    edit_translation: "Editar traducción"
+  
+  # Medios
+  media:
+    main_image: "Imagen principal"
+    gallery: "Galería"
+    technical_images: "Imágenes técnicas"
+    upload_image: "Subir imagen"
+    drag_drop: "Arrastra y suelta tus archivos aquí"
+    no_media: "No hay medios seleccionados"
+    remove_media: "Eliminar medio"
+    set_main: "Establecer como imagen principal"
+
+# Categorías
+admin.category:
+  title: "Gestión de categorías"
+  create_title: "Crear nueva categoría"
+  edit_title: "Editar categoría"
+  list_title: "Lista de categorías"
+  
+  # Campos
+  code: "Código de categoría"
+  name: "Nombre"
+  description: "Descripción"
+  short_description: "Descripción corta"
+  base_price: "Precio base"
+  is_active: "Activo"
+  is_featured: "Destacado"
+  sort_order: "Orden de clasificación"
+  parent_category: "Categoría padre"
+  
+  # Pestañas
+  general_info: "Información general"
+  translations: "Traducciones"
+
+# Filtros
+admin.filter:
+  title: "Filtros"
+  search_placeholder: "Buscar por nombre, código..."
+  category_filter: "Filtrar por categoría"
+  status_filter: "Filtrar por estado"
+  active_only: "Solo activos"
+  inactive_only: "Solo inactivos"
+  featured_only: "Solo destacados"
+  all_categories: "Todas las categorías"
+  all_status: "Todos los estados"
+  clear_filters: "Limpiar filtros"
+
+# Formularios
+admin.form:
+  submit: "Enviar"
+  reset: "Restablecer"
+  required_field: "Campo requerido"
+  optional_field: "Campo opcional"
+  character_count: "%{count} caracteres"
+  minimum_characters: "Mínimo %{min} caracteres"
+  maximum_characters: "Máximo %{max} caracteres"
+  invalid_format: "Formato inválido"
+
+# Interfaz de usuario
+admin.ui:
+  tabs: "Pestañas"
+  accordion: "Acordeón"
+  modal: "Modal"
+  dropdown: "Menú desplegable"
+  tooltip: "Información emergente"
+  breadcrumb: "Miga de pan"
+  notification: "Notificación"
+  progress_bar: "Barra de progreso"
+  spinner: "Cargador"
+  avatar: "Avatar"
+  badge: "Insignia"
+  chip: "Chip"
+  card: "Tarjeta"
+  button: "Botón"
+  input: "Campo de entrada"
+  select: "Selección"
+  textarea: "Área de texto"
+  checkbox: "Casilla de verificación"
+  radio_button: "Botón de radio"
+  switch: "Interruptor"
+  slider: "Control deslizante"
+  date_picker: "Selector de fecha"
+  time_picker: "Selector de hora"
