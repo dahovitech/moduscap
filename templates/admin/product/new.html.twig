@@ -25,10 +25,16 @@
         <div class="col-lg-8">
             <!-- Informations générales -->
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">
                         <i class="fas fa-info-circle me-2"></i>{{ 'admin.product.general_info'|trans }}
                     </h5>
+                    <div class="form-check form-switch">
+                        {{ form_widget(form.isActive, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label">{{ 'admin.product.active_product'|trans }}</label>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -93,79 +99,189 @@
                 </div>
             </div>
 
-            <!-- Specs section removed - now handled in ProductTranslationType for multilingual content -->
-            <!-- Materials, equipment, specifications, advantages are now translated fields within form.translations -->
+            <!-- Spécifications techniques -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.technicalSpecs, {
+                                'attr': {'class': 'form-control', 'rows': 4, 'placeholder': ('admin.product.technical_specs_placeholder'|trans)},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Traductions multilingues -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         <i class="fas fa-globe me-2"></i>{{ 'admin.product.multilingual_content'|trans }}
-                        <small class="text-muted">{{ 'admin.product.multilingual_instruction'|trans }}</small>
+                        <small class="text-muted">{{ 'admin.product.add_multilingual_content'|trans }}</small>
                     </h5>
                 </div>
                 <div class="card-body">
-                    <!-- Onglets des langues -->
+                    <!-- Onglets des langues - Utilise les langues actives disponibles -->
+                    {% set languages = [
+                        {'code': 'fr', 'name': 'Français', 'flag': '🇫🇷'},
+                        {'code': 'en', 'name': 'English', 'flag': '🇬🇧'},
+                        {'code': 'es', 'name': 'Español', 'flag': '🇪🇸'},
+                        {'code': 'de', 'name': 'Deutsch', 'flag': '🇩🇪'}
+                    ] %}
+                    
                     <ul class="nav nav-tabs" id="languageTabs" role="tablist">
-                        {% for translation in product.translations %}
-                            {% set language = translation.language %}
+                        {% for language in languages %}
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link {{ loop.first ? 'active' : '' }}" 
                                         id="lang-{{ language.code }}-tab" 
                                         data-bs-toggle="tab" 
                                         data-bs-target="#lang-{{ language.code }}" 
                                         type="button" role="tab">
-                                    <img src="/assets/flags/{{ language.code }}.svg" 
-                                         alt="{{ language.name }}" 
-                                         width="20" height="15" 
-                                         class="me-2 rounded">
+                                    <span class="me-2">{{ language.flag }}</span>
                                     {{ language.name }}
-                                    {% if not language.isActive %}
-                                        <span class="badge bg-warning text-dark ms-1">{{ 'admin.common.inactive'|trans }}</span>
-                                    {% endif %}
                                 </button>
                             </li>
                         {% endfor %}
                     </ul>
                     
-                    <!-- Contenu des onglets - Using form.translations structure -->
-                    {{ form_widget(form.translations) }}
-                    
-                    <!-- Simplified tab structure for demo - In production, you might want to customize ProductTranslationType rendering -->
+                    <!-- Contenu des onglets -->
+                    <div class="tab-content mt-3" id="languageTabsContent">
+                        {% for language in languages %}
+                            <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
+                                 id="lang-{{ language.code }}" 
+                                 role="tabpanel">
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.product_name'|trans }}</label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg" 
+                                               name="product[translations][{{ loop.index0 }}][name]" 
+                                               placeholder="{{ ('admin.product.product_name_placeholder'|trans)|replace({'%language%': language.name}) }}">
+                                        <div class="form-text">
+                                            {{ ('admin.product.name_display_info'|trans)|replace({'%language%': language.name}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.short_description'|trans }}</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="product[translations][{{ loop.index0 }}][shortDescription]" 
+                                               placeholder="{{ 'admin.product.short_description_placeholder'|trans }}">
+                                        <div class="form-text">
+                                            {{ 'admin.product.short_description_info'|trans }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.complete_description'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][description]" 
+                                                  rows="5"
+                                                  placeholder="{{ ('admin.product.description_placeholder'|trans)|replace({'%language%': language.name}) }}"></textarea>
+                                        <div class="form-text">
+                                            {{ 'admin.product.description_info'|trans }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.concept_design'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][concept]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.concept_placeholder'|trans }}"></textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.materials_detail'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][materialsDetail]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.materials_detail_placeholder'|trans }}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.equipment_detail'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.equipment_detail_placeholder'|trans }}"></textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][performanceDetails]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.performance_placeholder'|trans }}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.specifications'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][specifications]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.specs_placeholder'|trans }}"></textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.advantages'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][advantages]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.advantages_placeholder'|trans }}"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <input type="hidden" 
+                                       name="product[translations][{{ loop.index0 }}][language]" 
+                                       value="{{ language.code }}">
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Sidebar -->
         <div class="col-lg-4">
-            <!-- {{ 'admin.product.statuses'|trans }} -->
+            <!-- Statuts avancés -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-toggle-on me-2"></i>{{ 'admin.product.statuses'|trans }}
+                        <i class="fas fa-toggle-on me-2"></i>{{ 'admin.product.advanced_statuses'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
-                    {{ form_row(form.isActive, {
-                        'attr': {'class': 'form-check-input'},
-                        'label_attr': {'class': 'form-check-label'},
-                        'label': ('admin.product.active_product'|trans)
-                    }) }}
-                    <div class="form-text mb-3">{{ 'admin.product.active_help'|trans }}</div>
+                    <div class="form-check form-switch mb-3">
+                        {{ form_widget(form.isFeatured, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label fw-bold">{{ 'admin.product.featured_product'|trans }}</label>
+                        <div class="form-text">{{ 'admin.product.featured_product_info'|trans }}</div>
+                    </div>
                     
-                    {{ form_row(form.isFeatured, {
-                        'attr': {'class': 'form-check-input'},
-                        'label_attr': {'class': 'form-check-label'},
-                        'label': ('admin.product.featured'|trans)
-                    }) }}
-                    <div class="form-text mb-3">{{ 'admin.product.featured_help'|trans }}</div>
-                    
-                    {{ form_row(form.isCustomizable, {
-                        'attr': {'class': 'form-check-input'},
-                        'label_attr': {'class': 'form-check-label'},
-                        'label': ('admin.product.customizable'|trans)
-                    }) }}
-                    <div class="form-text">{{ 'admin.product.customizable_help'|trans }}</div>
+                    <div class="form-check form-switch">
+                        {{ form_widget(form.isCustomizable, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label fw-bold">{{ 'admin.product.customizable_product'|trans }}</label>
+                        <div class="form-text">{{ 'admin.product.customizable_product_info'|trans }}</div>
+                    </div>
                 </div>
             </div>
 
@@ -173,7 +289,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.warranties'|trans }}
+                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.warranty_performance'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -204,14 +320,15 @@
                 <div class="card-header">
                     <h6 class="card-title mb-0">
                         <i class="fas fa-plus-circle me-2"></i>{{ 'admin.product.available_options'|trans }}
+                        <small class="text-muted">({{ 'admin.common.multiple'|trans }})</small>
                     </h6>
                 </div>
                 <div class="card-body">
                     {{ form_row(form.availableOptions, {
-                        'attr': {'class': 'form-select', 'size': '6'},
+                        'attr': {'class': 'form-select', 'size': '8'},
                         'label_attr': {'class': 'form-label fw-bold'}
                     }) }}
-                    <div class="form-text">{{ 'admin.product.available_options_help'|trans }}</div>
+                    <div class="form-text">{{ 'admin.product.select_available_options_info'|trans }}</div>
                 </div>
             </div>
 
@@ -219,7 +336,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <h6 class="card-title mb-0">
-                        <i class="fas fa-sort me-2"></i>{{ 'admin.product.display'|trans }}
+                        <i class="fas fa-sort me-2"></i>{{ 'admin.product.display_order'|trans }}
                     </h6>
                 </div>
                 <div class="card-body">
@@ -227,7 +344,7 @@
                         'attr': {'class': 'form-control', 'placeholder': ('admin.product.sort_order_placeholder'|trans)},
                         'label_attr': {'class': 'form-label fw-bold'}
                     }) }}
-                    <div class="form-text">{{ 'admin.product.sort_order_help'|trans }}</div>
+                    <div class="form-text">{{ 'admin.product.sort_order_info'|trans }}</div>
                 </div>
             </div>
         </div>
@@ -236,7 +353,7 @@
     <!-- Boutons d'action -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <a href="{{ path('admin_product_index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left me-2"></i>{{ 'admin.common.back_to_list'|trans }}
+            <i class="fas fa-arrow-left me-2"></i>{{ 'admin.product.back_to_list'|trans }}
         </a>
         
         <div class="d-flex gap-2">
@@ -256,7 +373,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const codeInput = document.querySelector('#product_code');
     if (codeInput) {
         codeInput.addEventListener('input', function() {
-            // Vérifier que le code ne contient que des caractères autorisés
             const value = this.value;
             const validPattern = /^[A-Za-z0-9_-]*$/;
             
@@ -267,6 +383,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+    
+    // Statistiques des traductions en temps réel
+    updateTranslationStats();
+    
+    function updateTranslationStats() {
+        const nameInputs = document.querySelectorAll('[name*="[name]"]');
+        let filledCount = 0;
+        let totalCount = nameInputs.length;
+        
+        nameInputs.forEach(input => {
+            if (input.value.trim()) {
+                filledCount++;
+            }
+        });
+        
+        // Afficher les stats dans la console
+        console.log(`Traductions remplies: ${filledCount}/${totalCount}`);
+    }
+    
+    // Écouter les changements dans les champs de traduction
+    document.querySelectorAll('[name*="[name]"], [name*="[description]"]').forEach(input => {
+        input.addEventListener('input', updateTranslationStats);
+    });
     
     // Auto-génération du code basée sur la catégorie et le nom français
     const nameInputs = document.querySelectorAll('[name*="[name]"]');
@@ -288,20 +427,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Si le code a déjà été modifié manuellement, ne pas le réécrire
         if (codeInput.dataset.modified === 'true') return;
         
-        const frenchName = document.querySelector('[name*="[name]"]');
-        const categoryCode = categorySelect?.selectedOptions[0]?.textContent?.match(/\((.*?)\)/)?.[1];
-        
-        if (frenchName && categoryCode) {
-            const name = frenchName.value.trim();
-            const category = categoryCode.trim();
+        const frenchNameInput = document.querySelector('[name*="[language][fr]"][name*="[name]"]');
+        if (frenchNameInput) {
+            const categoryCode = categorySelect?.selectedOptions[0]?.textContent?.match(/\((.*?)\)/)?.[1];
             
-            if (name && category) {
-                const code = `${category}-${name}`.toLowerCase()
-                    .replace(/[^a-z0-9]/g, '-')
-                    .replace(/-+/g, '-')
-                    .replace(/^-|-$/g, '');
+            if (frenchNameInput && categoryCode) {
+                const name = frenchNameInput.value.trim();
+                const category = categoryCode.trim();
                 
-                codeInput.value = code;
+                if (name && category) {
+                    const code = `${category}-${name}`.toLowerCase()
+                        .replace(/[^a-z0-9]/g, '-')
+                        .replace(/-+/g, '-')
+                        .replace(/^-|-$/g, '');
+                    
+                    codeInput.value = code;
+                }
             }
         }
     }
@@ -309,48 +450,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Marquer le champ code comme modifié quand l'utilisateur tape
     codeInput?.addEventListener('input', function() {
         this.dataset.modified = 'true';
-    });
-    
-    // Sauvegarde automatique
-    let autoSaveTimeout;
-    const form = document.querySelector('form');
-    
-    form?.addEventListener('input', function() {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = setTimeout(function() {
-            // Sauvegarde automatique locale (localStorage)
-            saveDraft();
-        }, 2000);
-    });
-    
-    function saveDraft() {
-        const formData = new FormData(form);
-        const data = {};
-        for (let [key, value] of formData.entries()) {
-            data[key] = value;
-        }
-        localStorage.setItem('product_draft', JSON.stringify(data));
-    }
-    
-    // Restaurer le brouillon au chargement
-    const savedDraft = localStorage.getItem('product_draft');
-    if (savedDraft && !codeInput.value) {
-        try {
-            const draft = JSON.parse(savedDraft);
-            Object.keys(draft).forEach(key => {
-                const input = form.querySelector(`[name="${key}"]`);
-                if (input) {
-                    input.value = draft[key];
-                }
-            });
-        } catch (e) {
-            console.log('{{ 'admin.product.restore_draft_error'|trans }}', e);
-        }
-    }
-    
-    // Effacer le brouillon après soumission réussie
-    form?.addEventListener('submit', function() {
-        localStorage.removeItem('product_draft');
     });
 });
 

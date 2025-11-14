@@ -62,23 +62,37 @@ class ProductController extends AbstractController
         $product = new Product();
         $product->setCreatedAt(new \DateTime());
         $product->setUpdatedAt(new \DateTime());
-        
-        // Initialiser les traductions pour toutes les langues actives
-        $languages = $this->languageRepository->findBy(['isActive' => true]);
-        
-        foreach ($languages as $language) {
-            $translation = new ProductTranslation();
-            $translation->setProduct($product);
-            $translation->setLanguage($language);
-            $translation->setName('');
-            $translation->setDescription('');
-            $product->addTranslation($translation);
-        }
 
         $form = $this->createForm(\App\Form\ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductTranslation();
+                        $translation->setProduct($product);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        $translation->setConcept($translationData['concept'] ?? '');
+                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                        $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
+                        $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
+                        $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
+                        $translation->setSpecifications($translationData['specifications'] ?? '');
+                        $translation->setAdvantages($translationData['advantages'] ?? '');
+                        
+                        $product->addTranslation($translation);
+                    }
+                }
+            }
+            
             $this->entityManager->persist($product);
             $this->entityManager->flush();
 
@@ -89,7 +103,6 @@ class ProductController extends AbstractController
         return $this->render('admin/product/new.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
-            'languages' => $languages,
         ]);
     }
 

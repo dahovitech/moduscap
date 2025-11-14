@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Product;
 use App\Entity\ProductCategory;
 use App\Entity\ProductOption;
-use App\Form\ProductTranslationType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -65,7 +65,7 @@ class ProductType extends AbstractType
                 'label' => 'admin.product.height',
                 'required' => false
             ])
-            // Removed materials, equipment, specifications, advantages fields - now handled in ProductTranslationType for multilingual content
+            // Materials, equipment, specifications, advantages are now in ProductTranslation entity for multilingual support
             ->add('technicalSpecs', TextareaType::class, [
                 'label' => 'admin.product.technical_specs_detailed',
                 'required' => false,
@@ -124,17 +124,7 @@ class ProductType extends AbstractType
                 'required' => false,
                 'help' => 'admin.product.available_options_help'
             ])
-            ->add('translations', CollectionType::class, [
-                'entry_type' => ProductTranslationType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => false,
-                'allow_delete' => false,
-                'by_reference' => false,
-                'label' => 'admin.product.translations',
-                'attr' => [
-                    'class' => 'translations-container'
-                ]
-            ])
+
             ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
                 'label' => 'admin.common.save',
                 'attr' => [
@@ -148,22 +138,7 @@ class ProductType extends AbstractType
                 ]
             ]);
 
-        // Auto-generate code based on category and name in French
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-            if (isset($data['category']) && isset($data['translations'])) {
-                foreach ($data['translations'] as $translation) {
-                    if (isset($translation['language']) && $translation['language'] === 'fr') {
-                        $name = $translation['name'] ?? '';
-                        $categoryCode = $data['category'] ?? '';
-                        $code = strtolower(str_replace([' ', '-', '_'], '-', $categoryCode . '-' . $name));
-                        $data['code'] = $code;
-                        break;
-                    }
-                }
-            }
-            $event->setData($data);
-        });
+        // Translations are handled directly in Twig template and controllers
     }
 
     public function configureOptions(OptionsResolver $resolver): void
