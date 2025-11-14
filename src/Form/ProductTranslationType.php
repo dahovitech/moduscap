@@ -10,76 +10,83 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProductTranslationType extends AbstractType
 {
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('language', EntityType::class, [
                 'class' => Language::class,
                 'choice_label' => 'name',
-                'label' => ('admin.product.language'|trans)
+                'label' => $this->translator->trans('admin.product.language')
             ])
             ->add('name', TextType::class, [
-                'label' => ('admin.product.product_name'|trans),
+                'label' => $this->translator->trans('admin.product.product_name'),
                 'required' => true,
                 'attr' => [
                     'class' => 'form-control form-control-lg',
-                    'placeholder' => ('admin.product.name_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.name_placeholder')
                 ]
             ])
             ->add('shortDescription', TextType::class, [
-                'label' => ('admin.product.short_description'|trans),
+                'label' => $this->translator->trans('admin.product.short_description'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => ('admin.product.short_description_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.short_description_placeholder')
                 ]
             ])
             ->add('description', TextareaType::class, [
-                'label' => ('admin.product.full_description'|trans),
+                'label' => $this->translator->trans('admin.product.full_description'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 5,
-                    'placeholder' => ('admin.product.description_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.description_placeholder')
                 ]
             ])
             ->add('concept', TextareaType::class, [
-                'label' => ('admin.product.concept_design'|trans),
+                'label' => $this->translator->trans('admin.product.concept_design'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => ('admin.product.concept_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.concept_placeholder')
                 ]
             ])
             ->add('materialsDetail', TextareaType::class, [
-                'label' => ('admin.product.materials_used'|trans),
+                'label' => $this->translator->trans('admin.product.materials_used'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => ('admin.product.materials_detail_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.materials_detail_placeholder')
                 ]
             ])
             ->add('equipmentDetail', TextareaType::class, [
-                'label' => ('admin.product.equipment_included'|trans),
+                'label' => $this->translator->trans('admin.product.equipment_included'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => ('admin.product.equipment_detail_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.equipment_detail_placeholder')
                 ]
             ])
             ->add('performanceDetails', TextareaType::class, [
-                'label' => ('admin.product.performance'|trans),
+                'label' => $this->translator->trans('admin.product.performance'),
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 3,
-                    'placeholder' => ('admin.product.performance_placeholder'|trans)
+                    'placeholder' => $this->translator->trans('admin.product.performance_placeholder')
                 ]
             ]);
     }
