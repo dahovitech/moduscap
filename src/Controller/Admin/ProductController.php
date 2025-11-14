@@ -4,20 +4,25 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Entity\ProductTranslation;
+use App\Entity\ProductMedia;
 use App\Entity\Language;
 use App\Repository\LanguageRepository;
+use App\Repository\MediaRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/products')]
+#[IsGranted('ROLE_ADMIN')]
 class ProductController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private LanguageRepository $languageRepository
+        private LanguageRepository $languageRepository,
+        private MediaRepository $mediaRepository
     ) {
     }
 
@@ -67,6 +72,9 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les images
+            $this->handleProductMedia($request, $product);
+            
             // Traiter les traductions manuellement depuis les données du formulaire
             $translationsData = $request->request->get('product', [])['translations'] ?? [];
             
@@ -124,6 +132,9 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les images
+            $this->handleProductMedia($request, $product);
+            
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Produit modifié avec succès !');
@@ -134,6 +145,75 @@ class ProductController extends AbstractController
             'product' => $product,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * Gérer les médias du produit
+     */
+    private function handleProductMedia(Request $request, Product $product): void
+    {
+        $data = $request->request->all();
+        
+        // Supprimer toutes les associations media existantes
+        foreach ($product->getProductMedia() as $productMedia) {
+            $this->entityManager->remove($productMedia);
+        }
+        $product->getProductMedia()->clear();
+        
+        // Image principale
+        if (isset($data['main_image_id']) && !empty($data['main_image_id'])) {
+            $media = $this->mediaRepository->find($data['main_image_id']);
+            if ($media) {
+                $productMedia = new ProductMedia();
+                $productMedia->setProduct($product);
+                $productMedia->setMedia($media);
+                $productMedia->setMediaType('main_image');
+                $productMedia->setIsMainImage(true);
+                $productMedia->setSortOrder(0);
+                $product->addProductMedia($productMedia);
+                $this->entityManager->persist($productMedia);
+            }
+        }
+        
+        // Images de galerie
+        if (isset($data['gallery_images']) && is_array($data['gallery_images'])) {
+            $sortOrder = 1;
+            foreach ($data['gallery_images'] as $mediaId) {
+                if (!empty($mediaId)) {
+                    $media = $this->mediaRepository->find($mediaId);
+                    if ($media) {
+                        $productMedia = new ProductMedia();
+                        $productMedia->setProduct($product);
+                        $productMedia->setMedia($media);
+                        $productMedia->setMediaType('gallery');
+                        $productMedia->setIsMainImage(false);
+                        $productMedia->setSortOrder($sortOrder++);
+                        $product->addProductMedia($productMedia);
+                        $this->entityManager->persist($productMedia);
+                    }
+                }
+            }
+        }
+        
+        // Images techniques
+        if (isset($data['technical_images']) && is_array($data['technical_images'])) {
+            $sortOrder = 100; // Commencer à 100 pour les images techniques
+            foreach ($data['technical_images'] as $mediaId) {
+                if (!empty($mediaId)) {
+                    $media = $this->mediaRepository->find($mediaId);
+                    if ($media) {
+                        $productMedia = new ProductMedia();
+                        $productMedia->setProduct($product);
+                        $productMedia->setMedia($media);
+                        $productMedia->setMediaType('technical');
+                        $productMedia->setIsMainImage(false);
+                        $productMedia->setSortOrder($sortOrder++);
+                        $product->addProductMedia($productMedia);
+                        $this->entityManager->persist($productMedia);
+                    }
+                }
+            }
+        }
     }
 
     #[Route('/{id}', name: 'admin_product_delete', methods: ['POST'])]

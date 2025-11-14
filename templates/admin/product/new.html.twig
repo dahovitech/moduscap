@@ -326,6 +326,49 @@
                 </div>
             </div>
 
+            <!-- Images du produit -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-images me-2"></i>{{ 'admin.product.images'|trans }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <!-- Image principale -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ 'admin.product.main_image'|trans }}</label>
+                        {% include 'components/media_selector.html.twig' with {
+                            'selectedMedia': null,
+                            'inputName': 'main_image_id',
+                            'label': '',
+                            'required': false
+                        } %}
+                    </div>
+                    
+                    <!-- Images de galerie -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ 'admin.product.gallery_images'|trans }}</label>
+                        <div id="galleryImages">
+                            <!-- Les images de galerie seront ajoutées ici dynamiquement -->
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="addGalleryImage()">
+                            <i class="fas fa-plus me-1"></i>{{ 'admin.product.add_gallery_image'|trans }}
+                        </button>
+                    </div>
+                    
+                    <!-- Images techniques -->
+                    <div>
+                        <label class="form-label fw-bold">{{ 'admin.product.technical_images'|trans }}</label>
+                        <div id="technicalImages">
+                            <!-- Les images techniques seront ajoutées ici dynamiquement -->
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="addTechnicalImage()">
+                            <i class="fas fa-plus me-1"></i>{{ 'admin.product.add_technical_image'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Ordre d'affichage -->
             <div class="card mb-4">
                 <div class="card-header">
@@ -459,6 +502,104 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+// Gestion des images de galerie
+let galleryImageCounter = 0;
+
+function addGalleryImage() {
+    const container = document.getElementById('galleryImages');
+    const newItem = document.createElement('div');
+    newItem.className = 'gallery-image-item mb-3';
+    newItem.setAttribute('data-index', galleryImageCounter);
+    
+    newItem.innerHTML = `
+        <div class="mb-3">
+            <div class="media-selector" id="mediaSelector_gallery_images[${galleryImageCounter}]">
+                <input type="hidden" name="gallery_images[${galleryImageCounter}]" value="" id="mediaInput_gallery_images[${galleryImageCounter}]">
+                <div class="media-preview d-none" id="mediaPreview_gallery_images[${galleryImageCounter}]">
+                    <div class="media-preview-container">
+                        <img src="" alt="" class="media-preview-image" style="display: none;">
+                        <div class="media-preview-overlay">
+                            <button type="button" class="btn btn-sm btn-outline-light me-2" onclick="openMediaLibrary('gallery_images[${galleryImageCounter}]')">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSelectedMedia('gallery_images[${galleryImageCounter}]')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="media-preview-info">
+                        <small class="text-muted">Image sélectionnée</small>
+                    </div>
+                </div>
+                <div class="media-selector-empty" id="mediaEmpty_gallery_images[${galleryImageCounter}]">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="openMediaLibrary('gallery_images[${galleryImageCounter}]')">
+                        <i class="bi bi-image me-2"></i>Sélectionner une image
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeGalleryImage(this)">
+            <i class="fas fa-trash me-1"></i>Supprimer
+        </button>
+    `;
+    
+    container.appendChild(newItem);
+    galleryImageCounter++;
+}
+
+function removeGalleryImage(button) {
+    button.closest('.gallery-image-item').remove();
+}
+
+// Gestion des images techniques
+let technicalImageCounter = 0;
+
+function addTechnicalImage() {
+    const container = document.getElementById('technicalImages');
+    const newItem = document.createElement('div');
+    newItem.className = 'technical-image-item mb-3';
+    newItem.setAttribute('data-index', technicalImageCounter);
+    
+    newItem.innerHTML = `
+        <div class="mb-3">
+            <div class="media-selector" id="mediaSelector_technical_images[${technicalImageCounter}]">
+                <input type="hidden" name="technical_images[${technicalImageCounter}]" value="" id="mediaInput_technical_images[${technicalImageCounter}]">
+                <div class="media-preview d-none" id="mediaPreview_technical_images[${technicalImageCounter}]">
+                    <div class="media-preview-container">
+                        <img src="" alt="" class="media-preview-image" style="display: none;">
+                        <div class="media-preview-overlay">
+                            <button type="button" class="btn btn-sm btn-outline-light me-2" onclick="openMediaLibrary('technical_images[${technicalImageCounter}]')">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSelectedMedia('technical_images[${technicalImageCounter}]')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="media-preview-info">
+                        <small class="text-muted">Image sélectionnée</small>
+                    </div>
+                </div>
+                <div class="media-selector-empty" id="mediaEmpty_technical_images[${technicalImageCounter}]">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="openMediaLibrary('technical_images[${technicalImageCounter}]')">
+                        <i class="bi bi-image me-2"></i>Sélectionner une image
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeTechnicalImage(this)">
+            <i class="fas fa-trash me-1"></i>Supprimer
+        </button>
+    `;
+    
+    container.appendChild(newItem);
+    technicalImageCounter++;
+}
+
+function removeTechnicalImage(button) {
+    button.closest('.technical-image-item').remove();
 }
 </script>
 {% endblock %}

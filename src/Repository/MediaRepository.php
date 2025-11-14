@@ -19,32 +19,40 @@ class MediaRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Media::class);
     }
-    // /**
-    //  * @return Media[] Returns an array of Media objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('m.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Media
+    /**
+     * Rechercher des médias par texte
+     * 
+     * @param string $search
+     * @param int $limit
+     * @param int $offset
+     * @return Media[]
+     */
+    public function findBySearch(string $search, int $limit = 20, int $offset = 0): array
     {
         return $this->createQueryBuilder('m')
-            ->andWhere('m.exampleField = :val')
-            ->setParameter('val', $value)
+            ->where('m.alt LIKE :search OR m.fileName LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('m.id', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
+
+    /**
+     * Compter les médias correspondant à une recherche
+     * 
+     * @param string $search
+     * @return int
+     */
+    public function countBySearch(string $search): int
+    {
+        return (int) $this->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->where('m.alt LIKE :search OR m.fileName LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

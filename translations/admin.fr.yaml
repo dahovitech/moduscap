@@ -214,6 +214,15 @@ admin.product.js_messages.error_update: "Erreur lors de la mise à jour"
 admin.product.js_messages.performance_saved: "Performances sauvegardées avec succès"
 admin.product.js_messages.error_performance: "Erreur lors de la sauvegarde des performances"
 
+# Gestion des images de produits
+admin.product.images: "Images"
+admin.product.main_image: "Image principale"
+admin.product.gallery_images: "Images de galerie"
+admin.product.technical_images: "Images techniques"
+admin.product.add_gallery_image: "Ajouter une image de galerie"
+admin.product.add_technical_image: "Ajouter une image technique"
+
+
 # Catégories - liste et actions
 admin.category.list.title: "Gestion des catégories"
 admin.category.list.search_placeholder: "Rechercher par nom, code ou description..."
