@@ -6,12 +6,14 @@ use App\Repository\ProductOptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Attribute as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductOptionRepository::class)
  * @ORM\Table(name="product_options")
  */
+#[Gedmo\Timestampable]
 class ProductOption
 {
     #[ORM\Id]
@@ -22,6 +24,7 @@ class ProductOption
     #[ORM\Column(type: 'string', length: 100, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 100)]
+    #[Gedmo\Slug]
     private string $code;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
@@ -32,6 +35,14 @@ class ProductOption
 
     #[ORM\Column(type: 'integer')]
     private int $sortOrder = 0;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'create')]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Gedmo\Timestampable(on: 'update')]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: ProductOptionGroup::class, inversedBy: 'options')]
     #[ORM\JoinColumn(nullable: false)]
@@ -47,6 +58,8 @@ class ProductOption
     {
         $this->translations = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -195,6 +208,28 @@ class ProductOption
     {
         $translation = $this->getTranslation($locale);
         return $translation?->getDescription() ?: '';
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
     }
 
     public function __toString(): string
