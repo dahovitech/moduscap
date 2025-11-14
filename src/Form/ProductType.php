@@ -20,6 +20,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProductType extends AbstractType
+{
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
