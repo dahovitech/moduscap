@@ -8,6 +8,7 @@ admin.navigation.options: "Options"
 admin.navigation.medias: "Médias"
 admin.navigation.settings: "Paramètres"
 admin.navigation.users: "Utilisateurs"
+admin.navigation.translations: "Traductions"
 
 # Messages généraux
 admin.common.create: "Créer"
@@ -37,6 +38,24 @@ admin.common.success: "Succès"
 admin.common.error: "Erreur"
 admin.common.warning: "Attention"
 admin.common.info: "Information"
+admin.common.profile: "Profil"
+admin.common.logout: "Déconnexion"
+
+# Clés pour le titre admin
+admin.title: "Administration MODUSCAP"
+
+# Clés pour les actions communes
+common.actions.view_site: "Voir le site"
+action.close: "Fermer"
+common.item: "élément"
+common.confirm.delete: "Êtes-vous sûr de vouloir supprimer cet "
+
+# Clés pour les langues
+language.change_interface: "Changer la langue de l'interface"
+language.default.title: "Langue par défaut"
+
+# Clé pour le thème
+theme.toggle: "Basculer le thème"
 
 # Messages de validation
 admin.validation.required: "Ce champ est obligatoire"
