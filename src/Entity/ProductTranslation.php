@@ -41,6 +41,12 @@ class ProductTranslation
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $performanceDetails = null;
 
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $specifications = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $advantages = null;
+
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Product $product = null;
@@ -142,6 +148,28 @@ class ProductTranslation
     public function setPerformanceDetails(?string $performanceDetails): static
     {
         $this->performanceDetails = $performanceDetails;
+        return $this;
+    }
+
+    public function getSpecifications(): ?string
+    {
+        return $this->specifications;
+    }
+
+    public function setSpecifications(?string $specifications): static
+    {
+        $this->specifications = $specifications;
+        return $this;
+    }
+
+    public function getAdvantages(): ?string
+    {
+        return $this->advantages;
+    }
+
+    public function setAdvantages(?string $advantages): static
+    {
+        $this->advantages = $advantages;
         return $this;
     }
 
