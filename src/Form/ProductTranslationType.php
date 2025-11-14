@@ -56,21 +56,21 @@ class ProductTranslationType extends AbstractType
                 ]
             ])
             ->add('materialsDetail', TextareaType::class, [
-                'label' => 'admin.product.materials_used',
+                'label' => 'admin.product.materials',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => 'admin.product.materials_detail_placeholder'
+                    'placeholder' => 'admin.product.materials_placeholder'
                 ]
             ])
             ->add('equipmentDetail', TextareaType::class, [
-                'label' => 'admin.product.equipment_included',
+                'label' => 'admin.product.equipment',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
                     'rows' => 4,
-                    'placeholder' => 'admin.product.equipment_detail_placeholder'
+                    'placeholder' => 'admin.product.equipment_placeholder'
                 ]
             ])
             ->add('performanceDetails', TextareaType::class, [
@@ -80,6 +80,24 @@ class ProductTranslationType extends AbstractType
                     'class' => 'form-control',
                     'rows' => 3,
                     'placeholder' => 'admin.product.performance_placeholder'
+                ]
+            ])
+            ->add('specifications', TextareaType::class, [
+                'label' => 'admin.product.specifications',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 3,
+                    'placeholder' => 'admin.product.specifications_placeholder'
+                ]
+            ])
+            ->add('advantages', TextareaType::class, [
+                'label' => 'admin.product.advantages',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 3,
+                    'placeholder' => 'admin.product.advantages_placeholder'
                 ]
             ]);
     }
