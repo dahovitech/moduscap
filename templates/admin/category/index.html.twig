@@ -23,12 +23,12 @@
                 <div class="col-md-10">
                     <label for="search" class="form-label">{{ 'admin.filter.search_category'|trans }}</label>
                     <input type="text" class="form-control" id="search" name="search" 
-                           value="{{ current_search }}" placeholder="Code ou nom de la catégorie...">
+                           value="{{ current_search }}" placeholder="{{ 'admin.category.search_placeholder'|trans }}">
                 </div>
                 <div class="col-md-2 d-flex align-items-end">
                     <div class="w-100">
                         <button type="submit" class="btn btn-primary w-100">
-                            <i class="fas fa-search me-2"></i>Rechercher
+                            <i class="fas fa-search me-2"></i>{{ 'admin.filter.search_button'|trans }}
                         </button>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="h4 mb-0">{{ categories|length }}</div>
-                            <div class="small">Total catégories</div>
+                            <div class="small">{{ 'admin.category.total_categories'|trans }}</div>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-tags fa-2x opacity-75"></i>
@@ -59,7 +59,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="h4 mb-0">{{ categories|filter(c => c.isActive)|length }}</div>
-                            <div class="small">Catégories actives</div>
+                            <div class="small">{{ 'admin.category.active_categories'|trans }}</div>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-check-circle fa-2x opacity-75"></i>
@@ -74,7 +74,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <div class="h4 mb-0">{{ categories|filter(c => c.isFeatured)|length }}</div>
-                            <div class="small">Catégories mises en avant</div>
+                            <div class="small">{{ 'admin.category.featured_categories'|trans }}</div>
                         </div>
                         <div class="align-self-center">
                             <i class="fas fa-star fa-2x opacity-75"></i>
@@ -88,13 +88,13 @@
     <!-- Liste des catégories -->
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Liste des Catégories</h5>
+            <h5 class="mb-0">{{ 'admin.category.category_list'|trans }}</h5>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleReorderMode()">
-                    <i class="fas fa-sort me-1"></i>Réorganiser
+                    <i class="fas fa-sort me-1"></i>{{ 'admin.category.reorder_button'|trans }}
                 </button>
                 <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportCategories()">
-                    <i class="fas fa-download me-1"></i>Exporter
+                    <i class="fas fa-download me-1"></i>{{ 'admin.category.export_button'|trans }}
                 </button>
             </div>
         </div>
@@ -113,7 +113,7 @@
                                                    type="checkbox" 
                                                    data-category-id="{{ category.id }}"
                                                    {{ category.isActive ? 'checked' : '' }}>
-                                            <label class="form-check-label small">Active</label>
+                                            <label class="form-check-label small">{{ 'admin.category.active'|trans }}</label>
                                         </div>
                                     </div>
                                     <div class="dropdown">
@@ -124,24 +124,24 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <a class="dropdown-item" href="{{ path('admin_category_show', {'id': category.id}) }}">
-                                                    <i class="fas fa-eye me-2"></i>Voir
+                                                    <i class="fas fa-eye me-2"></i>{{ 'admin.common.view'|trans }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="{{ path('admin_category_edit', {'id': category.id}) }}">
-                                                    <i class="fas fa-edit me-2"></i>Modifier
+                                                    <i class="fas fa-edit me-2"></i>{{ 'admin.common.edit'|trans }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <button class="dropdown-item" onclick="duplicateCategory({{ category.id }})">
-                                                    <i class="fas fa-copy me-2"></i>Dupliquer
+                                                    <i class="fas fa-copy me-2"></i>{{ 'admin.common.duplicate'|trans }}
                                                 </button>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <button class="dropdown-item text-danger" 
                                                         onclick="confirmDeleteCategory({{ category.id }}, '{{ category.code }}')">
-                                                    <i class="fas fa-trash me-2"></i>Supprimer
+                                                    <i class="fas fa-trash me-2"></i>{{ 'admin.common.delete'|trans }}
                                                 </button>
                                             </li>
                                         </ul>
@@ -155,7 +155,7 @@
                                         {% if frenchName %}
                                             {{ frenchName.name }}
                                         {% else %}
-                                            <span class="text-muted">Nom non défini</span>
+                                            <span class="text-muted">{{ 'admin.category.unnamed'|trans }}</span>
                                         {% endif %}
                                     </h6>
                                     
@@ -169,7 +169,7 @@
                                         <div>
                                             {% if category.isFeatured %}
                                                 <span class="badge bg-warning text-dark">
-                                                    <i class="fas fa-star me-1"></i>En avant
+                                                    <i class="fas fa-star me-1"></i>{{ 'admin.category.featured'|trans }}
                                                 </span>
                                             {% endif %}
                                             
@@ -181,7 +181,7 @@
                                         </div>
                                         
                                         <small class="text-muted">
-                                            Ordre: {{ category.sortOrder }}
+                                            {{ 'admin.category.order'|trans }}: {{ category.sortOrder }}
                                         </small>
                                     </div>
                                 </div>
@@ -190,16 +190,16 @@
                                 <div class="card-footer">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <small class="text-muted">
-                                            Créée le {{ category.createdAt ? category.createdAt|date('d/m/Y') : '' }}
+                                            {{ 'admin.category.created_at'|trans }} {{ category.createdAt ? category.createdAt|date('d/m/Y') : '' }}
                                         </small>
                                         <div class="d-flex gap-1">
                                             <a href="{{ path('admin_category_edit', {'id': category.id}) }}" 
-                                               class="btn btn-sm btn-outline-warning" title="Modifier">
+                                               class="btn btn-sm btn-outline-warning" title="{{ 'admin.common.edit'|trans }}">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <button type="button" class="btn btn-sm btn-outline-danger" 
                                                     onclick="confirmDeleteCategory({{ category.id }}, '{{ category.code }}')" 
-                                                    title="Supprimer">
+                                                    title="{{ 'admin.common.delete'|trans }}">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -212,21 +212,21 @@
             {% else %}
                 <div class="text-center py-5">
                     <i class="fas fa-tags fa-3x text-muted mb-3"></i>
-                    <h5 class="text-muted">Aucune catégorie trouvée</h5>
+                    <h5 class="text-muted">{{ 'admin.category.no_categories_found'|trans }}</h5>
                     <p class="text-muted">
                         {% if current_search %}
-                            Aucune catégorie ne correspond à votre recherche.
+                            {{ 'admin.category.no_categories_search_match'|trans }}
                         {% else %}
-                            Commencez par créer votre première catégorie.
+                            {{ 'admin.category.first_category_message'|trans }}
                         {% endif %}
                     </p>
                     {% if current_search %}
                         <a href="{{ path('admin_category_index') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-times me-2"></i>Effacer la recherche
+                            <i class="fas fa-times me-2"></i>{{ 'admin.filter.clear_search'|trans }}
                         </a>
                     {% else %}
                         <a href="{{ path('admin_category_new') }}" class="btn btn-primary">
-                            <i class="fas fa-plus me-2"></i>Créer une catégorie
+                            <i class="fas fa-plus me-2"></i>{{ 'admin.category.create_category'|trans }}
                         </a>
                     {% endif %}
                 </div>
@@ -240,21 +240,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmation de suppression</h5>
+                <h5 class="modal-title">{{ 'admin.category.delete_confirmation_title'|trans }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer la catégorie <strong id="categoryName"></strong> ?</p>
+                <p>{{ ('admin.category.delete_confirmation_message'|trans)|replace({'%categoryName%': '<strong id="categoryName"></strong>'})|raw }}</p>
                 <div class="alert alert-warning">
                     <i class="fas fa-exclamation-triangle me-2"></i>
-                    Cette action est irréversible et peut affecter les produits associés.
+                    {{ 'admin.category.delete_warning'|trans }}
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'admin.common.cancel'|trans }}</button>
                 <form id="deleteCategoryForm" method="post" style="display: inline;">
                     <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
-                    <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
+                    <button type="submit" class="btn btn-danger">{{ 'admin.category.delete_permanently'|trans }}</button>
                 </form>
             </div>
         </div>
@@ -300,13 +300,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (!data.success) {
                     // Remettre l'état précédent en cas d'erreur
                     this.checked = !isActive;
-                    alert('Erreur lors de la mise à jour');
+                    alert(('admin.category.update_error'|trans));
                 }
             })
             .catch(error => {
-                console.error('Erreur:', error);
+                console.error(('admin.category.update_error_log'|trans), error);
                 this.checked = !isActive;
-                alert('Erreur lors de la mise à jour');
+                alert(('admin.category.update_error'|trans));
             });
         });
     });
@@ -321,7 +321,7 @@ function toggleReorderMode() {
     
     if (reorderMode) {
         container.classList.add('sortable');
-        button.innerHTML = '<i class="fas fa-check me-1"></i>Terminer';
+        button.innerHTML = '<i class="fas fa-check me-1"></i>' + ('admin.category.finish_reorder'|trans);
         button.classList.remove('btn-outline-primary');
         button.classList.add('btn-success');
         
@@ -338,7 +338,7 @@ function toggleReorderMode() {
         }
     } else {
         container.classList.remove('sortable');
-        button.innerHTML = '<i class="fas fa-sort me-1"></i>Réorganiser';
+        button.innerHTML = '<i class="fas fa-sort me-1"></i>' + ('admin.category.reorder_button'|trans);
         button.classList.remove('btn-success');
         button.classList.add('btn-outline-primary');
     }
@@ -360,9 +360,9 @@ function saveCategoryOrder() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Ordre des catégories sauvegardé', 'success');
+            showNotification(('admin.category.order_saved_success'|trans), 'success');
         } else {
-            showNotification('Erreur lors de la sauvegarde', 'error');
+            showNotification(('admin.category.save_error'|trans), 'error');
         }
     })
     .catch(error => {
@@ -380,7 +380,7 @@ function confirmDeleteCategory(categoryId, categoryName) {
 }
 
 function duplicateCategory(categoryId) {
-    if (confirm('Voulez-vous dupliquer cette catégorie ?')) {
+    if (confirm(('admin.category.duplicate_confirm_message'|trans))) {
         fetch(`/admin/categories/duplicate/${categoryId}`, {
             method: 'POST',
             headers: {
@@ -393,11 +393,11 @@ function duplicateCategory(categoryId) {
             if (data.success) {
                 window.location.href = `/admin/categories/${data.categoryId}/edit`;
             } else {
-                alert('Erreur lors de la duplication de la catégorie');
+                alert(('admin.category.duplicate_error_message'|trans));
             }
         })
         .catch(error => {
-            console.error('Erreur:', error);
+            console.error(('admin.category.duplicate_error_log'|trans), error);
             alert('Erreur lors de la duplication de la catégorie');
         });
     }
@@ -405,7 +405,7 @@ function duplicateCategory(categoryId) {
 
 function exportCategories() {
     // Implémentation de l'export (CSV, Excel, etc.)
-    alert('Fonctionnalité d\'export en cours de développement');
+    alert(('admin.category.export_development_message'|trans));
 }
 
 function showNotification(message, type = 'info') {
