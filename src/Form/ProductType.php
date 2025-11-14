@@ -25,9 +25,15 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('code', TextType::class, [
-                'label' => 'Code',
-                'help' => 'Identifiant unique du produit',
-                'attr' => ['readonly' => true]
+                'label' => 'Code produit',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Ex: MODUS001',
+                    'pattern' => '^[A-Za-z0-9_-]+$',
+                    'title' => 'Seuls les lettres, chiffres, tirets et underscores sont autorisés'
+                ],
+                'help' => 'Identifiant unique du produit'
             ])
             ->add('category', EntityType::class, [
                 'class' => ProductCategory::class,
@@ -139,10 +145,25 @@ class ProductType extends AbstractType
             ->add('translations', CollectionType::class, [
                 'entry_type' => ProductTranslationType::class,
                 'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
+                'allow_add' => false,
+                'allow_delete' => false,
                 'by_reference' => false,
-                'label' => 'Traductions'
+                'label' => 'Traductions',
+                'attr' => [
+                    'class' => 'translations-container'
+                ]
+            ])
+            ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
+                'label' => 'Enregistrer',
+                'attr' => [
+                    'class' => 'btn btn-primary btn-lg me-2'
+                ]
+            ])
+            ->add('save_and_continue', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
+                'label' => 'Enregistrer et continuer',
+                'attr' => [
+                    'class' => 'btn btn-secondary'
+                ]
             ]);
 
         // Auto-generate code based on category and name in French

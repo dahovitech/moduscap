@@ -22,37 +22,65 @@ class ProductTranslationType extends AbstractType
                 'label' => 'Langue'
             ])
             ->add('name', TextType::class, [
-                'label' => 'Nom',
-                'required' => true
+                'label' => 'Nom du produit',
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-control form-control-lg',
+                    'placeholder' => 'Ex: Produit MODUS Premium'
+                ]
             ])
             ->add('shortDescription', TextType::class, [
                 'label' => 'Description courte',
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Résumé en une phrase'
+                ]
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description complète',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 5,
+                    'placeholder' => 'Description détaillée du produit...'
+                ]
             ])
             ->add('concept', TextareaType::class, [
                 'label' => 'Concept & Design',
                 'required' => false,
-                'attr' => ['rows' => 3]
-            ])
-            ->add('description', TextareaType::class, [
-                'label' => 'Description',
-                'required' => false,
-                'attr' => ['rows' => 4]
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 3,
+                    'placeholder' => 'Concept et aspects design du produit...'
+                ]
             ])
             ->add('materialsDetail', TextareaType::class, [
-                'label' => 'Détail matériaux',
+                'label' => 'Matériaux utilisés',
                 'required' => false,
-                'attr' => ['rows' => 4]
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 4,
+                    'placeholder' => 'Détails sur les matériaux et leur qualité...'
+                ]
             ])
             ->add('equipmentDetail', TextareaType::class, [
-                'label' => 'Détail équipements',
+                'label' => 'Équipements inclus',
                 'required' => false,
-                'attr' => ['rows' => 4]
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 4,
+                    'placeholder' => 'Liste détaillée des équipements fournis...'
+                ]
             ])
             ->add('performanceDetails', TextareaType::class, [
-                'label' => 'Détails performances',
+                'label' => 'Performances',
                 'required' => false,
-                'attr' => ['rows' => 3]
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 3,
+                    'placeholder' => 'Spécifications techniques et performances...'
+                ]
             ]);
     }
 
