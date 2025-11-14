@@ -64,26 +64,8 @@ class ProductType extends AbstractType
                 'label' => 'admin.product.height',
                 'required' => false
             ])
-            ->add('materials', TextareaType::class, [
-                'label' => 'admin.product.materials',
-                'required' => false,
-                'attr' => ['rows' => 3]
-            ])
-            ->add('equipment', TextareaType::class, [
-                'label' => 'admin.product.equipment',
-                'required' => false,
-                'attr' => ['rows' => 3]
-            ])
-            ->add('specifications', TextareaType::class, [
-                'label' => 'admin.product.specifications',
-                'required' => false,
-                'attr' => ['rows' => 3]
-            ])
-            ->add('advantages', TextareaType::class, [
-                'label' => 'admin.product.advantages',
-                'required' => false,
-                'attr' => ['rows' => 3]
-            ])
+            // Removed materials, equipment, specifications, advantages fields 
+            // These are now handled in ProductTranslationType for multilingual content
             ->add('technicalSpecs', TextareaType::class, [
                 'label' => 'admin.product.technical_specs_detailed',
                 'required' => false,
