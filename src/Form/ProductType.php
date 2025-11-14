@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+// Removed CollectionType import - translations are handled manually in template
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -64,8 +64,26 @@ class ProductType extends AbstractType
                 'label' => 'admin.product.height',
                 'required' => false
             ])
-            // Removed materials, equipment, specifications, advantages fields 
-            // These are now handled in ProductTranslationType for multilingual content
+            ->add('materials', TextareaType::class, [
+                'label' => 'admin.product.materials',
+                'required' => false,
+                'attr' => ['rows' => 3]
+            ])
+            ->add('equipment', TextareaType::class, [
+                'label' => 'admin.product.equipment',
+                'required' => false,
+                'attr' => ['rows' => 3]
+            ])
+            ->add('specifications', TextareaType::class, [
+                'label' => 'admin.product.specifications',
+                'required' => false,
+                'attr' => ['rows' => 3]
+            ])
+            ->add('advantages', TextareaType::class, [
+                'label' => 'admin.product.advantages',
+                'required' => false,
+                'attr' => ['rows' => 3]
+            ])
             ->add('technicalSpecs', TextareaType::class, [
                 'label' => 'admin.product.technical_specs_detailed',
                 'required' => false,
@@ -123,17 +141,6 @@ class ProductType extends AbstractType
                 'multiple' => true,
                 'required' => false,
                 'help' => 'admin.product.available_options_help'
-            ])
-            ->add('translations', CollectionType::class, [
-                'entry_type' => ProductTranslationType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => false,
-                'allow_delete' => false,
-                'by_reference' => false,
-                'label' => 'admin.product.translations',
-                'attr' => [
-                    'class' => 'translations-container'
-                ]
             ])
             ->add('save', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, [
                 'label' => 'admin.common.save',
