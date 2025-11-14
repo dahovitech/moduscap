@@ -62,11 +62,6 @@ class ProductTranslation
     #[ORM\Column(type: 'datetime', nullable: true)]
     #[Gedmo\Timestampable(on: 'update')]
     private ?\DateTimeInterface $updatedAt = null;
-    private ?\DateTimeInterface $createdAt = null;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Gedmo\Timestampable(on: 'update')]
-    private ?\DateTimeInterface $updatedAt = null;
 
     public function getId(): ?int
     {
