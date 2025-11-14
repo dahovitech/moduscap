@@ -93,48 +93,8 @@
                 </div>
             </div>
 
-            <!-- Spécifications techniques -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans }}
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form_row(form.materials, {
-                                'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Liste des matériaux utilisés...'},
-                                'label_attr': {'class': 'form-label fw-bold'}
-                            }) }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form_row(form.equipment, {
-                                'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Équipements inclus...'},
-                                'label_attr': {'class': 'form-label fw-bold'}
-                            }) }}
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            {{ form_row(form.specifications, {
-                                'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Spécifications techniques détaillées...'},
-                                'label_attr': {'class': 'form-label fw-bold'}
-                            }) }}
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-12">
-                            {{ form_row(form.advantages, {
-                                'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'Principaux avantages du produit...'},
-                                'label_attr': {'class': 'form-label fw-bold'}
-                            }) }}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Specs section removed - now handled in ProductTranslationType for multilingual content -->
+            <!-- Materials, equipment, specifications, advantages are now translated fields within form.translations -->
 
             <!-- Traductions multilingues -->
             <div class="card mb-4">
@@ -168,102 +128,10 @@
                         {% endfor %}
                     </ul>
                     
-                    <!-- Contenu des onglets -->
-                    <div class="tab-content mt-3" id="languageTabsContent">
-                        {% for translation in product.translations %}
-                            {% set language = translation.language %}
-                            <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
-                                 id="lang-{{ language.code }}" 
-                                 role="tabpanel">
-                                
-                                <div class="row">
-                                    <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.product_name'|trans }}</label>
-                                        <input type="text" 
-                                               class="form-control form-control-lg" 
-                                               name="product[translations][{{ loop.index0 }}][name]" 
-                                               value="{{ translation.name }}"
-                                               placeholder="{{ ('admin.product.product_name_placeholder'|trans)|replace({'%language%': language.name}) }}"
-                                               {{ not language.isActive ? 'disabled' : '' }}>
-                                        <div class="form-text">
-                                            {{ ('admin.product.name_help_for'|trans)|replace({'%language%': language.name}) }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.short_description'|trans }}</label>
-                                        <input type="text" 
-                                               class="form-control" 
-                                               name="product[translations][{{ loop.index0 }}][shortDescription]" 
-                                               value="{{ translation.shortDescription }}"
-                                               placeholder="{{ 'admin.product.short_description_placeholder'|trans }}"
-                                               {{ not language.isActive ? 'disabled' : '' }}>
-                                        <div class="form-text">
-                                            {{ 'admin.product.short_description_help_text'|trans }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-12 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.full_description'|trans }}</label>
-                                        <textarea class="form-control" 
-                                                  name="product[translations][{{ loop.index0 }}][description]" 
-                                                  rows="5"
-                                                  placeholder="{{ ('admin.product.full_description_placeholder'|trans)|replace({'%language%': language.name}) }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.description }}</textarea>
-                                        <div class="form-text">
-                                            {{ 'admin.product.full_description_help_text'|trans }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.concept_design'|trans }}</label>
-                                        <textarea class="form-control" 
-                                                  name="product[translations][{{ loop.index0 }}][concept]" 
-                                                  rows="3"
-                                                  placeholder="{{ 'admin.product.concept_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.concept }}</textarea>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.detailed_materials'|trans }}</label>
-                                        <textarea class="form-control" 
-                                                  name="product[translations][{{ loop.index0 }}][materialsDetail]" 
-                                                  rows="3"
-                                                  placeholder="{{ 'admin.product.materials_placeholder_detailed'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.materialsDetail }}</textarea>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.detailed_equipment'|trans }}</label>
-                                        <textarea class="form-control" 
-                                                  name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
-                                                  rows="3"
-                                                  placeholder="{{ 'admin.product.equipment_placeholder_detailed'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.equipmentDetail }}</textarea>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}</label>
-                                        <textarea class="form-control" 
-                                                  name="product[translations][{{ loop.index0 }}][performanceDetails]" 
-                                                  rows="3"
-                                                  placeholder="{{ 'admin.product.performance_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.performanceDetails }}</textarea>
-                                    </div>
-                                </div>
-                                
-                                <input type="hidden" 
-                                       name="product[translations][{{ loop.index0 }}][language]" 
-                                       value="{{ language.id }}">
-                            </div>
-                        {% endfor %}
-                    </div>
+                    <!-- Contenu des onglets - Using form.translations structure -->
+                    {{ form_widget(form.translations) }}
+                    
+                    <!-- Simplified tab structure for demo - In production, you might want to customize ProductTranslationType rendering -->
                 </div>
             </div>
         </div>
