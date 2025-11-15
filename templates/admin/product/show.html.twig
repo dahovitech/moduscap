@@ -304,45 +304,7 @@
                 </div>
             </div>
 
-            <!-- Matériaux et équipements -->
-            {% if product.materials or product.equipment or product.specifications or product.advantages %}
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h6 class="card-title mb-0">
-                            <i class="fas fa-list me-2"></i>{{ 'admin.product.technical_details'|trans }}
-                        </h6>
-                    </div>
-                    <div class="card-body">
-                        {% if product.materials %}
-                            <div class="mb-3">
-                                <h6><i class="fas fa-cube me-1"></i>{{ 'admin.product.materials'|trans }}</h6>
-                                <p class="text-muted small">{{ product.materials|replace({"\n": "<br>"|raw})|raw }}</p>
-                            </div>
-                        {% endif %}
-                        
-                        {% if product.equipment %}
-                            <div class="mb-3">
-                                <h6><i class="fas fa-cogs me-1"></i>{{ 'admin.product.equipment'|trans }}</h6>
-                                <p class="text-muted small">{{ product.equipment|replace({"\n": "<br>"|raw})|raw }}</p>
-                            </div>
-                        {% endif %}
-                        
-                        {% if product.specifications %}
-                            <div class="mb-3">
-                                <h6><i class="fas fa-wrench me-1"></i>{{ 'admin.product.specifications'|trans }}</h6>
-                                <p class="text-muted small">{{ product.specifications|replace({"\n": "<br>"|raw})|raw }}</p>
-                            </div>
-                        {% endif %}
-                        
-                        {% if product.advantages %}
-                            <div class="mb-3">
-                                <h6><i class="fas fa-thumbs-up me-1"></i>{{ 'admin.product.advantages'|trans }}</h6>
-                                <p class="text-muted small">{{ product.advantages|replace({"\n": "<br>"|raw})|raw }}</p>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
+
 
             <!-- Options disponibles -->
             {% if product.availableOptions|length > 0 %}
