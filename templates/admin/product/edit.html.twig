@@ -121,7 +121,24 @@
                 </div>
             </div>
 
-
+            <!-- Spécifications techniques -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.technicalSpecs, {
+                                'attr': {'class': 'form-control', 'rows': 4, 'placeholder': ('admin.product.technical_specs_placeholder'|trans)},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Traductions multilingues -->
             <div class="card mb-4">
@@ -143,10 +160,6 @@
                                         data-bs-toggle="tab" 
                                         data-bs-target="#lang-{{ language.code }}" 
                                         type="button" role="tab">
-                                    <img src="/assets/flags/{{ language.code }}.svg" 
-                                         alt="{{ language.name }}" 
-                                         width="20" height="15" 
-                                         class="me-2 rounded">
                                     {{ language.name }}
                                     {% if existingTranslation and (not existingTranslation.name and not existingTranslation.description) %}
                                         <span class="badge bg-warning text-dark ms-1">{{ 'admin.product.empty_translation'|trans }}</span>
