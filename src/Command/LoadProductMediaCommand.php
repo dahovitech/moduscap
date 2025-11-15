@@ -266,7 +266,7 @@ class LoadProductMediaCommand extends Command
                 }
             }
             if ($mediaConfig['gallery']) {
-                $io->note("✅ Galeries: {$productCode} ({$sortOrder - 1} images)");
+                $io->note(sprintf("✅ Galeries: %s (%d images)", $productCode, $sortOrder - 1));
             }
         }
 
