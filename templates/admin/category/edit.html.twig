@@ -69,8 +69,8 @@
                 <div class="card-body">
                     {% if category.translations %}
                     <ul class="nav nav-tabs" id="languageTabs">
-                        {% for translation in form.translations %}
-                        {% set language = translation.vars.data.language %}
+                        {% for translation in category.translations %}
+                        {% set language = translation.language %}
                         <li class="nav-item">
                             <button class="nav-link {{ loop.first ? 'active' : '' }}" 
                                     id="tab-{{ language.code }}" 
