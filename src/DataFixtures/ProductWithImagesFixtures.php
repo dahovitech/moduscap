@@ -63,8 +63,6 @@ class ProductWithImagesFixtures extends Fixture
             $english->setSortOrder(2);
             $manager->persist($english);
         }
-            }
-        }
 
         // Créer des catégories si nécessaire
         $categories = [
