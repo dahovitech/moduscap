@@ -133,9 +133,10 @@
                 </div>
                 <div class="card-body">
                     <!-- Onglets des langues -->
+                    {% set languages = get_languages() %}
                     <ul class="nav nav-tabs" id="languageTabs" role="tablist">
-                        {% for translation in product.translations %}
-                            {% set language = translation.language %}
+                        {% for language in languages %}
+                            {% set existingTranslation = product.translations|filter(t => t.language.code == language.code)|first %}
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link {{ loop.first ? 'active' : '' }}" 
                                         id="lang-{{ language.code }}-tab" 
@@ -147,7 +148,7 @@
                                          width="20" height="15" 
                                          class="me-2 rounded">
                                     {{ language.name }}
-                                    {% if not translation.name and not translation.description %}
+                                    {% if existingTranslation and (not existingTranslation.name and not existingTranslation.description) %}
                                         <span class="badge bg-warning text-dark ms-1">{{ 'admin.product.empty_translation'|trans }}</span>
                                     {% endif %}
                                 </button>
@@ -157,8 +158,9 @@
                     
                     <!-- Contenu des onglets -->
                     <div class="tab-content mt-3" id="languageTabsContent">
-                        {% for translation in product.translations %}
-                            {% set language = translation.language %}
+                        {% for language in languages %}
+                            {% set existingTranslation = product.translations|filter(t => t.language.code == language.code)|first %}
+                            {% set translation = existingTranslation ?? null %}
                             <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
                                  id="lang-{{ language.code }}" 
                                  role="tabpanel">
@@ -169,7 +171,7 @@
                                         <input type="text" 
                                                class="form-control form-control-lg" 
                                                name="product[translations][{{ loop.index0 }}][name]" 
-                                               value="{{ translation.name }}"
+                                               value="{{ translation ? translation.name : '' }}"
                                                placeholder="{{ ('admin.product.product_name_placeholder'|trans)|replace({'%language%': language.name}) }}"
                                                {{ not language.isActive ? 'disabled' : '' }}>
                                         <div class="form-text">
@@ -184,7 +186,7 @@
                                         <input type="text" 
                                                class="form-control" 
                                                name="product[translations][{{ loop.index0 }}][shortDescription]" 
-                                               value="{{ translation.shortDescription }}"
+                                               value="{{ translation ? translation.shortDescription : '' }}"
                                                placeholder="{{ 'admin.product.short_description_placeholder'|trans }}"
                                                {{ not language.isActive ? 'disabled' : '' }}>
                                         <div class="form-text">
@@ -200,7 +202,7 @@
                                                   name="product[translations][{{ loop.index0 }}][description]" 
                                                   rows="5"
                                                   placeholder="{{ ('admin.product.description_placeholder'|trans)|replace({'%language%': language.name}) }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.description }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.description : '' }}</textarea>
                                         <div class="form-text">
                                             {{ 'admin.product.description_info'|trans }}
                                         </div>
@@ -214,7 +216,7 @@
                                                   name="product[translations][{{ loop.index0 }}][concept]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.concept_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.concept }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.concept : '' }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label class="form-label fw-bold">{{ 'admin.product.materials_detail'|trans }}</label>
@@ -222,32 +224,70 @@
                                                   name="product[translations][{{ loop.index0 }}][materialsDetail]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.materials_detail_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.materialsDetail }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.materialsDetail : '' }}</textarea>
                                     </div>
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.equipment_detail'|trans }}"
+                                        <label class="form-label fw-bold">{{ 'admin.product.equipment_detail'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.equipment_detail_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.equipmentDetail }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.equipmentDetail : '' }}</textarea>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}"
+                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans }}</label>
                                         <textarea class="form-control" 
                                                   name="product[translations][{{ loop.index0 }}][performanceDetails]" 
                                                   rows="3"
                                                   placeholder="{{ 'admin.product.performance_placeholder'|trans }}"
-                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation.performanceDetails }}</textarea>
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.performanceDetails : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.specifications'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][specifications]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.specs_placeholder'|trans }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.specifications : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.advantages'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][advantages]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.advantages_placeholder'|trans }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.advantages : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.specifications'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][specifications]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.specs_placeholder'|trans }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.specifications : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.advantages'|trans }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][advantages]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.advantages_placeholder'|trans }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.advantages : '' }}</textarea>
                                     </div>
                                 </div>
                                 
                                 <input type="hidden" 
                                        name="product[translations][{{ loop.index0 }}][language]" 
-                                       value="{{ language.id }}">
+                                       value="{{ language.code }}">
                             </div>
                         {% endfor %}
                     </div>

@@ -135,6 +135,39 @@ class ProductController extends AbstractController
             // Traiter les images
             $this->handleProductMedia($request, $product);
             
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                // Supprimer toutes les traductions existantes
+                foreach ($product->getTranslations() as $translation) {
+                    $product->removeTranslation($translation);
+                    $this->entityManager->remove($translation);
+                }
+                
+                // Ajouter les nouvelles traductions
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductTranslation();
+                        $translation->setProduct($product);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        $translation->setConcept($translationData['concept'] ?? '');
+                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                        $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
+                        $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
+                        $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
+                        $translation->setSpecifications($translationData['specifications'] ?? '');
+                        $translation->setAdvantages($translationData['advantages'] ?? '');
+                        
+                        $product->addTranslation($translation);
+                    }
+                }
+            }
+            
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Produit modifié avec succès !');
