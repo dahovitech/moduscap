@@ -30,7 +30,7 @@ Le chargement doit suivre cet ordre strict pour éviter les erreurs de dépendan
 ### ⚠️ Pourquoi cet Ordre ?
 
 - **Utilisateurs** (1er) : Aucune dépendance
-- **Paramètres** (2ème) : Aucune dépendance  
+- **Paramètres** (2ème) : Paramètres généraux du site (contact, emails)  
 - **Langues** (3ème) : Support pour les traductions des autres entités
 - **Produits** (4ème) : Nécessitent les langues pour les traductions
 - **Options** (5ème) : Nécessitent les produits pour les associations
@@ -96,13 +96,18 @@ php bin/console app:load-product-media
 | manager@moduscap.com | ROLE_MANAGER | manager123 |
 | user@moduscap.com | ROLE_USER | user123 |
 
-### ⚙️ Paramètres Système (19)
+### ⚙️ Paramètres Système (1 entité, 7 paramètres)
 
-- **Général** (5) : site_name, site_description, site_language, default_currency, default_currency_symbol
-- **Contact** (4) : contact_email, phone_number, address, business_hours
-- **Produits** (4) : products_per_page, enable_product_reviews, product_image_quality, max_image_size_mb
-- **SEO** (3) : seo_title, seo_description, seo_keywords
-- **Performance** (3) : cache_enabled, image_optimization, enable_cdn
+| Champ | Valeur |
+|-------|--------|
+| siteName | ModusCap |
+| phone | +33 1 23 45 67 89 |
+| whatsapp | +33 6 12 34 56 78 |
+| address | 123 Rue de l'Innovation, 75001 Paris, France |
+| email | contact@moduscap.com |
+| emailSender | noreply@moduscap.com |
+| emailReceived | admin@moduscap.com |
+| paymentInfo | Informations de paiement (IBAN, BIC) |
 
 ### 🌐 Langues (4)
 
