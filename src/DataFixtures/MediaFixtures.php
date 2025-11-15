@@ -186,7 +186,7 @@ class MediaFixtures extends Fixture
                 return;
             }
 
-            echo count($products) . ' produits trouvés pour la création de médias\n";
+            echo count($products) . ' produits trouvés pour la création de médias\n';
 
             // Traitement des produits par batch pour optimiser les performances
             $this->processProductsInBatches($manager, $products);
