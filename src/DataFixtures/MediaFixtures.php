@@ -219,6 +219,15 @@ class MediaFixtures extends Fixture
     }
 
     /**
+     * Définit l'ordre d'exécution de cette fixture
+     * Retourne 2 pour s'exécuter après ProductFixtures
+     */
+    public function getOrder(): int
+    {
+        return 2;
+    }
+
+    /**
      * Traite les produits par batch pour optimiser les performances
      */
     private function processProductsInBatches(ObjectManager $manager, array $products, int $batchSize = 10): void

@@ -12,9 +12,10 @@ use App\Entity\ProductOptionGroupTranslation;
 use App\Entity\ProductOptionTranslation;
 use App\Entity\ProductTranslation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\Fixture\OrderedFixturesInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class ProductFixtures extends Fixture
+class ProductFixtures extends Fixture implements OrderedFixturesInterface
 {
     public function load(ObjectManager $manager): void
     {
@@ -412,5 +413,14 @@ class ProductFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    /**
+     * Définit l'ordre d'exécution de cette fixture
+     * Retourne 1 pour s'exécuter en premier
+     */
+    public function getOrder(): int
+    {
+        return 1;
     }
 }
