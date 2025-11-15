@@ -121,7 +121,7 @@ class LoadLanguagesCommand extends Command
             
             $io->section('📊 Statistiques:');
             $io->writeln("   • Langue par défaut: " . reset($defaultLanguage)['name'] . " (" . reset($defaultLanguage)['code'] . ")");
-            $io->writeln("   • Langues actives: " . count($activeLanguages) . "/" . count($languagesData));}
+            $io->writeln("   • Langues actives: " . count($activeLanguages) . "/" . count($languagesData));
 
             return Command::SUCCESS;
             
