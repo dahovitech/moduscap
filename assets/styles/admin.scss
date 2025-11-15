@@ -1,6 +1,7 @@
 // Import Bootstrap core first (includes all variables and dependencies)
 @use "bootstrap/scss/bootstrap" as *;
 @use "bootstrap-icons/font/bootstrap-icons.css" as *;
+@import '~@fortawesome/fontawesome-free/css/all.css';
 
 :root {
     --bs-primary: #6f42c1;
