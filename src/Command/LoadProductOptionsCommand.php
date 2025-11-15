@@ -218,7 +218,7 @@ class LoadProductOptionsCommand extends Command
                     if ($language) {
                         $translation = new ProductOptionGroupTranslation();
                         $translation->setLanguage($language)
-                                    ->setGroup($group)
+                                    ->setOptionGroup($group)
                                     ->setName($translations['name'])
                                     ->setDescription($translations['description']);
 
@@ -232,7 +232,7 @@ class LoadProductOptionsCommand extends Command
                 // Créer les options du groupe
                 foreach ($groupData['options'] as $optionData) {
                     $option = new ProductOption();
-                    $option->setGroup($group)
+                    $option->setOptionGroup($group)
                            ->setValue($optionData['value'])
                            ->setIsAvailable($optionData['isAvailable'])
                            ->setSortOrder($optionData['sortOrder']);
