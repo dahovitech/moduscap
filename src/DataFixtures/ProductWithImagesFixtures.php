@@ -219,11 +219,13 @@ class ProductWithImagesFixtures extends Fixture
     {
         $media = new Media();
         $media->setFileName($fileName);
-        $media->setMimeType($mimeType);
-        $media->setOriginalName($fileName);
-        $media->setAltText('Image de démonstration');
-        $media->setIsActive(true);
-        $media->setSortOrder(1);
+        $media->setAlt('Image de démonstration');
+        
+        // Extraire l'extension du nom de fichier
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+        if ($extension) {
+            $media->setExtension($extension);
+        }
         
         $manager->persist($media);
         
