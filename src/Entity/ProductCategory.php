@@ -24,8 +24,7 @@ class ProductCategory
     #[Gedmo\Slug(fields: ['code'])]
     private string $code;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    private ?string $basePrice = null;
+
 
     #[ORM\Column(type: 'boolean')]
     private bool $isActive = true;
@@ -74,16 +73,7 @@ class ProductCategory
         return $this;
     }
 
-    public function getBasePrice(): ?string
-    {
-        return $this->basePrice;
-    }
 
-    public function setBasePrice(?string $basePrice): static
-    {
-        $this->basePrice = $basePrice;
-        return $this;
-    }
 
     public function isActive(): bool
     {

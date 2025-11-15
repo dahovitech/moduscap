@@ -30,7 +30,7 @@ class ProductFixtures extends Fixture
         $categoriesData = [
             [
                 'code' => 'capsule-house',
-                'basePrice' => 38000,
+
                 'translations' => [
                     'fr' => [
                         'name' => 'Capsule House',
@@ -46,7 +46,7 @@ class ProductFixtures extends Fixture
             ],
             [
                 'code' => 'apple-cabin',
-                'basePrice' => 45000,
+
                 'translations' => [
                     'fr' => [
                         'name' => 'Apple Cabin',
@@ -62,7 +62,7 @@ class ProductFixtures extends Fixture
             ],
             [
                 'code' => 'natural-house',
-                'basePrice' => 48000,
+
                 'translations' => [
                     'fr' => [
                         'name' => 'Natural House',
@@ -78,7 +78,7 @@ class ProductFixtures extends Fixture
             ],
             [
                 'code' => 'dome-house',
-                'basePrice' => 52000,
+
                 'translations' => [
                     'fr' => [
                         'name' => 'Dome House',
@@ -94,7 +94,7 @@ class ProductFixtures extends Fixture
             ],
             [
                 'code' => 'model-double',
-                'basePrice' => 68000,
+
                 'translations' => [
                     'fr' => [
                         'name' => 'Model Double',
@@ -114,7 +114,6 @@ class ProductFixtures extends Fixture
         foreach ($categoriesData as $categoryData) {
             $category = new ProductCategory();
             $category->setCode($categoryData['code']);
-            $category->setBasePrice($categoryData['basePrice']);
             $category->setIsActive(true);
             $category->setIsFeatured(true);
             $category->setSortOrder(array_search($categoryData, $categoriesData) + 1);

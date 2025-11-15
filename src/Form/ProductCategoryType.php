@@ -31,16 +31,7 @@ class ProductCategoryType extends AbstractType
                 ],
                 'help' => 'admin.category.code_help'
             ])
-            ->add('basePrice', MoneyType::class, [
-                'label' => 'admin.category.base_price',
-                'currency' => 'EUR',
-                'required' => false,
-                'help' => 'admin.category.base_price_help',
-                'attr' => [
-                    'class' => 'form-control',
-                    'placeholder' => 'admin.category.price_placeholder'
-                ]
-            ])
+
             ->add('isActive', CheckboxType::class, [
                 'label' => 'admin.category.active_category',
                 'required' => false,

@@ -56,12 +56,7 @@
                         </div>
                         <div class="col-md-6">
                             <dl class="row">
-                                {% if category.basePrice %}
-                                <dt class="col-sm-4">{{ 'admin.category.base_price'|trans }}:</dt>
-                                <dd class="col-sm-8">
-                                    <span class="text-success fw-bold">{{ category.basePrice|number_format(2, ',', ' ') }} €</span>
-                                </dd>
-                                {% endif %}
+
                                 
                                 <dt class="col-sm-4">{{ 'admin.category.updated_at'|trans }}:</dt>
                                 <dd class="col-sm-8">{{ category.updatedAt ? category.updatedAt|date('d/m/Y H:i') : '-' }}</dd>
