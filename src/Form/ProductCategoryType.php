@@ -66,22 +66,6 @@ class ProductCategoryType extends AbstractType
                 ]
             ]);
 
-        // Translations are handled directly in Twig template and controllers
-        // Auto-generate code based on name in French
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
-            if (isset($data['category']['translations'])) {
-                foreach ($data['category']['translations'] as $translation) {
-                    if (isset($translation['language']) && $translation['language'] === 'fr') {
-                        $name = $translation['name'] ?? '';
-                        $code = strtolower(str_replace([' ', '-', '_'], '-', $name));
-                        $data['category']['code'] = $code;
-                        break;
-                    }
-                }
-            }
-            $event->setData($data);
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
