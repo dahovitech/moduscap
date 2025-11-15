@@ -233,8 +233,8 @@ class LoadProductOptionsCommand extends Command
                 foreach ($groupData['options'] as $optionData) {
                     $option = new ProductOption();
                     $option->setOptionGroup($group)
-                           ->setValue($optionData['value'])
-                           ->setIsAvailable($optionData['isAvailable'])
+                           ->setCode($optionData['value'])
+                           ->setIsActive($optionData['isAvailable'])
                            ->setSortOrder($optionData['sortOrder']);
 
                     $this->entityManager->persist($option);
