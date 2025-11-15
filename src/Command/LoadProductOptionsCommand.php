@@ -60,7 +60,9 @@ class LoadProductOptionsCommand extends Command
                 [
                     'code' => 'material',
                     'isRequired' => true,
-                    'isMultiple' => false,
+                    'inputType' => 'select',
+                    'isActive' => true,
+                    'sortOrder' => 1,
                     'translations' => [
                         'fr' => ['name' => 'Matériau', 'description' => 'Sélectionnez le matériau principal'],
                         'en' => ['name' => 'Material', 'description' => 'Select the main material'],
@@ -98,7 +100,9 @@ class LoadProductOptionsCommand extends Command
                 [
                     'code' => 'color',
                     'isRequired' => false,
-                    'isMultiple' => false,
+                    'inputType' => 'select',
+                    'isActive' => true,
+                    'sortOrder' => 2,
                     'translations' => [
                         'fr' => ['name' => 'Couleur', 'description' => 'Choisissez la couleur extérieure'],
                         'en' => ['name' => 'Color', 'description' => 'Choose the exterior color'],
@@ -136,7 +140,9 @@ class LoadProductOptionsCommand extends Command
                 [
                     'code' => 'accessories',
                     'isRequired' => false,
-                    'isMultiple' => true,
+                    'inputType' => 'multiselect',
+                    'isActive' => true,
+                    'sortOrder' => 3,
                     'translations' => [
                         'fr' => ['name' => 'Accessoires', 'description' => 'Sélectionnez des accessoires optionnels'],
                         'en' => ['name' => 'Accessories', 'description' => 'Select optional accessories'],
@@ -197,7 +203,9 @@ class LoadProductOptionsCommand extends Command
                 $group = new ProductOptionGroup();
                 $group->setCode($groupData['code'])
                       ->setIsRequired($groupData['isRequired'])
-                      ->setIsMultiple($groupData['isMultiple']);
+                      ->setInputType($groupData['inputType'])
+                      ->setIsActive($groupData['isActive'])
+                      ->setSortOrder($groupData['sortOrder']);
 
                 $this->entityManager->persist($group);
                 $createdGroups++;
@@ -263,8 +271,8 @@ class LoadProductOptionsCommand extends Command
             $io->section('📋 Groupes d\'options créés:');
             foreach ($optionGroupsData as $groupData) {
                 $required = $groupData['isRequired'] ? ' (Requis)' : ' (Optionnel)';
-                $multiple = $groupData['isMultiple'] ? ' [Multiple]' : ' [Unique]';
-                $io->writeln("   • {$groupData['translations']['fr']['name']} ({$groupData['code']}){$required}{$multiple}");
+                $inputType = $groupData['inputType'] === 'multiselect' ? ' [Multiple]' : ' [Unique]';
+                $io->writeln("   • {$groupData['translations']['fr']['name']} ({$groupData['code']}){$required}{$inputType}");
             }
 
             return Command::SUCCESS;
