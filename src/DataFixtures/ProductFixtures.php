@@ -331,7 +331,6 @@ class ProductFixtures extends Fixture
             $product = new Product();
             $product->setCode($category->getCode());
             $product->setCategory($category);
-            $product->setBasePrice($category->getBasePrice());
             $product->setIsActive(true);
             $product->setIsFeatured(true);
             $product->setIsCustomizable(true);
@@ -340,6 +339,7 @@ class ProductFixtures extends Fixture
             // Set product specifications based on category
             switch ($category->getCode()) {
                 case 'capsule-house':
+                    $product->setBasePrice(38000);
                     $product->setSurface(28);
                     $product->setDimensions('6m × 4,7m × 2,8m');
                     $product->setRooms(1);
@@ -349,6 +349,7 @@ class ProductFixtures extends Fixture
                     $product->setWarrantyEquipment(5);
                     break;
                 case 'apple-cabin':
+                    $product->setBasePrice(45000);
                     $product->setSurface(35);
                     $product->setDimensions('7m × 5m × 3m');
                     $product->setRooms(2);
@@ -359,6 +360,7 @@ class ProductFixtures extends Fixture
                     $product->setWarrantyEquipment(5);
                     break;
                 case 'natural-house':
+                    $product->setBasePrice(48000);
                     $product->setSurface(38);
                     $product->setDimensions('6,5m × 6m × 3,2m');
                     $product->setRooms(2);
@@ -369,6 +371,7 @@ class ProductFixtures extends Fixture
                     $product->setWarrantyEquipment(5);
                     break;
                 case 'dome-house':
+                    $product->setBasePrice(52000);
                     $product->setSurface(42);
                     $product->setDimensions('Diamètre 7,3m × 4,2m');
                     $product->setRooms(3);
@@ -379,6 +382,7 @@ class ProductFixtures extends Fixture
                     $product->setWarrantyEquipment(5);
                     break;
                 case 'model-double':
+                    $product->setBasePrice(68000);
                     $product->setSurface(62);
                     $product->setDimensions('8m × 4m × 6,5m');
                     $product->setRooms(4);
