@@ -2,68 +2,129 @@
 
 namespace App\Command;
 
-use App\Command\LoadProductsCommand;
-use App\Command\LoadProductMediaCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
 
 /**
- * Commande pour charger toutes les données en une fois
- * Équivaut à l'ancien fixture mais avec plus de flexibilité
+ * Commande maestra pour charger toutes les données MODUSCAP dans l'ordre correct
  */
 #[AsCommand(
     name: 'app:load-all-data',
-    description: 'Charge tous les produits et leurs médias en une fois',
+    description: 'Charge toutes les données MODUSCAP (Users → Settings → Langues → Produits → Options → Médias)',
 )]
 class LoadAllDataCommand extends Command
 {
-    public function __construct(
-        private LoadProductsCommand $loadProductsCommand,
-        private LoadProductMediaCommand $loadProductMediaCommand
-    ) {
-        parent::__construct();
-    }
+    private array $commandNames = [
+        'app:load-users' => '👥 Utilisateurs',
+        'app:load-settings' => '⚙️ Paramètres système', 
+        'app:load-languages' => '🌐 Langues',
+        'app:load-products' => '🚀 Produits et catégories',
+        'app:load-product-options' => '🔧 Options de produits',
+        'app:load-product-media' => '🖼️ Médias produits'
+    ];
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $io->title('🚀 Chargement complet des données MODUSCAP');
+        $io->title('🎯 Chargement complet des données MODUSCAP');
+        $io->note('Ordre d\'exécution: Utilisateurs → Paramètres → Langues → Produits → Options → Médias');
 
-        try {
-            // ÉTAPE 1: Charger les produits
-            $io->section('📦 ÉTAPE 1: Chargement des produits');
-            $result1 = $this->loadProductsCommand->run($input, $output);
-            
-            if ($result1 !== Command::SUCCESS) {
-                $io->error('❌ Échec du chargement des produits');
-                return Command::FAILURE;
+        $successCount = 0;
+        $failureCount = 0;
+        $executedCommands = [];
+
+        foreach ($this->commandNames as $commandName => $description) {
+            try {
+                $io->section("🚀 Exécution de: {$description}");
+                
+                // Trouver la commande
+                $command = $this->getApplication()->find($commandName);
+                
+                if (!$command) {
+                    throw new \Exception("Commande non trouvée: {$commandName}");
+                }
+
+                // Exécuter la commande
+                $returnCode = $command->run($input, $output);
+                
+                if ($returnCode === SymfonyCommand::SUCCESS) {
+                    $executedCommands[] = [
+                        'name' => $commandName,
+                        'description' => $description,
+                        'status' => 'success'
+                    ];
+                    $successCount++;
+                } else {
+                    $executedCommands[] = [
+                        'name' => $commandName,
+                        'description' => $description,
+                        'status' => 'failure',
+                        'return_code' => $returnCode
+                    ];
+                    $failureCount++;
+                }
+
+                // Pause entre les commandes pour une meilleure lisibilité
+                if ($commandName !== array_key_last($this->commandNames)) {
+                    $io->note("⏳ Pause de 2 secondes...");
+                    sleep(2);
+                }
+
+            } catch (\Exception $e) {
+                $executedCommands[] = [
+                    'name' => $commandName,
+                    'description' => $description,
+                    'status' => 'error',
+                    'error' => $e->getMessage()
+                ];
+                $failureCount++;
+                $io->error("❌ Erreur lors de l'exécution de {$description}: " . $e->getMessage());
             }
+        }
 
-            // ÉTAPE 2: Charger les médias
-            $io->section('🖼️  ÉTAPE 2: Chargement des médias');
-            $result2 = $this->loadProductMediaCommand->run($input, $output);
-            
-            if ($result2 !== Command::SUCCESS) {
-                $io->error('❌ Échec du chargement des médias');
-                return Command::FAILURE;
+        // Résumé final
+        $io->title('📊 Résumé du chargement complet');
+        
+        $io->section('✅ Commandes exécutées avec succès:');
+        foreach ($executedCommands as $cmd) {
+            if ($cmd['status'] === 'success') {
+                $io->writeln("   • {$cmd['description']}");
             }
+        }
 
-            $io->success('✅ Toutes les données ont été chargées avec succès !');
-            $io->newLine(2);
-            $io->note('💡 Utilisations possibles:');
-            $io->listing([
-                'php bin/console app:load-products (charge seulement les produits)',
-                'php bin/console app:load-product-media (charge seulement les médias)',
-                'php bin/console app:load-all-data (charge tout)'
-            ]);
+        if ($failureCount > 0) {
+            $io->section('❌ Échecs et erreurs:');
+            foreach ($executedCommands as $cmd) {
+                if ($cmd['status'] === 'failure' || $cmd['status'] === 'error') {
+                    $status = $cmd['status'] === 'failure' ? 'Échec' : 'Erreur';
+                    $io->writeln("   • {$cmd['description']} - {$status}");
+                    if (isset($cmd['error'])) {
+                        $io->writeln("     📝 Détail: {$cmd['error']}");
+                    }
+                    if (isset($cmd['return_code'])) {
+                        $io->writeln("     🔢 Code retour: {$cmd['return_code']}");
+                    }
+                }
+            }
+        }
 
+        // Statistiques finales
+        $io->section('📈 Statistiques:');
+        $io->writeln("   • ✅ Commandes réussies: {$successCount}");
+        $io->writeln("   • ❌ Commandes échouées: {$failureCount}");
+        $io->writeln("   • 📊 Total des commandes: " . count($this->commandNames));
+
+        if ($failureCount === 0) {
+            $io->success('🎉 Toutes les données ont été chargées avec succès !');
+            $io->note('💡 Votre site MODUSCAP est maintenant prêt à fonctionner.');
             return Command::SUCCESS;
-            
-        } catch (\Exception $e) {
-            $io->error('❌ Erreur lors du chargement complet: ' . $e->getMessage());
+        } else {
+            $io->warning('⚠️  Le chargement s\'est terminé avec des erreurs.');
+            $io->note('💡 Vérifiez les erreurs ci-dessus et réexécutez les commandes individuellement si nécessaire.');
             return Command::FAILURE;
         }
     }

@@ -263,7 +263,7 @@ class LoadProductsCommand extends Command
         }
         $io->progressFinish();
 
-        $io->info(sprintf('✅ %d catégories et %d produits créés', 
+        $io->info(sprintf('✅ %d catégories et %d produits créés avec succès', 
             count($categories),
             count($categories)
         ));
