@@ -221,7 +221,7 @@ class LoadProductMediaCommand extends Command
                 $totalMediaCreated += $mediaCount;
                 $io->progressAdvance();
             } catch (\Exception $e) {
-                $io->errorText('❌ Erreur pour le produit: ' . $product->getCode() . ' - ' . $e->getMessage());
+                $io->error('❌ Erreur pour le produit: ' . $product->getCode() . ' - ' . $e->getMessage());
             }
         }
         $io->progressFinish();
