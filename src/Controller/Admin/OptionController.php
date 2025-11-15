@@ -42,29 +42,38 @@ class OptionController extends AbstractController
         $optionGroup = new ProductOptionGroup();
         $optionGroup->setCreatedAt(new \DateTime());
         $optionGroup->setUpdatedAt(new \DateTime());
-        
-        // Initialiser les traductions pour toutes les langues actives
-        $languages = $this->languageRepository->findBy(['isActive' => true]);
-        
-        foreach ($languages as $language) {
-            $translation = new ProductOptionGroupTranslation();
-            $translation->setOptionGroup($optionGroup);
-            $translation->setLanguage($language);
-            $translation->setName('');
-            $translation->setDescription('');
-            $optionGroup->addTranslation($translation);
-        }
 
         $form = $this->createForm(\App\Form\ProductOptionGroupType::class, $optionGroup);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product_option_group', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductOptionGroupTranslation();
+                        $translation->setOptionGroup($optionGroup);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        
+                        $optionGroup->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->persist($optionGroup);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Groupe d\'options créé avec succès !');
             return $this->redirectToRoute('admin_option_index');
         }
+
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
 
         return $this->render('admin/option/group_new.html.twig', [
             'optionGroup' => $optionGroup,
@@ -82,6 +91,31 @@ class OptionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product_option_group', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                // Supprimer les traductions existantes
+                foreach ($optionGroup->getTranslations() as $existingTranslation) {
+                    $this->entityManager->remove($existingTranslation);
+                }
+                $optionGroup->getTranslations()->clear();
+                
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductOptionGroupTranslation();
+                        $translation->setOptionGroup($optionGroup);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        
+                        $optionGroup->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Groupe d\'options modifié avec succès !');
@@ -129,29 +163,38 @@ class OptionController extends AbstractController
         $option->setOptionGroup($optionGroup);
         $option->setCreatedAt(new \DateTime());
         $option->setUpdatedAt(new \DateTime());
-        
-        // Initialiser les traductions pour toutes les langues actives
-        $languages = $this->languageRepository->findBy(['isActive' => true]);
-        
-        foreach ($languages as $language) {
-            $translation = new ProductOptionTranslation();
-            $translation->setOption($option);
-            $translation->setLanguage($language);
-            $translation->setName('');
-            $translation->setDescription('');
-            $option->addTranslation($translation);
-        }
 
         $form = $this->createForm(\App\Form\ProductOptionType::class, $option);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product_option', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductOptionTranslation();
+                        $translation->setOption($option);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        
+                        $option->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->persist($option);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Option créée avec succès !');
             return $this->redirectToRoute('admin_option_index');
         }
+
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
 
         return $this->render('admin/option/option_new.html.twig', [
             'optionGroup' => $optionGroup,
@@ -170,6 +213,31 @@ class OptionController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('product_option', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                // Supprimer les traductions existantes
+                foreach ($option->getTranslations() as $existingTranslation) {
+                    $this->entityManager->remove($existingTranslation);
+                }
+                $option->getTranslations()->clear();
+                
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                    
+                    if ($language) {
+                        $translation = new ProductOptionTranslation();
+                        $translation->setOption($option);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        
+                        $option->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Option modifiée avec succès !');

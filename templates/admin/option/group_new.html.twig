@@ -68,11 +68,10 @@
                                                     {{ 'admin.option.group.name'|trans }}
                                                     <span class="badge bg-primary">{{ language.code|upper }}</span>
                                                 </label>
-                                                {% set translationIndex = loop.index0 %}
-                                                {{ form_widget(form.translations[translationIndex].name, {
-                                                    'attr': {'class': 'form-control', 'placeholder': 'admin.option.group.name_placeholder'|trans}
-                                                }) }}
-                                                {{ form_errors(form.translations[translationIndex].name) }}
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="product_option_group[translations][{{ loop.index0 }}][name]" 
+                                                       placeholder="{{ 'admin.option.group.name_placeholder'|trans }}">
                                             </div>
                                         </div>
                                     </div>
@@ -81,15 +80,17 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label class="form-label">{{ 'admin.option.group.description'|trans }}</label>
-                                                {{ form_widget(form.translations[translationIndex].description, {
-                                                    'attr': {'class': 'form-control', 'rows': 3, 'placeholder': 'admin.option.group.description_placeholder'|trans}
-                                                }) }}
-                                                {{ form_errors(form.translations[translationIndex].description) }}
+                                                <textarea class="form-control" 
+                                                          name="product_option_group[translations][{{ loop.index0 }}][description]" 
+                                                          rows="3"
+                                                          placeholder="{{ 'admin.option.group.description_placeholder'|trans }}"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                     
-                                    {{ form_widget(form.translations[translationIndex].language, {'attr': {'style': 'display: none'}}) }}
+                                    <input type="hidden" 
+                                           name="product_option_group[translations][{{ loop.index0 }}][language]" 
+                                           value="{{ language.code }}">
                                 </div>
                             {% endfor %}
                         </div>

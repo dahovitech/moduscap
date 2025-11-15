@@ -60,7 +60,7 @@ class ProductCategoryController extends AbstractController
             
             if ($translationsData) {
                 foreach ($translationsData as $translationData) {
-                    $language = $this->languageRepository->find($translationData['language'] ?? null);
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
                     
                     if ($language) {
                         $translation = new ProductCategoryTranslation();
@@ -120,7 +120,7 @@ class ProductCategoryController extends AbstractController
                 $category->getTranslations()->clear();
                 
                 foreach ($translationsData as $translationData) {
-                    $language = $this->languageRepository->find($translationData['language'] ?? null);
+                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
                     
                     if ($language) {
                         $translation = new ProductCategoryTranslation();
