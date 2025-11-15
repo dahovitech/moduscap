@@ -206,7 +206,7 @@ class MediaFixtures extends Fixture
         'model-double' => 'Model Double',
         'otherpic' => 'otherpic',
         'catalogues' => 'catalogues',
-        'userfiles' => 'userfiles/image',
+        'userfiles' => 'userfiles',
     ];
 
     // Mapping des types MIME par extension
