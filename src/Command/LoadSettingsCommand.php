@@ -12,11 +12,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Helper\ProgressBar;
 
 /**
- * Commande pour charger les paramètres système
+ * Commande pour charger les paramètres système (site, contact, emails)
  */
 #[AsCommand(
     name: 'app:load-settings',
-    description: 'Charge les paramètres système en base de données',
+    description: 'Charge les paramètres système (site, contact, emails) en base de données',
 )]
 class LoadSettingsCommand extends Command
 {
@@ -43,36 +43,17 @@ class LoadSettingsCommand extends Command
                 $io->note('📊 Paramètres existants supprimés');
             }
 
-            // Configuration des paramètres système
+            // Configuration des paramètres système (utilisant la vraie structure de l'entité Setting)
             $settingsData = [
-                // Paramètres généraux du site
-                ['key' => 'site_name', 'value' => 'ModusCap', 'type' => 'string', 'category' => 'general'],
-                ['key' => 'site_description', 'value' => 'Solutions innovantes pour l\'habitat modulaire', 'type' => 'string', 'category' => 'general'],
-                ['key' => 'site_language', 'value' => 'fr', 'type' => 'string', 'category' => 'general'],
-                ['key' => 'default_currency', 'value' => 'EUR', 'type' => 'string', 'category' => 'general'],
-                ['key' => 'default_currency_symbol', 'value' => '€', 'type' => 'string', 'category' => 'general'],
-                
-                // Paramètres de contact
-                ['key' => 'contact_email', 'value' => 'contact@moduscap.com', 'type' => 'string', 'category' => 'contact'],
-                ['key' => 'phone_number', 'value' => '+33 1 23 45 67 89', 'type' => 'string', 'category' => 'contact'],
-                ['key' => 'address', 'value' => '123 Rue de l\'Innovation, 75001 Paris', 'type' => 'string', 'category' => 'contact'],
-                ['key' => 'business_hours', 'value' => 'Lundi - Vendredi: 9h00 - 18h00', 'type' => 'string', 'category' => 'contact'],
-                
-                // Paramètres des produits
-                ['key' => 'products_per_page', 'value' => '12', 'type' => 'integer', 'category' => 'products'],
-                ['key' => 'enable_product_reviews', 'value' => 'true', 'type' => 'boolean', 'category' => 'products'],
-                ['key' => 'product_image_quality', 'value' => 'high', 'type' => 'string', 'category' => 'products'],
-                ['key' => 'max_image_size_mb', 'value' => '5', 'type' => 'integer', 'category' => 'products'],
-                
-                // Paramètres SEO
-                ['key' => 'seo_title', 'value' => 'ModusCap - Habitats Modulaires Innovants', 'type' => 'string', 'category' => 'seo'],
-                ['key' => 'seo_description', 'value' => 'Découvrez nos solutions d\'habitat modulaire écologique et innovant', 'type' => 'string', 'category' => 'seo'],
-                ['key' => 'seo_keywords', 'value' => 'habitat modulaire, maison container, architecture écologique', 'type' => 'string', 'category' => 'seo'],
-                
-                // Paramètres de performance
-                ['key' => 'cache_enabled', 'value' => 'true', 'type' => 'boolean', 'category' => 'performance'],
-                ['key' => 'image_optimization', 'value' => 'true', 'type' => 'boolean', 'category' => 'performance'],
-                ['key' => 'enable_cdn', 'value' => 'false', 'type' => 'boolean', 'category' => 'performance'],
+                'siteName' => 'ModusCap',
+                'phone' => '+33 1 23 45 67 89',
+                'whatsapp' => '+33 6 12 34 56 78',
+                'address' => '123 Rue de l\'Innovation, 75001 Paris, France',
+                'email' => 'contact@moduscap.com',
+                'emailSender' => 'noreply@moduscap.com',
+                'emailReceived' => 'admin@moduscap.com',
+                'paymentInfo' => 'Mode de paiement: Virement bancaire - IBAN: FR76 1234 5678 9012 3456 789' . "\n" .
+                               'Coordonnées bancaires: Banque ModusCap - BIC: MODUFRPPXXX'
             ];
 
             // Configuration de la barre de progression
@@ -82,18 +63,19 @@ class LoadSettingsCommand extends Command
 
             $createdSettings = 0;
 
-            foreach ($settingsData as $settingData) {
-                $setting = new Setting();
-                $setting->setKey($settingData['key'])
-                        ->setValue($settingData['value'])
-                        ->setType($settingData['type'])
-                        ->setCategory($settingData['category']);
-
-                $this->entityManager->persist($setting);
-                $createdSettings++;
-
+            // Créer une seule instance de Setting avec tous les paramètres
+            $setting = new Setting();
+            
+            foreach ($settingsData as $methodName => $value) {
+                $setterMethod = 'set' . ucfirst($methodName);
+                if (method_exists($setting, $setterMethod)) {
+                    $setting->$setterMethod($value);
+                    $createdSettings++;
+                }
                 $progressBar->advance();
             }
+
+            $this->entityManager->persist($setting);
 
             $this->entityManager->flush();
             $progressBar->finish();
@@ -101,18 +83,9 @@ class LoadSettingsCommand extends Command
 
             $io->success("✅ {$createdSettings} paramètres créés avec succès !");
             
-            // Grouper les paramètres par catégorie pour l'affichage
-            $settingsByCategory = [];
-            foreach ($settingsData as $setting) {
-                $settingsByCategory[$setting['category']][] = $setting['key'];
-            }
-
-            $io->section('📋 Paramètres créés par catégorie:');
-            foreach ($settingsByCategory as $category => $keys) {
-                $io->writeln("   <comment>{$category}:</comment>");
-                foreach ($keys as $key) {
-                    $io->writeln("     • {$key}");
-                }
+            $io->section('📋 Paramètres système créés:');
+            foreach ($settingsData as $key => $value) {
+                $io->writeln("   • <info>{$key}</info>: " . substr($value, 0, 50) . (strlen($value) > 50 ? '...' : ''));
             }
 
             return Command::SUCCESS;
