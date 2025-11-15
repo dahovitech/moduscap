@@ -160,41 +160,7 @@ class MediaFixtures extends Fixture
                 ]
             ]
         ],
-        'otherpic' => [
-            'main' => 'Construction.png',
-            'gallery' => [
-                'Delivery.png',
-                'Fundation.png',
-                'Payment.png',
-                'Production.png',
-                'vfwechat.jpg',
-                'vollogo.png'
-            ],
-            'alt_texts' => [
-                'fr' => [
-                    'main' => 'Processus de construction',
-                    'gallery' => [
-                        'Livraison et transport',
-                        'Fondations et Terrassement',
-                        'Paiement sécurisé',
-                        'Production en usine',
-                        'Contact WhatsApp',
-                        'Logo ModusCap'
-                    ]
-                ],
-                'en' => [
-                    'main' => 'Construction process',
-                    'gallery' => [
-                        'Delivery and transport',
-                        'Foundations and earthworks',
-                        'Secure payment',
-                        'Factory production',
-                        'WhatsApp contact',
-                        'ModusCap logo'
-                    ]
-                ]
-            ]
-        ]
+
     ];
 
     // Mapping des noms de dossiers par catégorie
@@ -204,7 +170,6 @@ class MediaFixtures extends Fixture
         'natural-house' => 'Natural House',
         'dome-house' => 'Dome House',
         'model-double' => 'Model Double',
-        'otherpic' => 'otherpic',
         'catalogues' => 'catalogues',
     ];
 
@@ -460,5 +425,26 @@ class MediaFixtures extends Fixture
     private function getFileExtension(string $fileName): string
     {
         return pathinfo($fileName, PATHINFO_EXTENSION);
+    }
+
+    /**
+     * Construit le chemin complet vers un fichier image
+     */
+    private function buildImagePath(string $folderName, string $fileName): string
+    {
+        return sprintf(
+            '%s/public/images/products/%s/%s',
+            $this->getProjectRoot(),
+            $folderName,
+            $fileName
+        );
+    }
+
+    /**
+     * Récupère le chemin racine du projet
+     */
+    private function getProjectRoot(): string
+    {
+        return dirname(__DIR__, 4); // Remonte 4 niveaux depuis src/DataFixtures
     }
 }
