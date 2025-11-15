@@ -50,29 +50,39 @@ class ProductCategoryController extends AbstractController
         $category = new ProductCategory();
         $category->setCreatedAt(new \DateTime());
         $category->setUpdatedAt(new \DateTime());
-        
-        // Initialiser les traductions pour toutes les langues actives
-        $languages = $this->languageRepository->findBy(['isActive' => true]);
-        
-        foreach ($languages as $language) {
-            $translation = new ProductCategoryTranslation();
-            $translation->setProductCategory($category);
-            $translation->setLanguage($language);
-            $translation->setName('');
-            $translation->setDescription('');
-            $category->addTranslation($translation);
-        }
 
         $form = $this->createForm(\App\Form\ProductCategoryType::class, $category);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('category', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->find($translationData['language'] ?? null);
+                    
+                    if ($language) {
+                        $translation = new ProductCategoryTranslation();
+                        $translation->setProductCategory($category);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                        
+                        $category->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->persist($category);
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Catégorie créée avec succès !');
             return $this->redirectToRoute('admin_category_index');
         }
+
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
 
         return $this->render('admin/category/new.html.twig', [
             'category' => $category,
@@ -99,6 +109,32 @@ class ProductCategoryController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Traiter les traductions manuellement depuis les données du formulaire
+            $translationsData = $request->request->get('category', [])['translations'] ?? [];
+            
+            if ($translationsData) {
+                // Supprimer les traductions existantes
+                foreach ($category->getTranslations() as $existingTranslation) {
+                    $this->entityManager->remove($existingTranslation);
+                }
+                $category->getTranslations()->clear();
+                
+                foreach ($translationsData as $translationData) {
+                    $language = $this->languageRepository->find($translationData['language'] ?? null);
+                    
+                    if ($language) {
+                        $translation = new ProductCategoryTranslation();
+                        $translation->setProductCategory($category);
+                        $translation->setLanguage($language);
+                        $translation->setName($translationData['name'] ?? '');
+                        $translation->setDescription($translationData['description'] ?? '');
+                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                        
+                        $category->addTranslation($translation);
+                    }
+                }
+            }
+
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Catégorie modifiée avec succès !');
