@@ -54,10 +54,16 @@
                         <i class="bi bi-translate me-2"></i>{{ 'admin.option.translations'|trans }}
                     </h6>
 
-                    {% if optionGroup.translations is defined and optionGroup.translations|length > 0 %}
+                    {% set languages = get_languages() %}
+                    {% if languages|length > 0 %}
                         <div class="tab-content" id="languageTabs">
-                            {% for translation in optionGroup.translations %}
-                                {% set language = translation.language %}
+                            {% for language in languages %}
+                                {% set translation = null %}
+                                {% for t in optionGroup.translations %}
+                                    {% if t.language.code == language.code %}
+                                        {% set translation = t %}
+                                    {% endif %}
+                                {% endfor %}
                                 <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
                                      id="lang-{{ language.code }}" 
                                      role="tabpanel">
@@ -75,7 +81,7 @@
                                                 <input type="text" 
                                                        class="form-control" 
                                                        name="product_option_group[translations][{{ loop.index0 }}][name]" 
-                                                       value="{{ translation.name }}"
+                                                       value="{{ translation ? translation.name : '' }}"
                                                        placeholder="{{ 'admin.option.group.name_placeholder'|trans }}">
                                             </div>
                                         </div>
@@ -88,7 +94,7 @@
                                                 <textarea class="form-control" 
                                                           name="product_option_group[translations][{{ loop.index0 }}][description]" 
                                                           rows="3"
-                                                          placeholder="{{ 'admin.option.group.description_placeholder'|trans }}">{{ translation.description }}</textarea>
+                                                          placeholder="{{ 'admin.option.group.description_placeholder'|trans }}">{{ translation ? translation.description : '' }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -101,8 +107,7 @@
                         </div>
 
                         <ul class="nav nav-tabs" role="tablist">
-                            {% for translation in optionGroup.translations %}
-                                {% set language = translation.language %}
+                            {% for language in languages %}
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link {% if loop.first %}active{% endif %}" 
                                             type="button" 

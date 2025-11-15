@@ -122,9 +122,12 @@ class OptionController extends AbstractController
             return $this->redirectToRoute('admin_option_index');
         }
 
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
+
         return $this->render('admin/option/group_edit.html.twig', [
             'optionGroup' => $optionGroup,
             'form' => $form->createView(),
+            'languages' => $languages,
         ]);
     }
 
@@ -244,9 +247,12 @@ class OptionController extends AbstractController
             return $this->redirectToRoute('admin_option_index');
         }
 
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
+
         return $this->render('admin/option/option_edit.html.twig', [
             'option' => $option,
             'form' => $form->createView(),
+            'languages' => $languages,
         ]);
     }
 
