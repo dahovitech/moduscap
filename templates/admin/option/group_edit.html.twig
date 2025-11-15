@@ -54,6 +54,7 @@
                         <i class="bi bi-translate me-2"></i>{{ 'admin.option.translations'|trans }}
                     </h6>
 
+                    {% set languages = get_languages() %}
                     {% if languages|length > 0 %}
                         <div class="tab-content" id="languageTabs">
                             {% for language in languages %}
