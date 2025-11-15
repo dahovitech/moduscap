@@ -47,35 +47,67 @@ class LoadLanguagesCommand extends Command
             $languagesData = [
                 [
                     'code' => 'fr',
-                    'name' => 'Français',
+                    'name' => 'Française',
                     'nativeName' => 'Français',
                     'isDefault' => true,
                     'isActive' => true,
                     'sortOrder' => 1
                 ],
                 [
-                    'code' => 'en',
-                    'name' => 'English',
-                    'nativeName' => 'English',
+                    'code' => 'pt',
+                    'name' => 'Portugaise',
+                    'nativeName' => 'Português',
                     'isDefault' => false,
                     'isActive' => true,
                     'sortOrder' => 2
                 ],
                 [
-                    'code' => 'es',
-                    'name' => 'Español',
-                    'nativeName' => 'Español',
+                    'code' => 'de',
+                    'name' => 'Allemande',
+                    'nativeName' => 'Deutsch',
                     'isDefault' => false,
-                    'isActive' => false, // Inactive par défaut
+                    'isActive' => true,
                     'sortOrder' => 3
                 ],
                 [
-                    'code' => 'de',
-                    'name' => 'Deutsch',
-                    'nativeName' => 'Deutsch',
+                    'code' => 'it',
+                    'name' => 'Italienne',
+                    'nativeName' => 'Italiano',
                     'isDefault' => false,
-                    'isActive' => false, // Inactive par défaut
+                    'isActive' => true,
                     'sortOrder' => 4
+                ],
+                [
+                    'code' => 'no',
+                    'name' => 'Norvégienne',
+                    'nativeName' => 'Norsk',
+                    'isDefault' => false,
+                    'isActive' => true,
+                    'sortOrder' => 5
+                ],
+                [
+                    'code' => 'lt',
+                    'name' => 'Lithuanienne',
+                    'nativeName' => 'Lietuvių',
+                    'isDefault' => false,
+                    'isActive' => true,
+                    'sortOrder' => 6
+                ],
+                [
+                    'code' => 'es',
+                    'name' => 'Espagnole',
+                    'nativeName' => 'Español',
+                    'isDefault' => false,
+                    'isActive' => true,
+                    'sortOrder' => 7
+                ],
+                [
+                    'code' => 'nl',
+                    'name' => 'Néerlandaise',
+                    'nativeName' => 'Nederlands',
+                    'isDefault' => false,
+                    'isActive' => true,
+                    'sortOrder' => 8
                 ]
             ];
 
