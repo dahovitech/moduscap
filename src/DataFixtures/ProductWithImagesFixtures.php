@@ -6,6 +6,8 @@ use App\Entity\Product;
 use App\Entity\ProductMedia;
 use App\Entity\Media;
 use App\Entity\ProductCategory;
+use App\Entity\ProductCategoryTranslation;
+use App\Entity\ProductTranslation;
 use App\Entity\Language;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -58,23 +60,24 @@ class ProductWithImagesFixtures extends Fixture
             if (!$existingCategory) {
                 $category = new ProductCategory();
                 $category->setCode($code);
-                $category->setName($name);
                 $category->setIsActive(true);
                 $category->setSortOrder(0);
                 
                 // Ajouter des traductions
-                $translationFr = new \App\Entity\ProductCategoryTranslation();
-                $translationFr->setCategory($category);
+                $translationFr = new ProductCategoryTranslation();
+                $translationFr->setProductCategory($category);
                 $translationFr->setLanguage($french);
                 $translationFr->setName($name);
                 $translationFr->setDescription("Catégorie de {$name} de haute qualité");
+                $manager->persist($translationFr);
                 $category->addTranslation($translationFr);
                 
-                $translationEn = new \App\Entity\ProductCategoryTranslation();
-                $translationEn->setCategory($category);
+                $translationEn = new ProductCategoryTranslation();
+                $translationEn->setProductCategory($category);
                 $translationEn->setLanguage($english);
                 $translationEn->setName($name);
                 $translationEn->setDescription("High quality {$name} category");
+                $manager->persist($translationEn);
                 $category->addTranslation($translationEn);
                 
                 $manager->persist($category);
@@ -111,7 +114,7 @@ class ProductWithImagesFixtures extends Fixture
         $product->setUpdatedAt(new \DateTime());
 
         // Traductions françaises
-        $translationFr = new \App\Entity\ProductTranslation();
+        $translationFr = new ProductTranslation();
         $translationFr->setProduct($product);
         $translationFr->setLanguage($french);
         $translationFr->setName("Construction {$code} - Moderne");
@@ -126,7 +129,7 @@ class ProductWithImagesFixtures extends Fixture
         $product->addTranslation($translationFr);
 
         // Traductions anglaises
-        $translationEn = new \App\Entity\ProductTranslation();
+        $translationEn = new ProductTranslation();
         $translationEn->setProduct($product);
         $translationEn->setLanguage($english);
         $translationEn->setName("Construction {$code} - Modern");
