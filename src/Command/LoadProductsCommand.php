@@ -6,10 +6,10 @@ use App\Entity\Language;
 use App\Entity\Product;
 use App\Entity\ProductCategory;
 use App\Entity\ProductCategoryTranslation;
-use App\Entity\ProductOption;
-use App\Entity\ProductOptionGroup;
-use App\Entity\ProductOptionGroupTranslation;
-use App\Entity\ProductOptionTranslation;
+// use App\Entity\ProductOption;
+// use App\Entity\ProductOptionGroup;
+// use App\Entity\ProductOptionGroupTranslation;
+// use App\Entity\ProductOptionTranslation;
 use App\Entity\ProductTranslation;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 #[AsCommand(
     name: 'app:load-products',
-    description: 'Charge les produits, catégories et options en base de données',
+    description: 'Charge les produits et catégories en base de données',
 )]
 class LoadProductsCommand extends Command
 {
@@ -171,200 +171,7 @@ class LoadProductsCommand extends Command
         }
         $io->progressFinish();
 
-        $io->section('🔧 Création des groupes d\'options...');
 
-        // Create Option Groups
-        $optionGroupsData = [
-            [
-                'code' => 'bardage',
-                'inputType' => 'select',
-                'isRequired' => true,
-                'translations' => [
-                    'fr' => [
-                        'name' => 'Type de bardage',
-                        'description' => 'Choisissez le type de bardage pour vos murs extérieurs'
-                    ],
-                    'en' => [
-                        'name' => 'Cladding type',
-                        'description' => 'Choose the type of cladding for your exterior walls'
-                    ]
-                ]
-            ],
-            [
-                'code' => 'couverture',
-                'inputType' => 'select',
-                'isRequired' => true,
-                'translations' => [
-                    'fr' => [
-                        'name' => 'Type de couverture',
-                        'description' => 'Sélectionnez le matériau de couverture pour votre toiture'
-                    ],
-                    'en' => [
-                        'name' => 'Roofing type',
-                        'description' => 'Select the roofing material for your roof'
-                    ]
-                ]
-            ],
-            [
-                'code' => 'equipements',
-                'inputType' => 'multiselect',
-                'isRequired' => false,
-                'translations' => [
-                    'fr' => [
-                        'name' => 'Équipements optionnels',
-                        'description' => 'Équipements supplémentaires pour améliorer votre confort'
-                    ],
-                    'en' => [
-                        'name' => 'Optional equipment',
-                        'description' => 'Additional equipment to improve your comfort'
-                    ]
-                ]
-            ]
-        ];
-
-        $optionGroups = [];
-        foreach ($optionGroupsData as $groupData) {
-            $group = new ProductOptionGroup();
-            $group->setCode($groupData['code']);
-            $group->setInputType($groupData['inputType']);
-            $group->setIsRequired($groupData['isRequired']);
-            $group->setIsActive(true);
-            $group->setSortOrder(array_search($groupData, $optionGroupsData) + 1);
-
-            // Add translations
-            foreach ($groupData['translations'] as $locale => $translationData) {
-                $language = $this->entityManager->getRepository(Language::class)->findOneBy(['code' => $locale]);
-                if ($language) {
-                    $translation = new ProductOptionGroupTranslation();
-                    $translation->setName($translationData['name']);
-                    $translation->setDescription($translationData['description']);
-                    $translation->setLanguage($language);
-                    $group->addTranslation($translation);
-                }
-            }
-
-            $this->entityManager->persist($group);
-            $optionGroups[] = $group;
-        }
-
-        $io->section('⚙️  Création des options...');
-
-        // Create Options for bardage group
-        $bardageOptions = [
-            ['code' => 'bardage-original', 'price' => 0, 'translations' => [
-                'fr' => ['name' => 'Original', 'description' => 'Bardage original suivant les plans de base'],
-                'en' => ['name' => 'Original', 'description' => 'Original cladding following basic plans']
-            ]],
-            ['code' => 'bardage-terre', 'price' => 2500, 'translations' => [
-                'fr' => ['name' => 'Bardage terre', 'description' => 'Solution rustique avec bardage terre'],
-                'en' => ['name' => 'Earth cladding', 'description' => 'Rustic solution with earth cladding']
-            ]],
-            ['code' => 'bardage-aluminium', 'price' => 1800, 'translations' => [
-                'fr' => ['name' => 'Bardage aluminium', 'description' => 'Bardage aluminium haute qualité'],
-                'en' => ['name' => 'Aluminium cladding', 'description' => 'High quality aluminium cladding']
-            ]]
-        ];
-
-        foreach ($bardageOptions as $optionData) {
-            $option = new ProductOption();
-            $option->setCode($optionData['code']);
-            $option->setPrice($optionData['price']);
-            $option->setIsActive(true);
-            $option->setSortOrder(array_search($optionData, $bardageOptions) + 1);
-            $option->setOptionGroup($optionGroups[0]); // bardage group
-
-            // Add translations
-            foreach ($optionData['translations'] as $locale => $translationData) {
-                $language = $this->entityManager->getRepository(Language::class)->findOneBy(['code' => $locale]);
-                if ($language) {
-                    $translation = new ProductOptionTranslation();
-                    $translation->setName($translationData['name']);
-                    $translation->setDescription($translationData['description']);
-                    $translation->setLanguage($language);
-                    $option->addTranslation($translation);
-                }
-            }
-
-            $this->entityManager->persist($option);
-        }
-
-        // Create Options for couverture group
-        $couvertureOptions = [
-            ['code' => 'couverture-tuiles', 'price' => 0, 'translations' => [
-                'fr' => ['name' => 'Tuiles terre cuite', 'description' => 'Couverture en tuiles terre cuite'],
-                'en' => ['name' => 'Clay tiles', 'description' => 'Clay tile roofing']
-            ]],
-            ['code' => 'couverture-vegetale', 'price' => 3200, 'translations' => [
-                'fr' => ['name' => 'Toiture végétale', 'description' => 'Couverture végétalisée écologique'],
-                'en' => ['name' => 'Green roof', 'description' => 'Ecological green roofing']
-            ]],
-            ['code' => 'couverture-étanche', 'price' => 1500, 'translations' => [
-                'fr' => ['name' => 'Toiture étanchéité renforcée', 'description' => 'Système d\'étanchéité renforcé'],
-                'en' => ['name' => 'Reinforced waterproofing', 'description' => 'Reinforced waterproofing system']
-            ]]
-        ];
-
-        foreach ($couvertureOptions as $optionData) {
-            $option = new ProductOption();
-            $option->setCode($optionData['code']);
-            $option->setPrice($optionData['price']);
-            $option->setIsActive(true);
-            $option->setSortOrder(array_search($optionData, $couvertureOptions) + 1);
-            $option->setOptionGroup($optionGroups[1]); // couverture group
-
-            // Add translations
-            foreach ($optionData['translations'] as $locale => $translationData) {
-                $language = $this->entityManager->getRepository(Language::class)->findOneBy(['code' => $locale]);
-                if ($language) {
-                    $translation = new ProductOptionTranslation();
-                    $translation->setName($translationData['name']);
-                    $translation->setDescription($translationData['description']);
-                    $translation->setLanguage($language);
-                    $option->addTranslation($translation);
-                }
-            }
-
-            $this->entityManager->persist($option);
-        }
-
-        // Create Options for équipements group
-        $equipementsOptions = [
-            ['code' => 'climatisation', 'price' => 3500, 'translations' => [
-                'fr' => ['name' => 'Climatisation', 'description' => 'Système de climatisation réversible'],
-                'en' => ['name' => 'Air conditioning', 'description' => 'Reversible air conditioning system']
-            ]],
-            ['code' => 'domotique', 'price' => 2800, 'translations' => [
-                'fr' => ['name' => 'Système domotique', 'description' => 'Maison connectée avec contrôle smartphone'],
-                'en' => ['name' => 'Smart home system', 'description' => 'Connected house with smartphone control']
-            ]],
-            ['code' => 'cheminee', 'price' => 4200, 'translations' => [
-                'fr' => ['name' => 'Cheminée insert', 'description' => 'Cheminée insert pour ambiance chaleureuse'],
-                'en' => ['name' => 'Fireplace insert', 'description' => 'Fireplace insert for warm atmosphere']
-            ]]
-        ];
-
-        foreach ($equipementsOptions as $optionData) {
-            $option = new ProductOption();
-            $option->setCode($optionData['code']);
-            $option->setPrice($optionData['price']);
-            $option->setIsActive(true);
-            $option->setSortOrder(array_search($optionData, $equipementsOptions) + 1);
-            $option->setOptionGroup($optionGroups[2]); // equipements group
-
-            // Add translations
-            foreach ($optionData['translations'] as $locale => $translationData) {
-                $language = $this->entityManager->getRepository(Language::class)->findOneBy(['code' => $locale]);
-                if ($language) {
-                    $translation = new ProductOptionTranslation();
-                    $translation->setName($translationData['name']);
-                    $translation->setDescription($translationData['description']);
-                    $translation->setLanguage($language);
-                    $option->addTranslation($translation);
-                }
-            }
-
-            $this->entityManager->persist($option);
-        }
 
         // Create Products based on categories
         $io->section('🏠 Création des produits...');
@@ -456,10 +263,8 @@ class LoadProductsCommand extends Command
         }
         $io->progressFinish();
 
-        $io->info(sprintf('✅ %d catégories, %d groupes d\'options, %d options et %d produits créés', 
+        $io->info(sprintf('✅ %d catégories et %d produits créés', 
             count($categories),
-            count($optionGroups),
-            count($bardageOptions) + count($couvertureOptions) + count($equipementsOptions),
             count($categories)
         ));
     }
