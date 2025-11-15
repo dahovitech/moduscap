@@ -33,25 +33,41 @@ class ProductWithImagesFixtures extends Fixture
         $french = $languageRepository->findOneBy(['code' => 'fr']);
         $english = $languageRepository->findOneBy(['code' => 'en']);
 
-        if (!$french || !$english) {
-            // Créer les langues si elles n'existent pas
-            $french = new Language();
-            $french->setCode('fr');
-            $french->setName('Français');
-            $french->setNativeName('Français');
-            $french->setIsActive(true);
-            $french->setIsDefault(false);
-            $french->setSortOrder(1);
-            $manager->persist($french);
+        // Vérifier et créer les langues si nécessaire en évitant les doublons
+        if (!$french) {
+            // Vérifier si une langue française existe déjà dans la base
+            $existingFrench = $languageRepository->findOneBy(['code' => 'fr']);
+            if ($existingFrench) {
+                $french = $existingFrench;
+            } else {
+                // Créer la langue française seulement si elle n'existe pas
+                $french = new Language();
+                $french->setCode('fr');
+                $french->setName('Français');
+                $french->setNativeName('Français');
+                $french->setIsActive(true);
+                $french->setIsDefault(true); // Langue par défaut
+                $french->setSortOrder(1);
+                $manager->persist($french);
+            }
+        }
 
-            $english = new Language();
-            $english->setCode('en');
-            $english->setName('English');
-            $english->setNativeName('English');
-            $english->setIsActive(true);
-            $english->setIsDefault(false);
-            $english->setSortOrder(2);
-            $manager->persist($english);
+        if (!$english) {
+            // Vérifier si une langue anglaise existe déjà dans la base
+            $existingEnglish = $languageRepository->findOneBy(['code' => 'en']);
+            if ($existingEnglish) {
+                $english = $existingEnglish;
+            } else {
+                // Créer la langue anglaise seulement si elle n'existe pas
+                $english = new Language();
+                $english->setCode('en');
+                $english->setName('English');
+                $english->setNativeName('English');
+                $english->setIsActive(true);
+                $english->setIsDefault(false);
+                $english->setSortOrder(2);
+                $manager->persist($english);
+            }
         }
 
         // Créer des catégories si nécessaire
