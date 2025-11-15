@@ -38,13 +38,19 @@ class ProductWithImagesFixtures extends Fixture
             $french = new Language();
             $french->setCode('fr');
             $french->setName('Français');
+            $french->setNativeName('Français');
             $french->setIsActive(true);
+            $french->setIsDefault(false);
+            $french->setSortOrder(1);
             $manager->persist($french);
 
             $english = new Language();
             $english->setCode('en');
             $english->setName('English');
+            $english->setNativeName('English');
             $english->setIsActive(true);
+            $english->setIsDefault(false);
+            $english->setSortOrder(2);
             $manager->persist($english);
         }
 
