@@ -45,7 +45,7 @@ class LoadSettingsCommand extends Command
 
             // Configuration des paramètres système (utilisant la vraie structure de l'entité Setting)
             $settingsData = [
-                'siteName' => 'ModusCap',
+                'siteName' => 'moduscap.store',
                 'phone' => '+33 1 23 45 67 89',
                 'whatsapp' => '+33 6 12 34 56 78',
                 'address' => '123 Rue de l\'Innovation, 75001 Paris, France',
