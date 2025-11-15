@@ -336,8 +336,8 @@ class LoadProductMediaCommand extends Command
     private function getDefaultLocale(array $languages): string
     {
         foreach ($languages as $language) {
-            if ($language->getIsDefault()) {
-                return $language->getLocale();
+            if ($language->isDefault()) {
+                return $language->getCode();
             }
         }
         return 'fr'; // Fallback vers le français
