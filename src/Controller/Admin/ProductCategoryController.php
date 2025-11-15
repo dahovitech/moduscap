@@ -56,7 +56,7 @@ class ProductCategoryController extends AbstractController
         
         foreach ($languages as $language) {
             $translation = new ProductCategoryTranslation();
-            $translation->setCategory($category);
+            $translation->setProductCategory($category);
             $translation->setLanguage($language);
             $translation->setName('');
             $translation->setDescription('');
@@ -186,7 +186,7 @@ class ProductCategoryController extends AbstractController
         // Dupliquer les traductions
         foreach ($category->getTranslations() as $translation) {
             $newTranslation = clone $translation;
-            $newTranslation->setCategory($newCategory);
+            $newTranslation->setProductCategory($newCategory);
             $newCategory->addTranslation($newTranslation);
         }
 
