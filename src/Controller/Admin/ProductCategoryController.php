@@ -141,9 +141,12 @@ class ProductCategoryController extends AbstractController
             return $this->redirectToRoute('admin_category_index');
         }
 
+        $languages = $this->languageRepository->findBy(['isActive' => true]);
+
         return $this->render('admin/category/edit.html.twig', [
             'category' => $category,
             'form' => $form->createView(),
+            'languages' => $languages,
         ]);
     }
 
