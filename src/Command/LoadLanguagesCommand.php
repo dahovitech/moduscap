@@ -43,43 +43,39 @@ class LoadLanguagesCommand extends Command
                 $io->note('📊 Langues existantes supprimées');
             }
 
-            // Configuration des langues supportées
+            // Configuration des langues supportées (utilisant la vraie structure de l'entité Language)
             $languagesData = [
                 [
                     'code' => 'fr',
                     'name' => 'Français',
                     'nativeName' => 'Français',
-                    'locale' => 'fr_FR',
-                    'direction' => 'ltr',
                     'isDefault' => true,
-                    'isActive' => true
+                    'isActive' => true,
+                    'sortOrder' => 1
                 ],
                 [
                     'code' => 'en',
                     'name' => 'English',
                     'nativeName' => 'English',
-                    'locale' => 'en_US',
-                    'direction' => 'ltr',
                     'isDefault' => false,
-                    'isActive' => true
+                    'isActive' => true,
+                    'sortOrder' => 2
                 ],
                 [
                     'code' => 'es',
                     'name' => 'Español',
                     'nativeName' => 'Español',
-                    'locale' => 'es_ES',
-                    'direction' => 'ltr',
                     'isDefault' => false,
-                    'isActive' => false // Inactive par défaut
+                    'isActive' => false, // Inactive par défaut
+                    'sortOrder' => 3
                 ],
                 [
                     'code' => 'de',
                     'name' => 'Deutsch',
                     'nativeName' => 'Deutsch',
-                    'locale' => 'de_DE',
-                    'direction' => 'ltr',
                     'isDefault' => false,
-                    'isActive' => false // Inactive par défaut
+                    'isActive' => false, // Inactive par défaut
+                    'sortOrder' => 4
                 ]
             ];
 
@@ -95,10 +91,9 @@ class LoadLanguagesCommand extends Command
                 $language->setCode($languageData['code'])
                          ->setName($languageData['name'])
                          ->setNativeName($languageData['nativeName'])
-                         ->setLocale($languageData['locale'])
-                         ->setDirection($languageData['direction'])
                          ->setIsDefault($languageData['isDefault'])
-                         ->setIsActive($languageData['isActive']);
+                         ->setIsActive($languageData['isActive'])
+                         ->setSortOrder($languageData['sortOrder']);
 
                 $this->entityManager->persist($language);
                 $createdLanguages++;
@@ -117,15 +112,16 @@ class LoadLanguagesCommand extends Command
             foreach ($languagesData as $languageData) {
                 $status = $languageData['isActive'] ? '✅ Active' : '❌ Inactive';
                 $default = $languageData['isDefault'] ? ' (Défaut)' : '';
-                $io->writeln("   • {$languageData['nativeName']} ({$languageData['code']}) - {$status}{$default}");
+                $sortOrder = $languageData['sortOrder'];
+                $io->writeln("   • [{$sortOrder}] {$languageData['nativeName']} ({$languageData['code']}) - {$status}{$default}");
             }
 
             $defaultLanguage = array_filter($languagesData, fn($lang) => $lang['isDefault']);
             $activeLanguages = array_filter($languagesData, fn($lang) => $lang['isActive']);
             
             $io->section('📊 Statistiques:');
-            $io->writeln("   • Langue par défaut: " . reset($defaultLanguage)['name']);
-            $io->writeln("   • Langues actives: " . count($activeLanguages) . "/" . count($languagesData));
+            $io->writeln("   • Langue par défaut: " . reset($defaultLanguage)['name'] . " (" . reset($defaultLanguage)['code'] . ")");
+            $io->writeln("   • Langues actives: " . count($activeLanguages) . "/" . count($languagesData));}
 
             return Command::SUCCESS;
             
