@@ -48,21 +48,21 @@ class LoadUsersCommand extends Command
             // Configuration des utilisateurs
             $usersData = [
                 [
-                    'email' => 'admin@moduscap.com',
+                    'email' => 'admin@moduscap.store',
                     'password' => 'admin123',
                     'roles' => ['ROLE_ADMIN'],
                     'firstName' => 'Administrateur',
                     'lastName' => 'Système'
                 ],
                 [
-                    'email' => 'manager@moduscap.com',
+                    'email' => 'manager@moduscap.store',
                     'password' => 'manager123',
                     'roles' => ['ROLE_MANAGER'],
                     'firstName' => 'Manager',
                     'lastName' => 'Commercial'
                 ],
                 [
-                    'email' => 'user@moduscap.com',
+                    'email' => 'user@moduscap.store',
                     'password' => 'user123',
                     'roles' => ['ROLE_USER'],
                     'firstName' => 'Utilisateur',

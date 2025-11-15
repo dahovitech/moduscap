@@ -49,9 +49,9 @@ class LoadSettingsCommand extends Command
                 'phone' => '+33 1 23 45 67 89',
                 'whatsapp' => '+33 6 12 34 56 78',
                 'address' => '123 Rue de l\'Innovation, 75001 Paris, France',
-                'email' => 'contact@moduscap.com',
-                'emailSender' => 'noreply@moduscap.com',
-                'emailReceived' => 'admin@moduscap.com',
+                'email' => 'contact@moduscap.store',
+                'emailSender' => 'noreply@moduscap.store',
+                'emailReceived' => 'admin@moduscap.store',
                 'paymentInfo' => 'Mode de paiement: Virement bancaire - IBAN: FR76 1234 5678 9012 3456 789' . "\n" .
                                'Coordonnées bancaires: Banque ModusCap - BIC: MODUFRPPXXX'
             ];
