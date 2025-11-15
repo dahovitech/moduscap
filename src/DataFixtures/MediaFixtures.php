@@ -78,7 +78,11 @@ class MediaFixtures extends Fixture
             'gallery' => [
                 'o_1j3qfjorkedkj92pjuao8vr8.jpg',
                 'o_1j3qg0nr8hj010lb1p36lv16ia8.jpg',
-                'o_1j3qg2kpupkt4tprdk198d1g269_28910.jpg'
+                'o_1j3qg2kpupkt4tprdk198d1g269_28910.jpg',
+                'Natural.jpg@v=20251003.jpg',
+                'A1_left side.jpg@v=20251003.jpg',
+                'D1_right side.jpg@v=20251003.jpg',
+                'E8_left side.jpg@v=20251003.jpg'
             ],
             'alt_texts' => [
                 'fr' => [
@@ -86,7 +90,11 @@ class MediaFixtures extends Fixture
                     'gallery' => [
                         'Matériaux naturels de la maison',
                         'Vue d\'ensemble de l\'architecture',
-                        'Détails de construction écologique'
+                        'Détails de construction écologique',
+                        'Modèle Natural - Vue principale',
+                        'Vue côté gauche modèle A1',
+                        'Vue côté droit modèle D1',
+                        'Vue côté gauche modèle E8'
                     ]
                 ],
                 'en' => [
@@ -94,7 +102,11 @@ class MediaFixtures extends Fixture
                     'gallery' => [
                         'Natural materials of the house',
                         'Overview of the architecture',
-                        'Ecological construction details'
+                        'Ecological construction details',
+                        'Natural model - Main view',
+                        'Left side view model A1',
+                        'Right side view model D1',
+                        'Left side view model E8'
                     ]
                 ]
             ]
@@ -147,6 +159,41 @@ class MediaFixtures extends Fixture
                     ]
                 ]
             ]
+        ],
+        'otherpic' => [
+            'main' => 'Construction.png',
+            'gallery' => [
+                'Delivery.png',
+                'Fundation.png',
+                'Payment.png',
+                'Production.png',
+                'vfwechat.jpg',
+                'vollogo.png'
+            ],
+            'alt_texts' => [
+                'fr' => [
+                    'main' => 'Processus de construction',
+                    'gallery' => [
+                        'Livraison et transport',
+                        'Fondations et Terrassement',
+                        'Paiement sécurisé',
+                        'Production en usine',
+                        'Contact WhatsApp',
+                        'Logo ModusCap'
+                    ]
+                ],
+                'en' => [
+                    'main' => 'Construction process',
+                    'gallery' => [
+                        'Delivery and transport',
+                        'Foundations and earthworks',
+                        'Secure payment',
+                        'Factory production',
+                        'WhatsApp contact',
+                        'ModusCap logo'
+                    ]
+                ]
+            ]
         ]
     ];
 
@@ -157,6 +204,9 @@ class MediaFixtures extends Fixture
         'natural-house' => 'Natural House',
         'dome-house' => 'Dome House',
         'model-double' => 'Model Double',
+        'otherpic' => 'otherpic',
+        'catalogues' => 'catalogues',
+        'userfiles' => 'userfiles/image',
     ];
 
     // Mapping des types MIME par extension
@@ -166,6 +216,24 @@ class MediaFixtures extends Fixture
         'png' => 'image/png',
         'gif' => 'image/gif',
         'webp' => 'image/webp'
+    ];
+
+    // Images supplémentaires pour les modèles récents
+    private const ADDITIONAL_USERFILES = [
+        'the_coodo_yanko_design_01.jpg',
+        'the_coodo_yanko_design_02.jpg',
+        '10.jpg',
+        '7.jpg',
+        '1710382109441_14837.jpg',
+        'IMG_0083.jpg',
+        '660fa2d6-daba-4dba-91f4-d9d67af025d4.jpg',
+        '676b123c-cdb5-4bde-862d-f1a47f94af88.jpg',
+        'output.jpg',
+        'output (1).jpg',
+        'output (3).jpg',
+        'A2.jpg',
+        '569-120.png',
+        'Coodo-2-1.png'
     ];
 
     /**
@@ -190,6 +258,9 @@ class MediaFixtures extends Fixture
 
             // Traitement des produits par batch pour optimiser les performances
             $this->processProductsInBatches($manager, $products);
+
+            // Traitement des images supplémentaires (userfiles)
+            $this->processAdditionalUserfiles($manager);
 
             $manager->flush();
             echo "Fixtures média chargées avec succès\n";
@@ -262,7 +333,7 @@ class MediaFixtures extends Fixture
     }
 
     /**
-     * Valide l'existence du fichier image et retourne le chemin complet
+     * Valide l'existence du fichier image et retourne le chemin complet en essayant différents dossiers
      */
     private function validateImagePath(Product $product, string $fileName): ?string
     {
@@ -281,15 +352,24 @@ class MediaFixtures extends Fixture
             }
         }
 
+        // Pour userfiles, essayer tous les sous-dossiers avec dates
+        if (strpos($fileName, 'userfiles') !== false || strpos($folder ?? '', 'userfiles') !== false) {
+            $userfilesPath = '/workspace/moduscap/public/images/products/userfiles/';
+            if (is_dir($userfilesPath)) {
+                $subDirs = array_filter(glob($userfilesPath . '*'), 'is_dir');
+                foreach ($subDirs as $subDir) {
+                    $fullPath = $subDir . '/' . basename($fileName);
+                    if (file_exists($fullPath)) {
+                        return $fullPath;
+                    }
+                }
+            }
+        }
+
         // Aucune image trouvée
         echo "Fichier image non trouvé pour le produit: {$product->getCode()} - fichier: {$fileName}\n";
 
         return null;
-    }
-
-    private function buildImagePath(string $folder, string $fileName): string
-    {
-        return '/workspace/moduscap/public/images/products/' . $folder . '/' . $fileName;
     }
 
     /**
@@ -373,13 +453,8 @@ class MediaFixtures extends Fixture
             // Création de l'entité Media
             $media = new Media();
             $media->setFileName($fileName);
-            $media->setOriginalFilename($fileName);
+            $media->setAlt($altText);
             $media->setExtension($this->getFileExtension($fileName));
-            $media->setMimeType($this->getMimeType($fileName));
-            $media->setFileSize(filesize($imagePath));
-            $media->setAltText($altText);
-            $media->setPath('uploads/media/' . $fileName);
-            $media->setIsActive(true);
 
             $manager->persist($media);
 
@@ -410,6 +485,53 @@ class MediaFixtures extends Fixture
     {
         $extension = $this->getFileExtension($fileName);
         return self::MIME_TYPES[strtolower($extension)] ?? 'image/jpeg';
+    }
+
+    /**
+     * Traite les images supplémentaires dans userfiles pour créer des médias génériques
+     */
+    private function processAdditionalUserfiles(ObjectManager $manager): void
+    {
+        echo "Traitement des images supplémentaires dans userfiles\n";
+
+        foreach (self::ADDITIONAL_USERFILES as $fileName) {
+            $imagePath = $this->findUserfilesImage($fileName);
+            if ($imagePath) {
+                try {
+                    // Créer un média générique pour ces images
+                    $media = new Media();
+                    $media->setFileName($fileName);
+                    $media->setAlt('Image de démonstration - ' . $fileName);
+                    $media->setExtension($this->getFileExtension($fileName));
+                    
+                    $manager->persist($media);
+                    echo "Média supplémentaire créé: {$fileName}\n";
+                } catch (\Exception $e) {
+                    echo "Erreur lors de la création du média supplémentaire {$fileName}: " . $e->getMessage() . "\n";
+                }
+            }
+        }
+    }
+
+    /**
+     * Trouve une image dans les sous-dossiers userfiles
+     */
+    private function findUserfilesImage(string $fileName): ?string
+    {
+        $userfilesPath = '/workspace/moduscap/public/images/products/userfiles/';
+        if (!is_dir($userfilesPath)) {
+            return null;
+        }
+
+        $subDirs = array_filter(glob($userfilesPath . '*'), 'is_dir');
+        foreach ($subDirs as $subDir) {
+            $fullPath = $subDir . '/' . $fileName;
+            if (file_exists($fullPath)) {
+                return $fullPath;
+            }
+        }
+
+        return null;
     }
 
     private function getFileExtension(string $fileName): string
