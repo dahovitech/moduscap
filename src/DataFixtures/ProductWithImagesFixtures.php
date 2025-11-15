@@ -24,49 +24,49 @@ class ProductWithImagesFixtures extends Fixture
         $languageRepository = $manager->getRepository(Language::class);
         $categoryRepository = $manager->getRepository(ProductCategory::class);
         
+        // Récupérer les médias de référence ou créer des médias de fallback
         $heroMedia = $mediaRepository->findOneBy(['fileName' => 'hero-building-main.jpg']);
         $galleryMedia = $mediaRepository->findOneBy(['fileName' => 'gallery-house-modern.jpeg']);
         $technicalMedia = $mediaRepository->findOneBy(['fileName' => 'technical-plans-construction.jpg']);
         $lifestyleMedia = $mediaRepository->findOneBy(['fileName' => 'lifestyle-family-home.jpg']);
         $constructionMedia = $mediaRepository->findOneBy(['fileName' => 'construction-materials.jpg']);
 
+        // Créer des médias de fallback si nécessaire
+        $heroMedia = $heroMedia ?: $this->createFallbackMedia($manager, 'hero-building-main.jpg', 'image/jpeg');
+        $galleryMedia = $galleryMedia ?: $this->createFallbackMedia($manager, 'gallery-house-modern.jpeg', 'image/jpeg');
+        $technicalMedia = $technicalMedia ?: $this->createFallbackMedia($manager, 'technical-plans-construction.jpg', 'image/jpeg');
+        $lifestyleMedia = $lifestyleMedia ?: $this->createFallbackMedia($manager, 'lifestyle-family-home.jpg', 'image/jpeg');
+        $constructionMedia = $constructionMedia ?: $this->createFallbackMedia($manager, 'construction-materials.jpg', 'image/jpeg');
+
         $french = $languageRepository->findOneBy(['code' => 'fr']);
         $english = $languageRepository->findOneBy(['code' => 'en']);
 
-        // Vérifier et créer les langues si nécessaire en évitant les doublons
+        // Créer les langues si elles n'existent pas
         if (!$french) {
-            // Vérifier si une langue française existe déjà dans la base
-            $existingFrench = $languageRepository->findOneBy(['code' => 'fr']);
-            if ($existingFrench) {
-                $french = $existingFrench;
-            } else {
-                // Créer la langue française seulement si elle n'existe pas
-                $french = new Language();
-                $french->setCode('fr');
-                $french->setName('Français');
-                $french->setNativeName('Français');
-                $french->setIsActive(true);
-                $french->setIsDefault(true); // Langue par défaut
-                $french->setSortOrder(1);
-                $manager->persist($french);
-            }
+            $french = new Language();
+            $french->setCode('fr');
+            $french->setName('Français');
+            $french->setNativeName('Français');
+            $french->setIsActive(true);
+            $french->setIsDefault(true);
+            $french->setSortOrder(1);
+            $manager->persist($french);
         }
 
         if (!$english) {
-            // Vérifier si une langue anglaise existe déjà dans la base
-            $existingEnglish = $languageRepository->findOneBy(['code' => 'en']);
-            if ($existingEnglish) {
-                $english = $existingEnglish;
-            } else {
-                // Créer la langue anglaise seulement si elle n'existe pas
-                $english = new Language();
-                $english->setCode('en');
-                $english->setName('English');
-                $english->setNativeName('English');
-                $english->setIsActive(true);
-                $english->setIsDefault(false);
-                $english->setSortOrder(2);
-                $manager->persist($english);
+            $english = new Language();
+            $english->setCode('en');
+            $english->setName('English');
+            $english->setNativeName('English');
+            $english->setIsActive(true);
+            $english->setIsDefault(false);
+            $english->setSortOrder(2);
+            $manager->persist($english);
+        }
+
+
+                $french->setSortOrder(1);
+                $manager->persist($french);
             }
         }
 
@@ -216,5 +216,23 @@ class ProductWithImagesFixtures extends Fixture
 
         $manager->persist($product);
         $manager->flush();
+    }
+
+    /**
+     * Crée un média de fallback si le média recherché n'existe pas
+     */
+    private function createFallbackMedia(ObjectManager $manager, string $fileName, string $mimeType): Media
+    {
+        $media = new Media();
+        $media->setFileName($fileName);
+        $media->setMimeType($mimeType);
+        $media->setOriginalName($fileName);
+        $media->setAltText('Image de démonstration');
+        $media->setIsActive(true);
+        $media->setSortOrder(1);
+        
+        $manager->persist($media);
+        
+        return $media;
     }
 }
