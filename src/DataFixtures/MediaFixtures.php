@@ -206,7 +206,6 @@ class MediaFixtures extends Fixture
         'model-double' => 'Model Double',
         'otherpic' => 'otherpic',
         'catalogues' => 'catalogues',
-        'userfiles' => 'userfiles/image',
     ];
 
     // Mapping des types MIME par extension
@@ -218,23 +217,7 @@ class MediaFixtures extends Fixture
         'webp' => 'image/webp'
     ];
 
-    // Images supplémentaires pour les modèles récents
-    private const ADDITIONAL_USERFILES = [
-        'the_coodo_yanko_design_01.jpg',
-        'the_coodo_yanko_design_02.jpg',
-        '10.jpg',
-        '7.jpg',
-        '1710382109441_14837.jpg',
-        'IMG_0083.jpg',
-        '660fa2d6-daba-4dba-91f4-d9d67af025d4.jpg',
-        '676b123c-cdb5-4bde-862d-f1a47f94af88.jpg',
-        'output.jpg',
-        'output (1).jpg',
-        'output (3).jpg',
-        'A2.jpg',
-        '569-120.png',
-        'Coodo-2-1.png'
-    ];
+
 
     /**
      * Constructor simplifié pour compatibilité maximale
@@ -259,8 +242,7 @@ class MediaFixtures extends Fixture
             // Traitement des produits par batch pour optimiser les performances
             $this->processProductsInBatches($manager, $products);
 
-            // Traitement des images supplémentaires (userfiles)
-            $this->processAdditionalUserfiles($manager);
+
 
             $manager->flush();
             echo "Fixtures média chargées avec succès\n";
@@ -349,20 +331,6 @@ class MediaFixtures extends Fixture
             $imagePath = $this->buildImagePath($categoryFolder, $fileName);
             if (file_exists($imagePath)) {
                 return $imagePath;
-            }
-        }
-
-        // Pour userfiles, essayer tous les sous-dossiers avec dates
-        if (strpos($fileName, 'userfiles') !== false || strpos($folder ?? '', 'userfiles') !== false) {
-            $userfilesPath = '/workspace/moduscap/public/images/products/userfiles/';
-            if (is_dir($userfilesPath)) {
-                $subDirs = array_filter(glob($userfilesPath . '*'), 'is_dir');
-                foreach ($subDirs as $subDir) {
-                    $fullPath = $subDir . '/' . basename($fileName);
-                    if (file_exists($fullPath)) {
-                        return $fullPath;
-                    }
-                }
             }
         }
 
@@ -487,52 +455,7 @@ class MediaFixtures extends Fixture
         return self::MIME_TYPES[strtolower($extension)] ?? 'image/jpeg';
     }
 
-    /**
-     * Traite les images supplémentaires dans userfiles pour créer des médias génériques
-     */
-    private function processAdditionalUserfiles(ObjectManager $manager): void
-    {
-        echo "Traitement des images supplémentaires dans userfiles\n";
 
-        foreach (self::ADDITIONAL_USERFILES as $fileName) {
-            $imagePath = $this->findUserfilesImage($fileName);
-            if ($imagePath) {
-                try {
-                    // Créer un média générique pour ces images
-                    $media = new Media();
-                    $media->setFileName($fileName);
-                    $media->setAlt('Image de démonstration - ' . $fileName);
-                    $media->setExtension($this->getFileExtension($fileName));
-                    
-                    $manager->persist($media);
-                    echo "Média supplémentaire créé: {$fileName}\n";
-                } catch (\Exception $e) {
-                    echo "Erreur lors de la création du média supplémentaire {$fileName}: " . $e->getMessage() . "\n";
-                }
-            }
-        }
-    }
-
-    /**
-     * Trouve une image dans les sous-dossiers userfiles
-     */
-    private function findUserfilesImage(string $fileName): ?string
-    {
-        $userfilesPath = '/workspace/moduscap/public/images/products/userfiles/';
-        if (!is_dir($userfilesPath)) {
-            return null;
-        }
-
-        $subDirs = array_filter(glob($userfilesPath . '*'), 'is_dir');
-        foreach ($subDirs as $subDir) {
-            $fullPath = $subDir . '/' . $fileName;
-            if (file_exists($fullPath)) {
-                return $fullPath;
-            }
-        }
-
-        return null;
-    }
 
     private function getFileExtension(string $fileName): string
     {
