@@ -282,4 +282,114 @@ class ProductController extends AbstractController
         $this->addFlash('success', 'Produit dupliqué avec succès !');
         return $this->redirectToRoute('admin_product_edit', ['id' => $newProduct->getId()]);
     }
+
+    #[Route('/{id}/images', name: 'admin_product_images', methods: ['GET', 'POST'])]
+    public function manageImages(Request $request, Product $product): Response
+    {
+        if ($request->isMethod('POST')) {
+            $data = json_decode($request->getContent(), true);
+            $action = $data['action'] ?? '';
+            $mediaId = $data['media_id'] ?? null;
+            $mediaType = $data['media_type'] ?? 'gallery';
+            $isMainImage = $data['is_main_image'] ?? false;
+            $sortOrder = $data['sort_order'] ?? 0;
+
+            $mediaRepository = $this->entityManager->getRepository(\App\Entity\Media::class);
+            $productMediaRepository = $this->entityManager->getRepository(\App\Entity\ProductMedia::class);
+
+            if ($action === 'add' && $mediaId) {
+                $media = $mediaRepository->find($mediaId);
+                if ($media) {
+                    // Vérifier si l'image existe déjà pour ce produit
+                    $existingProductMedia = $productMediaRepository->findOneBy([
+                        'product' => $product,
+                        'media' => $media
+                    ]);
+
+                    if (!$existingProductMedia) {
+                        $productMedia = new \App\Entity\ProductMedia();
+                        $productMedia->setProduct($product);
+                        $productMedia->setMedia($media);
+                        $productMedia->setMediaType($mediaType);
+                        $productMedia->setIsMainImage($isMainImage);
+                        $productMedia->setSortOrder($sortOrder);
+                        
+                        $this->entityManager->persist($productMedia);
+                        $this->entityManager->flush();
+
+                        return $this->json([
+                            'success' => true,
+                            'message' => 'Image ajoutée avec succès',
+                            'product_media' => [
+                                'id' => $productMedia->getId(),
+                                'media_type' => $productMedia->getMediaType(),
+                                'is_main_image' => $productMedia->isMainImage(),
+                                'media' => [
+                                    'id' => $media->getId(),
+                                    'file_name' => $media->getFileName(),
+                                    'alt' => $media->getAlt(),
+                                    'web_path' => $media->getWebPath(),
+                                    'url' => '/' . $media->getWebPath()
+                                ]
+                            ]
+                        ]);
+                    }
+                }
+            } elseif ($action === 'remove' && $mediaId) {
+                $productMedia = $productMediaRepository->findOneBy([
+                    'product' => $product,
+                    'media' => $mediaId
+                ]);
+
+                if ($productMedia) {
+                    $this->entityManager->remove($productMedia);
+                    $this->entityManager->flush();
+
+                    return $this->json([
+                        'success' => true,
+                        'message' => 'Image supprimée avec succès'
+                    ]);
+                }
+            } elseif ($action === 'update') {
+                $productMediaId = $data['product_media_id'] ?? null;
+                if ($productMediaId) {
+                    $productMedia = $productMediaRepository->find($productMediaId);
+                    if ($productMedia && $productMedia->getProduct() === $product) {
+                        if (isset($data['media_type'])) {
+                            $productMedia->setMediaType($data['media_type']);
+                        }
+                        if (isset($data['is_main_image'])) {
+                            $productMedia->setIsMainImage($data['is_main_image']);
+                        }
+                        if (isset($data['sort_order'])) {
+                            $productMedia->setSortOrder($data['sort_order']);
+                        }
+                        
+                        $this->entityManager->flush();
+
+                        return $this->json([
+                            'success' => true,
+                            'message' => 'Image mise à jour avec succès'
+                        ]);
+                    }
+                }
+            }
+
+            return $this->json([
+                'success' => false,
+                'message' => 'Action invalide ou erreur'
+            ], 400);
+        }
+
+        // GET: Afficher la page de gestion des images
+        return $this->render('admin/product/images.html.twig', [
+            'product' => $product,
+            'media_types' => [
+                'main_image' => 'Image principale',
+                'gallery' => 'Galerie',
+                'technical' => 'Technique',
+                'lifestyle' => 'Lifestyle'
+            ]
+        ]);
+    }
 }
