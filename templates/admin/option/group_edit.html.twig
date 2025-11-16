@@ -56,6 +56,23 @@
 
                     {% set languages = get_languages() %}
                     {% if languages|length > 0 %}
+                    
+                        <ul class="nav nav-tabs" role="tablist">
+                            {% for language in languages %}
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#lang-{{ language.code }}" 
+                                            role="tab">
+                                        {{ language.nativeName }}
+                                        {% if language.isDefault() %}
+                                            <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                        {% endif %}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
                         <div class="tab-content" id="languageTabs">
                             {% for language in languages %}
                                 {% set translation = null %}
@@ -106,22 +123,6 @@
                             {% endfor %}
                         </div>
 
-                        <ul class="nav nav-tabs" role="tablist">
-                            {% for language in languages %}
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link {% if loop.first %}active{% endif %}" 
-                                            type="button" 
-                                            data-bs-toggle="tab" 
-                                            data-bs-target="#lang-{{ language.code }}" 
-                                            role="tab">
-                                        {{ language.nativeName }}
-                                        {% if language.isDefault() %}
-                                            <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
-                                        {% endif %}
-                                    </button>
-                                </li>
-                            {% endfor %}
-                        </ul>
                     {% else %}
                         <div class="alert alert-warning">
                             <i class="bi bi-exclamation-triangle me-2"></i>
