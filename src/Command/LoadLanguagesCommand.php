@@ -54,12 +54,20 @@ class LoadLanguagesCommand extends Command
                     'sortOrder' => 1
                 ],
                 [
+                    'code' => 'en',
+                    'name' => 'Anglais',
+                    'nativeName' => 'English',
+                    'isDefault' => true,
+                    'isActive' => true,
+                    'sortOrder' => 2
+                ],
+                [
                     'code' => 'pt',
                     'name' => 'Portugaise',
                     'nativeName' => 'Português',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 2
+                    'sortOrder' => 3
                 ],
                 [
                     'code' => 'de',
@@ -67,7 +75,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Deutsch',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 3
+                    'sortOrder' => 4
                 ],
                 [
                     'code' => 'it',
@@ -75,7 +83,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Italiano',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 4
+                    'sortOrder' => 5
                 ],
                 [
                     'code' => 'no',
@@ -83,7 +91,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Norsk',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 5
+                    'sortOrder' => 6
                 ],
                 [
                     'code' => 'lt',
@@ -91,7 +99,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Lietuvių',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 6
+                    'sortOrder' => 7
                 ],
                 [
                     'code' => 'es',
@@ -99,7 +107,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Español',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 7
+                    'sortOrder' => 8
                 ],
                 [
                     'code' => 'nl',
@@ -107,7 +115,7 @@ class LoadLanguagesCommand extends Command
                     'nativeName' => 'Nederlands',
                     'isDefault' => false,
                     'isActive' => true,
-                    'sortOrder' => 8
+                    'sortOrder' => 9
                 ]
             ];
 
