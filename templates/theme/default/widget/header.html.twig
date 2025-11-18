@@ -49,7 +49,7 @@
             {% for language in get_languages() %}
             <li>
               <a class="dropdown-item{% if app.request.locale == language.code %} active{% endif %}" 
-                 href="{{ path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params') ?? {})|merge({'_locale': language.code})) }}">
+                 href="{{ path(app.request.attributes.get('_route') ?? 'app_homepage', (app.request.attributes.get('_route_params') ?? {})|merge({'_locale': language.code})) }}">
                 <span class="lang-code">{{ language.code|upper }}</span>
                 <span class="lang-name">{{ language.name }}</span>
               </a>
