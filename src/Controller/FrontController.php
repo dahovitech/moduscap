@@ -75,4 +75,52 @@ class FrontController extends AbstractController
             'locale' => $locale
         ]);
     }
+
+    #[Route('/quote', name: 'app_quote')]
+    public function quote(Request $request): Response
+    {
+        $locale = $request->getLocale();
+        $currentLanguage = $this->languageRepository->findByCode($locale);
+
+        return $this->render('@theme/quote.html.twig', [
+            'currentLanguage' => $currentLanguage,
+            'locale' => $locale
+        ]);
+    }
+
+    #[Route('/legal', name: 'app_legal')]
+    public function legal(Request $request): Response
+    {
+        $locale = $request->getLocale();
+        $currentLanguage = $this->languageRepository->findByCode($locale);
+
+        return $this->render('@theme/legal.html.twig', [
+            'currentLanguage' => $currentLanguage,
+            'locale' => $locale
+        ]);
+    }
+
+    #[Route('/privacy', name: 'app_privacy')]
+    public function privacy(Request $request): Response
+    {
+        $locale = $request->getLocale();
+        $currentLanguage = $this->languageRepository->findByCode($locale);
+
+        return $this->render('@theme/privacy.html.twig', [
+            'currentLanguage' => $currentLanguage,
+            'locale' => $locale
+        ]);
+    }
+
+    #[Route('/terms', name: 'app_terms')]
+    public function terms(Request $request): Response
+    {
+        $locale = $request->getLocale();
+        $currentLanguage = $this->languageRepository->findByCode($locale);
+
+        return $this->render('@theme/terms.html.twig', [
+            'currentLanguage' => $currentLanguage,
+            'locale' => $locale
+        ]);
+    }
 }

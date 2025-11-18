@@ -1,0 +1,154 @@
+# Navigation
+nav:
+  home: 'Home'
+  products: 'Products'
+  services: 'Services'
+  about: 'About'
+  contact: 'Contact'
+  free_quote: 'Free Quote'
+  toggle: 'Toggle navigation'
+
+# Footer
+footer:
+  description: 'Leader in modular construction since 2009. Quality, speed and innovation serving your project.'
+  quick_links: 'Quick links'
+  our_models: 'Our models'
+  service_design: 'Design'
+  service_manufacturing: 'Manufacturing'
+  service_delivery: 'Delivery'
+  service_installation: 'Installation'
+  get_quote: 'Get a quote'
+  phone: 'Phone'
+  email: 'Email'
+  all_rights_reserved: 'All rights reserved'
+  legal_notice: 'Legal notice'
+  privacy_policy: 'Privacy policy'
+  terms: 'Terms & Conditions'
+
+# WhatsApp
+whatsapp:
+  contact_us: 'Contact us on WhatsApp'
+  default_message: 'Hello, I am interested in your modular homes'
+
+# Homepage
+hero:
+  title: 'Your modular home in 90 days'
+  subtitle: 'Build your dream home with our customizable modular solutions. Guaranteed quality, speed and transparency.'
+  discover_models: 'Discover our models'
+  get_quote: 'Get a quote'
+
+# Features
+features:
+  title: 'Why choose ModusCap?'
+  fast_delivery:
+    title: 'Fast delivery'
+    description: 'Your modular home ready in just 90 days'
+  quality:
+    title: 'Guaranteed quality'
+    description: 'Premium materials and quality finishes'
+  customization:
+    title: 'Customization'
+    description: 'Configure your home according to your needs'
+  eco_friendly:
+    title: 'Eco-friendly'
+    description: 'Sustainable and environmentally friendly construction'
+  transparent_pricing:
+    title: 'Transparent pricing'
+    description: 'Detailed quotes with no hidden fees'
+  professional_support:
+    title: 'Professional support'
+    description: 'A dedicated team from project to delivery'
+
+# Products Section
+products:
+  featured_title: 'Our flagship models'
+  featured_subtitle: 'Discover our selection of modular homes'
+  view_all: 'View all products'
+  starting_from: 'Starting from'
+  view_details: 'View details'
+  configure: 'Configure'
+
+# Process Section
+process:
+  title: 'Our 4-step process'
+  step_1:
+    title: 'Consultation'
+    description: 'Discuss with our experts to define your project'
+  step_2:
+    title: 'Configuration'
+    description: 'Customize your home according to your needs'
+  step_3:
+    title: 'Manufacturing'
+    description: 'Your home is manufactured in our workshops'
+  step_4:
+    title: 'Installation'
+    description: 'Delivery and installation on your land'
+
+# CTA Section
+cta:
+  title: 'Ready to start your project?'
+  subtitle: 'Get your personalized quote in less than 48 hours'
+  get_quote_btn: 'Request a free quote'
+  contact_us_btn: 'Contact us'
+
+# Contact Page
+contact:
+  title: 'Contact us'
+  subtitle: 'Have a question? Our team is here to help'
+  form:
+    name: 'Full name'
+    email: 'Email address'
+    phone: 'Phone'
+    subject: 'Subject'
+    message: 'Your message'
+    send: 'Send message'
+    sending: 'Sending...'
+  info:
+    title: 'Contact information'
+    address: 'Address'
+    phone: 'Phone'
+    email: 'Email'
+    hours: 'Opening hours'
+    hours_value: 'Mon - Fri: 9am - 6pm'
+
+# About Page
+about:
+  title: 'About ModusCap'
+  subtitle: 'Leader in modular construction since 2009'
+  our_story: 'Our story'
+  our_values: 'Our values'
+  our_team: 'Our team'
+
+# Services Page
+services:
+  title: 'Our services'
+  subtitle: 'Complete support for your project'
+  design: 'Custom design'
+  manufacturing: 'Workshop manufacturing'
+  delivery: 'Delivery and installation'
+  warranty: 'Warranty and after-sales service'
+
+# Quote Page
+quote:
+  title: 'Quote request'
+  subtitle: 'Get your free personalized quote'
+  step_1: 'Project information'
+  step_2: 'Contact details'
+  step_3: 'Summary'
+  submit: 'Submit request'
+
+# Common
+common:
+  loading: 'Loading...'
+  error: 'An error occurred'
+  success: 'Operation successful'
+  required: 'This field is required'
+  invalid_email: 'Invalid email'
+  invalid_phone: 'Invalid phone'
+  read_more: 'Read more'
+  back: 'Back'
+  next: 'Next'
+  previous: 'Previous'
+  close: 'Close'
+  confirm: 'Confirm'
+  cancel: 'Cancel'

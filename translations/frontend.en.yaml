@@ -1,0 +1,63 @@
+# Messages from controllers (domain: frontend)
+
+# Flash messages
+flash:
+  success:
+    quote_submitted: 'Your quote request has been sent successfully. We will contact you within 48 hours.'
+    contact_sent: 'Your message has been sent successfully. We will respond as soon as possible.'
+    account_created: 'Your account has been created successfully.'
+    password_reset: 'Your password has been reset successfully.'
+  error:
+    generic: 'An error occurred. Please try again.'
+    invalid_form: 'The form contains errors. Please check the fields.'
+    email_failed: 'Email sending failed. Please try again.'
+  warning:
+    session_expired: 'Your session has expired. Please log in again.'
+  info:
+    processing: 'Your request is being processed.'
+
+# Email subjects
+email:
+  subject:
+    quote_request: 'New quote request - %site_name%'
+    contact_form: 'New contact message - %site_name%'
+    order_confirmation: 'Order confirmation #%order_number%'
+    order_approved: 'Your quote has been approved'
+    order_rejected: 'Update regarding your quote'
+    payment_confirmed: 'Payment confirmed for order #%order_number%'
+    payment_reminder: 'Payment reminder - Order #%order_number%'
+
+# Form labels and placeholders
+form:
+  label:
+    first_name: 'First name'
+    last_name: 'Last name'
+    email: 'Email address'
+    phone: 'Phone'
+    subject: 'Subject'
+    message: 'Message'
+    company: 'Company (optional)'
+    project_type: 'Project type'
+    budget: 'Estimated budget'
+    timeline: 'Desired timeline'
+    address: 'Land address'
+    city: 'City'
+    postal_code: 'Postal code'
+    country: 'Country'
+  placeholder:
+    first_name: 'Your first name'
+    last_name: 'Your last name'
+    email: 'example@email.com'
+    phone: '+33 6 12 34 56 78'
+    message: 'Describe your project...'
+    company: 'Your company name'
+
+# Validation messages
+validation:
+  required: 'This field is required.'
+  email: 'Please enter a valid email address.'
+  phone: 'Please enter a valid phone number.'
+  min_length: 'This field must contain at least %min% characters.'
+  max_length: 'This field cannot exceed %max% characters.'
+  numeric: 'This field must contain only numbers.'
+  alpha: 'This field must contain only letters.'

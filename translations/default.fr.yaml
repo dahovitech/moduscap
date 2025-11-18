@@ -1,0 +1,154 @@
+# Navigation
+nav:
+  home: 'Accueil'
+  products: 'Produits'
+  services: 'Services'
+  about: 'À propos'
+  contact: 'Contact'
+  free_quote: 'Devis Gratuit'
+  toggle: 'Basculer la navigation'
+
+# Footer
+footer:
+  description: 'Leader de la construction modulaire depuis 2009. Qualité, rapidité et innovation au service de votre projet.'
+  quick_links: 'Liens rapides'
+  our_models: 'Nos modèles'
+  service_design: 'Conception'
+  service_manufacturing: 'Fabrication'
+  service_delivery: 'Livraison'
+  service_installation: 'Installation'
+  get_quote: 'Obtenir un devis'
+  phone: 'Tél'
+  email: 'Email'
+  all_rights_reserved: 'Tous droits réservés'
+  legal_notice: 'Mentions légales'
+  privacy_policy: 'Politique de confidentialité'
+  terms: 'CGV'
+
+# WhatsApp
+whatsapp:
+  contact_us: 'Contactez-nous sur WhatsApp'
+  default_message: 'Bonjour, je suis intéressé par vos maisons modulaires'
+
+# Homepage
+hero:
+  title: 'Votre maison modulaire en 90 jours'
+  subtitle: 'Construisez la maison de vos rêves avec nos solutions modulaires personnalisables. Qualité, rapidité et transparence garanties.'
+  discover_models: 'Découvrir nos modèles'
+  get_quote: 'Obtenir un devis'
+
+# Features
+features:
+  title: 'Pourquoi choisir ModusCap ?'
+  fast_delivery:
+    title: 'Livraison rapide'
+    description: 'Votre maison modulaire prête en 90 jours seulement'
+  quality:
+    title: 'Qualité garantie'
+    description: 'Matériaux haut de gamme et finitions soignées'
+  customization:
+    title: 'Personnalisation'
+    description: 'Configurez votre maison selon vos besoins'
+  eco_friendly:
+    title: 'Écologique'
+    description: 'Construction durable et respectueuse de l'environnement'
+  transparent_pricing:
+    title: 'Prix transparents'
+    description: 'Devis détaillés sans frais cachés'
+  professional_support:
+    title: 'Accompagnement pro'
+    description: 'Une équipe dédiée du projet à la livraison'
+
+# Products Section
+products:
+  featured_title: 'Nos modèles phares'
+  featured_subtitle: 'Découvrez notre sélection de maisons modulaires'
+  view_all: 'Voir tous nos produits'
+  starting_from: 'À partir de'
+  view_details: 'Voir les détails'
+  configure: 'Configurer'
+
+# Process Section
+process:
+  title: 'Notre processus en 4 étapes'
+  step_1:
+    title: 'Consultation'
+    description: 'Échangez avec nos experts pour définir votre projet'
+  step_2:
+    title: 'Configuration'
+    description: 'Personnalisez votre maison selon vos besoins'
+  step_3:
+    title: 'Fabrication'
+    description: 'Votre maison est fabriquée dans nos ateliers'
+  step_4:
+    title: 'Installation'
+    description: 'Livraison et installation sur votre terrain'
+
+# CTA Section
+cta:
+  title: 'Prêt à démarrer votre projet ?'
+  subtitle: 'Obtenez votre devis personnalisé en moins de 48h'
+  get_quote_btn: 'Demander un devis gratuit'
+  contact_us_btn: 'Nous contacter'
+
+# Contact Page
+contact:
+  title: 'Contactez-nous'
+  subtitle: 'Une question ? Notre équipe est là pour vous répondre'
+  form:
+    name: 'Nom complet'
+    email: 'Adresse email'
+    phone: 'Téléphone'
+    subject: 'Sujet'
+    message: 'Votre message'
+    send: 'Envoyer le message'
+    sending: 'Envoi en cours...'
+  info:
+    title: 'Informations de contact'
+    address: 'Adresse'
+    phone: 'Téléphone'
+    email: 'Email'
+    hours: 'Horaires d'ouverture'
+    hours_value: 'Lun - Ven: 9h - 18h'
+
+# About Page
+about:
+  title: 'À propos de ModusCap'
+  subtitle: 'Leader de la construction modulaire depuis 2009'
+  our_story: 'Notre histoire'
+  our_values: 'Nos valeurs'
+  our_team: 'Notre équipe'
+
+# Services Page
+services:
+  title: 'Nos services'
+  subtitle: 'Un accompagnement complet pour votre projet'
+  design: 'Conception sur-mesure'
+  manufacturing: 'Fabrication en atelier'
+  delivery: 'Livraison et installation'
+  warranty: 'Garantie et SAV'
+
+# Quote Page
+quote:
+  title: 'Demande de devis'
+  subtitle: 'Obtenez votre devis personnalisé gratuit'
+  step_1: 'Informations du projet'
+  step_2: 'Coordonnées'
+  step_3: 'Récapitulatif'
+  submit: 'Envoyer la demande'
+
+# Common
+common:
+  loading: 'Chargement...'
+  error: 'Une erreur est survenue'
+  success: 'Opération réussie'
+  required: 'Ce champ est requis'
+  invalid_email: 'Email invalide'
+  invalid_phone: 'Téléphone invalide'
+  read_more: 'En savoir plus'
+  back: 'Retour'
+  next: 'Suivant'
+  previous: 'Précédent'
+  close: 'Fermer'
+  confirm: 'Confirmer'
+  cancel: 'Annuler'
