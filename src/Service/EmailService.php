@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\ContactMessage;
 use App\Entity\Order;
 use App\Entity\Setting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -218,5 +219,109 @@ class EmailService
         }
         
         return $successCount;
+    }
+
+    /**
+     * Send contact form notification to admin
+     */
+    public function sendContactNotification(ContactMessage $contact): bool
+    {
+        try {
+            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            
+            if (!$setting) {
+                return false;
+            }
+
+            $receiverEmail = $setting->getEmailReceived() ?: $setting->getEmail() ?: 'contact@moduscap.com';
+
+            $emailData = [
+                'contact' => $contact,
+                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
+                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+            ];
+
+            $email = (new Email())
+                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->to($receiverEmail)
+                ->subject('Nouveau message de contact - ' . $contact->getSubject())
+                ->html($this->twig->render('emails/contact_notification.html.twig', $emailData));
+
+            $this->mailer->send($email);
+            
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error sending contact notification: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send contact confirmation to sender
+     */
+    public function sendContactConfirmation(ContactMessage $contact): bool
+    {
+        try {
+            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            
+            if (!$setting || !$contact->getEmail()) {
+                return false;
+            }
+
+            $emailData = [
+                'contact' => $contact,
+                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
+                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com',
+                'site_phone' => $setting->getPhone(),
+                'site_address' => $setting->getAddress()
+            ];
+
+            $email = (new Email())
+                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->to($contact->getEmail())
+                ->subject('Confirmation de votre message - ' . ($setting->getSiteName() ?: 'MODUSCAP'))
+                ->html($this->twig->render('emails/contact_confirmation.html.twig', $emailData));
+
+            $this->mailer->send($email);
+            
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error sending contact confirmation: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send registration confirmation
+     */
+    public function sendRegistrationConfirmation(string $userEmail, string $userName): bool
+    {
+        try {
+            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            
+            if (!$setting) {
+                return false;
+            }
+
+            $emailData = [
+                'user_name' => $userName,
+                'user_email' => $userEmail,
+                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
+                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+            ];
+
+            $email = (new Email())
+                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->to($userEmail)
+                ->subject('Bienvenue sur ' . ($setting->getSiteName() ?: 'MODUSCAP'))
+                ->html($this->twig->render('emails/registration_confirmation.html.twig', $emailData));
+
+            $this->mailer->send($email);
+            
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error sending registration confirmation: ' . $e->getMessage());
+            return false;
+        }
     }
 }
