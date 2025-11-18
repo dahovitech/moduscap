@@ -1,7 +1,167 @@
 {% extends '@theme/base.html.twig' %}
 
-{% block title %} {{ parent() }} - {{ 'page.products.title'|trans }}{% endblock %}
+{% block title %}{{ setting('siteName') }} - {{ 'products.page_title'|trans({}, 'default') }}{% endblock %}
 
 {% block body %}
-   
+  <!-- Page Header -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mx-auto text-center">
+          <h1 class="mb-4">{{ 'products.page_title'|trans({}, 'default') }}</h1>
+          <p class="lead">{{ 'products.page_subtitle'|trans({}, 'default') }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="section pt-4">
+    <div class="container">
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <form method="get" action="{{ path('app_products_index', {'_locale': app.request.locale}) }}" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                  <label for="filter_surface" class="form-label">{{ 'products.filter.surface'|trans({}, 'default') }}</label>
+                  <select class="form-select" id="filter_surface" name="surface">
+                    <option value="">{{ 'products.filter.all_surfaces'|trans({}, 'default') }}</option>
+                    <option value="0-60">0 - 60 m²</option>
+                    <option value="60-90">60 - 90 m²</option>
+                    <option value="90-120">90 - 120 m²</option>
+                    <option value="120+">120+ m²</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <label for="filter_price" class="form-label">{{ 'products.filter.price'|trans({}, 'default') }}</label>
+                  <select class="form-select" id="filter_price" name="price">
+                    <option value="">{{ 'products.filter.all_prices'|trans({}, 'default') }}</option>
+                    <option value="0-100k">0 - 100 000€</option>
+                    <option value="100k-150k">100 000€ - 150 000€</option>
+                    <option value="150k-200k">150 000€ - 200 000€</option>
+                    <option value="200k+">200 000€+</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <label for="filter_rooms" class="form-label">{{ 'products.filter.bedrooms'|trans({}, 'default') }}</label>
+                  <select class="form-select" id="filter_rooms" name="rooms">
+                    <option value="">{{ 'products.filter.all_bedrooms'|trans({}, 'default') }}</option>
+                    <option value="1">1 {{ 'products.filter.bedroom'|trans({}, 'default') }}</option>
+                    <option value="2">2 {{ 'products.filter.bedrooms_label'|trans({}, 'default') }}</option>
+                    <option value="3">3 {{ 'products.filter.bedrooms_label'|trans({}, 'default') }}</option>
+                    <option value="4+">4+ {{ 'products.filter.bedrooms_label'|trans({}, 'default') }}</option>
+                  </select>
+                </div>
+                
+                <div class="col-md-3">
+                  <button type="submit" class="btn btn-primary w-100">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    {{ 'products.filter.apply'|trans({}, 'default') }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="row g-4">
+        {% if products is defined and products|length > 0 %}
+          {% for product in products %}
+            <div class="col-lg-4 col-md-6">
+              <div class="card product-card h-100 shadow-sm">
+                {% if product.images|length > 0 %}
+                  <img src="{{ asset('uploads/media/' ~ product.images[0].filename) }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                  <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" class="card-img-top" alt="{{ product.name }}">
+                {% endif %}
+                
+                <div class="card-body">
+                  <h3 class="h5 card-title">{{ product.name }}</h3>
+                  <p class="card-text text-muted">{{ product.description|striptags|slice(0, 120) }}...</p>
+                  
+                  <div class="product-specs mb-3">
+                    <div class="row g-2 text-center">
+                      <div class="col-4">
+                        <div class="spec-item">
+                          <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
+                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+                          </svg>
+                          <div class="small">{{ product.surface|default('90') }} m²</div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="spec-item">
+                          <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                          </svg>
+                          <div class="small">{{ product.bedrooms|default('2') }} {{ 'products.bedrooms'|trans({}, 'default') }}</div>
+                        </div>
+                      </div>
+                      <div class="col-4">
+                        <div class="spec-item">
+                          <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
+                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                          </svg>
+                          <div class="small">{{ product.bathrooms|default('1') }} {{ 'products.bathrooms'|trans({}, 'default') }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {% if product.price %}
+                    <div class="product-price mb-3">
+                      <span class="h4 text-primary mb-0">{{ product.price|number_format(0, ',', ' ') }}€</span>
+                      <span class="text-muted small">{{ 'products.starting_from'|trans({}, 'default') }}</span>
+                    </div>
+                  {% endif %}
+                  
+                  <div class="d-grid gap-2">
+                    <a href="{{ path('app_products_show', {'slug': product.slug, '_locale': app.request.locale}) }}" class="btn btn-primary">
+                      {{ 'products.view_details'|trans({}, 'default') }}
+                    </a>
+                    <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-outline-primary">
+                      {{ 'products.quote'|trans({}, 'default') }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="col-12">
+            <div class="alert alert-info text-center">
+              <svg width="48" height="48" fill="currentColor" viewBox="0 0 16 16" class="mb-3">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+              </svg>
+              <h4>{{ 'products.no_products'|trans({}, 'default') }}</h4>
+              <p class="mb-0">{{ 'products.no_products_description'|trans({}, 'default') }}</p>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <h2 class="mb-4">{{ 'products.cta.title'|trans({}, 'default') }}</h2>
+          <p class="lead mb-4">{{ 'products.cta.description'|trans({}, 'default') }}</p>
+          <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
+            {{ 'products.cta.button'|trans({}, 'default') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
