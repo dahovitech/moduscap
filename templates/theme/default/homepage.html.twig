@@ -11,7 +11,7 @@
           <h1 class="fade-in-up">{{ 'hero.title'|trans({}, 'default') }}</h1>
           <p class="fade-in-up">{{ 'hero.subtitle'|trans({}, 'default') }}</p>
           <div class="fade-in-up">
-            <a href="{{ path('app_products', {'_locale': app.request.locale}) }}" class="btn btn-outline me-3">{{ 'hero.discover_models'|trans({}, 'default') }}</a>
+            <a href="{{ path('app_products_index', {'_locale': app.request.locale}) }}" class="btn btn-outline me-3">{{ 'hero.discover_models'|trans({}, 'default') }}</a>
             <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-primary-custom">{{ 'hero.get_quote'|trans({}, 'default') }}</a>
           </div>
         </div>
@@ -131,7 +131,7 @@
       </div>
       
       <div class="text-center mt-5">
-        <a href="{{ path('app_products', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
+        <a href="{{ path('app_products_index', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
           {{ 'products.view_all'|trans({}, 'default') }}
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>

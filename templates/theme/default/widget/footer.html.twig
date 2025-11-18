@@ -32,7 +32,7 @@
         <h5>{{ 'footer.quick_links'|trans({}, 'default') }}</h5>
         <ul>
           <li><a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}">{{ 'nav.home'|trans({}, 'default') }}</a></li>
-          <li><a href="{{ path('app_products', {'_locale': app.request.locale}) }}">{{ 'footer.our_models'|trans({}, 'default') }}</a></li>
+          <li><a href="{{ path('app_products_index', {'_locale': app.request.locale}) }}">{{ 'footer.our_models'|trans({}, 'default') }}</a></li>
           <li><a href="{{ path('app_services', {'_locale': app.request.locale}) }}">{{ 'nav.services'|trans({}, 'default') }}</a></li>
           <li><a href="{{ path('app_about', {'_locale': app.request.locale}) }}">{{ 'nav.about'|trans({}, 'default') }}</a></li>
           <li><a href="{{ path('app_contact', {'_locale': app.request.locale}) }}">{{ 'nav.contact'|trans({}, 'default') }}</a></li>
