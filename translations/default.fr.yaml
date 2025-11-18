@@ -42,14 +42,14 @@ features.quality.description: 'Normes européennes, matériaux premium et garant
 features.customization.title: 'Sur-mesure'
 features.customization.description: 'Personnalisez votre maison selon vos besoins et envies'
 features.eco_friendly.title: 'Écologique'
-features.eco_friendly.description: 'Construction durable et respectueuse de l'environnement'
+features.eco_friendly.description: 'Construction durable et respectueuse de l''environnement'
 features.transparent_pricing.title: 'Prix transparent'
 features.transparent_pricing.description: 'Tarification claire sans surprises ni coûts cachés'
 features.professional_support.title: 'Accompagnement pro'
 features.professional_support.description: 'Une équipe dédiée du projet à la livraison'
 
 # Stats
-stats.experience: 'Années d'expérience'
+stats.experience: 'Années d''expérience'
 stats.homes_delivered: 'Maisons livrées'
 stats.satisfied_clients: 'Clients satisfaits'
 stats.warranty: 'Garantie complète'
@@ -103,7 +103,7 @@ contact.info.title: 'Informations de contact'
 contact.info.address: 'Adresse'
 contact.info.phone: 'Téléphone'
 contact.info.email: 'Email'
-contact.info.hours: 'Horaires d'ouverture'
+contact.info.hours: 'Horaires d''ouverture'
 contact.info.hours_value: 'Lun - Ven: 9h - 18h'
 
 # About Page
@@ -130,7 +130,7 @@ services.manufacturing.description: 'Vos modules sont fabriqués dans nos atelie
 services.delivery.title: 'Livraison et installation'
 services.delivery.description: 'Transport sécurisé et installation professionnelle sur votre terrain en quelques jours seulement.'
 services.warranty.title: 'Garantie et SAV'
-services.warranty.description: 'Garantie décennale complète et service après-vente réactif pour votre tranquillité d'esprit.'
+services.warranty.description: 'Garantie décennale complète et service après-vente réactif pour votre tranquillité d''esprit.'
 
 # Quote Page
 quote.title: 'Demande de devis'
@@ -163,21 +163,21 @@ privacy.data_usage_content: 'Vos données sont utilisées uniquement pour traite
 privacy.data_security: 'Sécurité des données'
 privacy.data_security_content: 'Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles pour protéger vos données personnelles.'
 privacy.your_rights: 'Vos droits'
-privacy.your_rights_content: 'Vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Contactez-nous pour exercer vos droits.'
+privacy.your_rights_content: 'Vous disposez d''un droit d''accès, de rectification et de suppression de vos données personnelles. Contactez-nous pour exercer vos droits.'
 
 terms.title: 'Conditions Générales de Vente'
 terms.intro: 'Article 1 - Objet'
 terms.intro_content: 'Les présentes conditions générales de vente régissent les relations contractuelles entre ModusCap et ses clients.'
 terms.services: 'Article 2 - Services proposés'
-terms.services_content: 'ModusCap propose la conception, la fabrication et l'installation de maisons modulaires sur-mesure.'
+terms.services_content: 'ModusCap propose la conception, la fabrication et l''installation de maisons modulaires sur-mesure.'
 terms.pricing: 'Article 3 - Tarifs'
 terms.pricing_content: 'Les prix sont indiqués en euros TTC. Un devis personnalisé sera établi pour chaque projet.'
 terms.payment: 'Article 4 - Modalités de paiement'
-terms.payment_content: 'Le paiement s'effectue selon un échéancier défini dans le contrat : acompte à la commande, paiements intermédiaires et solde à la livraison.'
+terms.payment_content: 'Le paiement s''effectue selon un échéancier défini dans le contrat : acompte à la commande, paiements intermédiaires et solde à la livraison.'
 terms.delivery: 'Article 5 - Livraison'
-terms.delivery_content: 'Les délais de livraison sont indicatifs et peuvent varier en fonction des conditions météorologiques et de l'accessibilité du terrain.'
+terms.delivery_content: 'Les délais de livraison sont indicatifs et peuvent varier en fonction des conditions météorologiques et de l''accessibilité du terrain.'
 terms.warranty: 'Article 6 - Garanties'
-terms.warranty_content: 'Tous nos produits bénéficient d'une garantie décennale conforme à la réglementation en vigueur.'
+terms.warranty_content: 'Tous nos produits bénéficient d''une garantie décennale conforme à la réglementation en vigueur.'
 
 # Common
 common.loading: 'Chargement...'
