@@ -1,0 +1,7 @@
+// Bootstrap complet (tout dans l'ordre correct)
+@use 'bootstrap/scss/bootstrap' as *;
+@use '@fortawesome/fontawesome-free/css/all.css' as *;
+
+// Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+

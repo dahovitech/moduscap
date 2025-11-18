@@ -1,0 +1,194 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.option.option_new.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ path('admin_option_index') }}">{{ 'admin.navigation.options'|trans }}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ path('admin_option_group_edit', {'id': optionGroup.id}) }}">
+                    {{ optionGroup.name(app.request.locale) ?: optionGroup.code }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active">{{ 'admin.option.option_new.title'|trans }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-plus-circle me-2"></i>{{ 'admin.option.option_new.title'|trans }}
+                </h5>
+                <small class="text-muted">
+                    {{ 'admin.option.option_new.group'|trans }}: 
+                    <strong>{{ optionGroup.name(app.request.locale) ?: optionGroup.code }}</strong>
+                    <span class="badge bg-info ms-2">{{ optionGroup.inputType|title }}</span>
+                </small>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': true}}) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.optionGroup) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.price) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.sortOrder) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.isActive) }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="mb-3">
+                        <i class="bi bi-translate me-2"></i>{{ 'admin.option.translations'|trans }}
+                    </h6>
+
+                    {% if languages is defined and languages|length > 0 %}
+                        <ul class="nav nav-tabs" role="tablist">
+                            {% for language in languages %}
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#lang-{{ language.code }}" 
+                                            role="tab">
+                                        {{ language.nativeName }}
+                                        {% if language.isDefault() %}
+                                            <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                        {% endif %}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content" id="languageTabs">
+                            {% for language in languages %}
+                                <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                     id="lang-{{ language.code }}" 
+                                     role="tabpanel">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    {{ 'admin.option.option.name'|trans }}
+                                                    <span class="badge bg-primary">{{ language.code|upper }}</span>
+                                                    {% if language.isDefault() %}
+                                                        <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                                    {% endif %}
+                                                </label>
+                                                {% set translationIndex = loop.index0 %}
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="product_option[translations][{{ loop.index0 }}][name]" 
+                                                       placeholder="{{ 'admin.option.option.name_placeholder'|trans }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'admin.option.option.description'|trans }}</label>
+                                                <textarea class="form-control" 
+                                                          name="product_option[translations][{{ loop.index0 }}][description]" 
+                                                          rows="3"
+                                                          placeholder="{{ 'admin.option.option.description_placeholder'|trans }}"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" 
+                                           name="product_option[translations][{{ loop.index0 }}][language]" 
+                                           value="{{ language.code }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            {{ 'admin.option.no_active_languages'|trans }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ path('admin_option_index') }}" class="btn btn-secondary">
+                            {{ 'common.actions.cancel'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>{{ 'common.actions.save'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>{{ 'admin.option.help.title'|trans }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.group_info.title'|trans }}:</strong>
+                    <div class="mt-1">
+                        <code>{{ optionGroup.code }}</code>
+                        <span class="badge bg-info ms-2">{{ optionGroup.inputType|title }}</span>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6>{{ 'admin.option.option_new.help_price'|trans }}</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="bi bi-info-circle text-info me-1"></i> {{ 'admin.option.help.tip_price'|trans }}</li>
+                    <li><i class="bi bi-info-circle text-info me-1"></i> {{ 'admin.option.help.tip_code_option'|trans }}</li>
+                    <li><i class="bi bi-info-circle text-info me-1"></i> {{ 'admin.option.help.tip_translations'|trans }}</li>
+                </ul>
+                
+                <hr>
+                
+                <h6>{{ 'admin.option.option_new.existing_options'|trans }}</h6>
+                {% if optionGroup.options|length > 0 %}
+                    <div class="list-group list-group-flush">
+                        {% for existingOption in optionGroup.options %}
+                            <div class="list-group-item d-flex justify-content-between align-items-center px-0 py-1">
+                                <small>{{ existingOption.name(app.request.locale) ?: existingOption.code }}</small>
+                                {% if existingOption.price != '0.00' %}
+                                    <small class="text-muted">{{ existingOption.price|number_format(2, ',') }} €</small>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted small">{{ 'admin.option.option_new.no_existing_options'|trans }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

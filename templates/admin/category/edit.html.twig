@@ -1,0 +1,234 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.category.edit_title'|trans({'%name%': category.translations|first.name ?? category.code}) }} - MODUSCAP{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ 'admin.category.edit_title'|trans({'%name%': category.translations|first.name ?? category.code}) }}</h1>
+            <p class="text-muted">{{ 'admin.category.edit_description'|trans }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('admin_category_show', {'id': category.id}) }}" class="btn btn-outline-info">
+                <i class="fas fa-eye me-2"></i>{{ 'admin.common.view'|trans }}
+            </a>
+            <a href="{{ path('admin_category_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i>{{ 'admin.common.back'|trans }}
+            </a>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Informations de base -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>{{ 'admin.category.basic_information'|trans }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.sortOrder) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    {{ form_widget(form.isActive, {'attr': {'class': 'form-check-input'}}) }}
+                                    {{ form_label(form.isActive, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                                </div>
+                            </div>
+                            <div class="form-check form-switch">
+                                {{ form_widget(form.isFeatured, {'attr': {'class': 'form-check-input'}}) }}
+                                {{ form_label(form.isFeatured, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Traductions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-globe me-2"></i>{{ 'admin.category.translations'|trans }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% set languages = get_languages() %}
+                    {% if languages|length > 0 %}
+                    <ul class="nav nav-tabs" id="languageTabs">
+                        {% for language in languages %}
+                        <li class="nav-item">
+                            <button class="nav-link {{ loop.first ? 'active' : '' }}" 
+                                    id="tab-{{ language.code }}" 
+                                    data-bs-toggle="tab" 
+                                    data-bs-target="#content-{{ language.code }}" 
+                                    type="button">
+                                {{ language.name }}
+                                {% if language.isDefault %}
+                                <i class="fas fa-star text-warning ms-1" title="{{ 'admin.common.default_language'|trans }}"></i>
+                                {% endif %}
+                            </button>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="tab-content mt-3" id="languageTabsContent">
+                        {% for language in languages %}
+                        {% set translation = null %}
+                        {% for t in category.translations %}
+                            {% if t.language.code == language.code %}
+                                {% set translation = t %}
+                            {% endif %}
+                        {% endfor %}
+                        <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
+                             id="content-{{ language.code }}">
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name-{{ language.code }}" class="form-label">
+                                        {{ 'admin.category.name'|trans }} {{ language.isDefault ? '*' : '' }}
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="name-{{ language.code }}" 
+                                           name="category[translations][{{ loop.index0 }}][name]" 
+                                           value="{{ translation ? translation.name : '' }}"
+                                           placeholder="{{ 'admin.category.name_placeholder'|trans({'%language%': language.name}) }}"
+                                           {{ language.isDefault ? 'required' : '' }}>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="shortDescription-{{ language.code }}" class="form-label">
+                                        {{ 'admin.category.short_description'|trans }}
+                                    </label>
+                                    <input type="text" 
+                                           class="form-control" 
+                                           id="shortDescription-{{ language.code }}" 
+                                           name="category[translations][{{ loop.index0 }}][shortDescription]" 
+                                           value="{{ translation ? translation.shortDescription : '' }}"
+                                           placeholder="{{ 'admin.category.short_description_placeholder'|trans }}">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description-{{ language.code }}" class="form-label">
+                                    {{ 'admin.category.description'|trans }}
+                                </label>
+                                <textarea class="form-control" 
+                                          id="description-{{ language.code }}" 
+                                          name="category[translations][{{ loop.index0 }}][description]" 
+                                          rows="4"
+                                          placeholder="{{ 'admin.category.description_placeholder'|trans({'%language%': language.name}) }}">{{ translation ? translation.description : '' }}</textarea>
+                            </div>
+                            
+                            <input type="hidden" 
+                                   name="category[translations][{{ loop.index0 }}][language]" 
+                                   value="{{ language.code }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ 'admin.category.no_translations_found'|trans }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ 'admin.common.actions'|trans }}</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        {{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}}) }}
+                        {{ form_widget(form.save_and_continue, {'attr': {'class': 'btn btn-secondary'}}) }}
+                        <a href="{{ path('admin_category_index') }}" class="btn btn-outline-secondary">
+                            {{ 'admin.common.cancel'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations supplémentaires -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">{{ 'admin.category.additional_info'|trans }}</h6>
+                </div>
+                <div class="card-body">
+                    <div class="small text-muted">
+                        <div class="mb-2">
+                            <strong>{{ 'admin.category.created_at'|trans }}:</strong><br>
+                            {{ category.createdAt ? category.createdAt|date('d/m/Y H:i') : '-' }}
+                        </div>
+                        <div class="mb-2">
+                            <strong>{{ 'admin.category.updated_at'|trans }}:</strong><br>
+                            {{ category.updatedAt ? category.updatedAt|date('d/m/Y H:i') : '-' }}
+                        </div>
+                        <div>
+                            <strong>{{ 'admin.category.category_id'|trans }}:</strong><br>
+                            {{ category.id }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zone de danger -->
+            {% if category.products|length == 0 %}
+            <div class="card mt-3 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h6 class="mb-0">{{ 'admin.common.danger_zone'|trans }}</h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted">{{ 'admin.category.delete_warning'|trans }}</p>
+                    <form method="post" action="{{ path('admin_category_delete', {'id': category.id}) }}" 
+                          onsubmit="return confirm('{{ 'admin.category.delete_confirmation'|trans }}')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            <i class="fas fa-trash me-2"></i>{{ 'admin.category.delete_category'|trans }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+{{ parent() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-tab switching based on form focus
+    const inputs = document.querySelectorAll('.tab-pane input, .tab-pane textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            const tabPane = this.closest('.tab-pane');
+            if (tabPane) {
+                const tabId = tabPane.id;
+                const tabButton = document.querySelector(`[data-bs-target="#${tabId}"]`);
+                if (tabButton && !tabButton.classList.contains('active')) {
+                    new bootstrap.Tab(tabButton).show();
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

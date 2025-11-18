@@ -1,0 +1,427 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.category.management_title'|trans({}, 'admin') }} - MODUSCAP{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">{{ 'admin.category.management_title'|trans }}</h1>
+            <p class="text-muted">{{ 'admin.category.management_description'|trans }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('admin_category_new') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus me-2"></i>{{ 'admin.category.new_button'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <!-- Barre de recherche -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-10">
+                    <label for="search" class="form-label">{{ 'admin.filter.search_category'|trans }}</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           value="{{ current_search }}" placeholder="{{ 'admin.category.search_placeholder'|trans({}, 'admin') }}">
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <div class="w-100">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search me-2"></i>{{ 'admin.filter.search_button'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Statistiques rapides -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="h4 mb-0">{{ categories|length }}</div>
+                            <div class="small">{{ 'admin.category.total_categories'|trans }}</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-tags fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="h4 mb-0">{{ categories|filter(c => c.isActive)|length }}</div>
+                            <div class="small">{{ 'admin.category.active_categories'|trans }}</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-check-circle fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <div class="h4 mb-0">{{ categories|filter(c => c.isFeatured)|length }}</div>
+                            <div class="small">{{ 'admin.category.featured_categories'|trans }}</div>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-star fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liste des catégories -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">{{ 'admin.category.category_list'|trans }}</h5>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-primary btn-sm" onclick="toggleReorderMode()">
+                    <i class="fas fa-sort me-1"></i>{{ 'admin.category.reorder_button'|trans }}
+                </button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="exportCategories()">
+                    <i class="fas fa-download me-1"></i>{{ 'admin.category.export_button'|trans }}
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if categories %}
+                <div id="categoriesContainer" class="row">
+                    {% for category in categories %}
+                        <div class="col-md-6 col-lg-4 mb-4 category-item" data-category-id="{{ category.id }}">
+                            <div class="card h-100 shadow-sm">
+                                <!-- En-tête de la carte -->
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-secondary me-2">{{ category.code }}</span>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input category-active-toggle" 
+                                                   type="checkbox" 
+                                                   data-category-id="{{ category.id }}"
+                                                   {{ category.isActive ? 'checked' : '' }}>
+                                            <label class="form-check-label small">{{ 'admin.category.active'|trans }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" 
+                                                type="button" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ path('admin_category_show', {'id': category.id}) }}">
+                                                    <i class="fas fa-eye me-2"></i>{{ 'admin.common.view'|trans }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" href="{{ path('admin_category_edit', {'id': category.id}) }}">
+                                                    <i class="fas fa-edit me-2"></i>{{ 'admin.common.edit'|trans }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="dropdown-item" onclick="duplicateCategory({{ category.id }})">
+                                                    <i class="fas fa-copy me-2"></i>{{ 'admin.common.duplicate'|trans }}
+                                                </button>
+                                            </li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <button class="dropdown-item text-danger" 
+                                                        onclick="confirmDeleteCategory({{ category.id }}, '{{ category.code }}')">
+                                                    <i class="fas fa-trash me-2"></i>{{ 'admin.common.delete'|trans }}
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <!-- Corps de la carte -->
+                                <div class="card-body">
+                                    {% set frenchName = category.translations|filter(t => t.language.code == 'fr')|first %}
+                                    <h6 class="card-title">
+                                        {% if frenchName %}
+                                            {{ frenchName.name }}
+                                        {% else %}
+                                            <span class="text-muted">{{ 'admin.category.unnamed'|trans }}</span>
+                                        {% endif %}
+                                    </h6>
+                                    
+                                    {% if frenchName.description %}
+                                        <p class="card-text small text-muted">
+                                            {{ frenchName.description|slice(0, 100) }}{% if frenchName.description|length > 100 %}...{% endif %}
+                                        </p>
+                                    {% endif %}
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {% if category.isFeatured %}
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="fas fa-star me-1"></i>{{ 'admin.category.featured'|trans }}
+                                                </span>
+                                            {% endif %}
+                                            
+
+                                        </div>
+                                        
+                                        <small class="text-muted">
+                                            {{ 'admin.category.order'|trans }}: {{ category.sortOrder }}
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pied de carte -->
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            {{ 'admin.category.created_at'|trans }} {{ category.createdAt ? category.createdAt|date('d/m/Y') : '' }}
+                                        </small>
+                                        <div class="d-flex gap-1">
+                                            <a href="{{ path('admin_category_edit', {'id': category.id}) }}" 
+                                               class="btn btn-sm btn-outline-warning" title="{{ 'admin.common.edit'|trans }}">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                    onclick="confirmDeleteCategory({{ category.id }}, '{{ category.code }}')" 
+                                                    title="{{ 'admin.common.delete'|trans }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">{{ 'admin.category.no_categories_found'|trans }}</h5>
+                    <p class="text-muted">
+                        {% if current_search %}
+                            {{ 'admin.category.no_categories_search_match'|trans }}
+                        {% else %}
+                            {{ 'admin.category.first_category_message'|trans }}
+                        {% endif %}
+                    </p>
+                    {% if current_search %}
+                        <a href="{{ path('admin_category_index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i>{{ 'admin.filter.clear_search'|trans }}
+                        </a>
+                    {% else %}
+                        <a href="{{ path('admin_category_new') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>{{ 'admin.category.create_category'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{# Modal de confirmation de suppression #}
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'admin.category.delete_confirmation_title'|trans }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ ('admin.category.delete_confirmation_message'|trans)|replace({'%categoryName%': '<strong id="categoryName"></strong>'})|raw }}</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ 'admin.category.delete_warning'|trans }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'admin.common.cancel'|trans }}</button>
+                <form id="deleteCategoryForm" method="post" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                    <button type="submit" class="btn btn-danger">{{ 'admin.category.delete_permanently'|trans }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+{{parent()}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-submit du formulaire de recherche
+    const searchInput = document.getElementById('search');
+    if (searchInput) {
+        let searchTimeout;
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                this.closest('form').submit();
+            }, 500);
+        });
+    }
+    
+    // Toggle rapide du statut actif
+    const activeToggles = document.querySelectorAll('.category-active-toggle');
+    activeToggles.forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const categoryId = this.dataset.categoryId;
+            const isActive = this.checked;
+            
+            fetch('/admin/categories/quick-update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: categoryId,
+                    field: 'isActive',
+                    value: isActive
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // Remettre l'état précédent en cas d'erreur
+                    this.checked = !isActive;
+                    alert(('admin.category.update_error'|trans));
+                }
+            })
+            .catch(error => {
+                console.error(('admin.category.update_error_log'|trans), error);
+                this.checked = !isActive;
+                alert(('admin.category.update_error'|trans));
+            });
+        });
+    });
+});
+
+let reorderMode = false;
+
+function toggleReorderMode() {
+    reorderMode = !reorderMode;
+    const container = document.getElementById('categoriesContainer');
+    const button = document.querySelector('[onclick="toggleReorderMode()"]');
+    
+    if (reorderMode) {
+        container.classList.add('sortable');
+        button.innerHTML = '<i class="fas fa-check me-1"></i>' + ('admin.category.finish_reorder'|trans);
+        button.classList.remove('btn-outline-primary');
+        button.classList.add('btn-success');
+        
+        // Initialiser Sortable si disponible
+        if (typeof Sortable !== 'undefined') {
+            new Sortable(container, {
+                animation: 150,
+                handle: '.card',
+                ghostClass: 'bg-light',
+                onEnd: function(evt) {
+                    saveCategoryOrder();
+                }
+            });
+        }
+    } else {
+        container.classList.remove('sortable');
+        button.innerHTML = '<i class="fas fa-sort me-1"></i>' + ('admin.category.reorder_button'|trans);
+        button.classList.remove('btn-success');
+        button.classList.add('btn-outline-primary');
+    }
+}
+
+function saveCategoryOrder() {
+    const categoryItems = document.querySelectorAll('.category-item');
+    const orderedIds = Array.from(categoryItems).map(item => item.dataset.categoryId);
+    
+    fetch('/admin/categories/reorder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            ordered_ids: orderedIds
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(('admin.category.order_saved_success'|trans), 'success');
+        } else {
+            showNotification(('admin.category.save_error'|trans), 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        showNotification('Erreur lors de la sauvegarde', 'error');
+    });
+}
+
+function confirmDeleteCategory(categoryId, categoryName) {
+    document.getElementById('categoryName').textContent = categoryName;
+    document.getElementById('deleteCategoryForm').action = `/admin/categories/${categoryId}`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteCategoryModal'));
+    modal.show();
+}
+
+function duplicateCategory(categoryId) {
+    if (confirm(('admin.category.duplicate_confirm_message'|trans))) {
+        fetch(`/admin/categories/duplicate/${categoryId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = `/admin/categories/${data.categoryId}/edit`;
+            } else {
+                alert(('admin.category.duplicate_error_message'|trans));
+            }
+        })
+        .catch(error => {
+            console.error(('admin.category.duplicate_error_log'|trans), error);
+            alert('Erreur lors de la duplication de la catégorie');
+        });
+    }
+}
+
+function exportCategories() {
+    // Implémentation de l'export (CSV, Excel, etc.)
+    alert(('admin.category.export_development_message'|trans));
+}
+
+function showNotification(message, type = 'info') {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    const notification = document.createElement('div');
+    notification.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        <i class="fas ${icon} me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}

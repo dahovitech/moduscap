@@ -1,0 +1,254 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.option.option_edit.title'|trans }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ path('admin_option_index') }}">{{ 'admin.navigation.options'|trans }}</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ path('admin_option_group_edit', {'id': option.optionGroup.id}) }}">
+                    {{ option.optionGroup.name(app.request.locale) ?: option.optionGroup.code }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active">{{ 'admin.option.option_edit.title'|trans }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pencil me-2"></i>{{ 'admin.option.option_edit.title'|trans }}
+                </h5>
+                <small class="text-muted">
+                    {{ 'admin.option.option_edit.group'|trans }}: 
+                    <strong>{{ option.optionGroup.name(app.request.locale) ?: option.optionGroup.code }}</strong>
+                    <span class="badge bg-info ms-2">{{ option.optionGroup.inputType|title }}</span>
+                </small>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': true}}) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.optionGroup) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.price) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.sortOrder) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.isActive) }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="mb-3">
+                        <i class="bi bi-translate me-2"></i>{{ 'admin.option.translations'|trans }}
+                    </h6>
+
+                    {% set languages = get_languages() %}
+                    {% if languages|length > 0 %}
+                     <ul class="nav nav-tabs" role="tablist">
+                            {% for language in languages %}
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#lang-{{ language.code }}" 
+                                            role="tab">
+                                        {{ language.nativeName }}
+                                        {% if language.isDefault() %}
+                                            <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                        {% endif %}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content" id="languageTabs">
+                            {% for language in languages %}
+                                {% set translation = null %}
+                                {% for t in option.translations %}
+                                    {% if t.language.code == language.code %}
+                                        {% set translation = t %}
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                     id="lang-{{ language.code }}" 
+                                     role="tabpanel">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    {{ 'admin.option.option.name'|trans }}
+                                                    <span class="badge bg-primary">{{ language.code|upper }}</span>
+                                                    {% if language.isDefault() %}
+                                                        <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                                    {% endif %}
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="product_option[translations][{{ loop.index0 }}][name]" 
+                                                       value="{{ translation ? translation.name : '' }}"
+                                                       placeholder="{{ 'admin.option.option.name_placeholder'|trans }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'admin.option.option.description'|trans }}</label>
+                                                <textarea class="form-control" 
+                                                          name="product_option[translations][{{ loop.index0 }}][description]" 
+                                                          rows="3"
+                                                          placeholder="{{ 'admin.option.option.description_placeholder'|trans }}">{{ translation ? translation.description : '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" 
+                                           name="product_option[translations][{{ loop.index0 }}][language]" 
+                                           value="{{ language.code }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                       
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            {{ 'admin.option.no_translations'|trans }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ path('admin_option_index') }}" class="btn btn-secondary">
+                            {{ 'common.actions.cancel'|trans }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>{{ 'common.actions.update'|trans }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>{{ 'admin.option.option_info.title'|trans }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.option.code'|trans }}:</strong>
+                    <code>{{ option.code }}</code>
+                </div>
+                
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.option.price'|trans }}:</strong>
+                    {% if option.price != '0.00' %}
+                        <span class="text-success">{{ option.price|number_format(2, ',') }} €</span>
+                    {% else %}
+                        <span class="text-muted">{{ 'admin.option.option.no_price'|trans }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.option.active'|trans }}:</strong>
+                    {% if option.isActive %}
+                        <span class="badge bg-success">{{ 'admin.option.active'|trans }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ 'admin.option.inactive'|trans }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.option.sort_order'|trans }}:</strong>
+                    {{ option.sortOrder }}
+                </div>
+                
+                <div class="mb-3">
+                    <strong>{{ 'admin.option.option.products_count'|trans }}:</strong>
+                    {{ option.products|length }}
+                </div>
+                
+                <hr>
+                
+                <div class="small text-muted">
+                    <strong>{{ 'admin.option.option.created'|trans }}:</strong>
+                    {{ option.createdAt ? option.createdAt|date('d/m/Y H:i') : '—' }}
+                </div>
+                
+                <div class="small text-muted">
+                    <strong>{{ 'admin.option.option.updated'|trans }}:</strong>
+                    {{ option.updatedAt ? option.updatedAt|date('d/m/Y H:i') : '—' }}
+                </div>
+            </div>
+        </div>
+        
+        {% if option.products|length > 0 %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-box me-2"></i>{{ 'admin.option.option.used_in_products'|trans }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% for product in option.products %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small">{{ product.code }}</span>
+                            {% if product.category %}
+                                <small class="text-muted">{{ product.category.name(app.request.locale) }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-list me-2"></i>{{ 'admin.option.option.group_options'|trans }}
+                </h6>
+            </div>
+            <div class="card-body">
+                {% for groupOption in option.optionGroup.options %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="{% if groupOption.id == option.id %}text-primary{% endif %}">
+                            {{ groupOption.name(app.request.locale) ?: groupOption.code }}
+                        </span>
+                        {% if groupOption.isActive %}
+                            <span class="badge bg-success">{{ 'admin.option.active'|trans }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ 'admin.option.inactive'|trans }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

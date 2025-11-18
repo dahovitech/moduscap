@@ -1,0 +1,834 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ product.code }} - {{ 'admin.product.edit_page_title'|trans({}, 'admin') }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_product_index') }}">{{ 'admin.navigation.products'|trans({}, 'admin') }}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_product_show', {'id': product.id}) }}">{{ product.code }}</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ 'admin.common.edit'|trans({}, 'admin') }}</li>
+                </ol>
+            </nav>
+            <h1 class="h3 mb-1">{{ 'admin.product.edit_title'|trans({}, 'admin') }}</h1>
+            <p class="text-muted">{{ 'admin.product.edit_description'|trans({}, 'admin') }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('admin_product_show', {'id': product.id}) }}" class="btn btn-outline-primary">
+                <i class="fas fa-eye me-2"></i>{{ 'admin.product.preview'|trans({}, 'admin') }}
+            </a>
+            <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
+                <i class="fas fa-arrow-left me-2"></i>{{ 'admin.common.back'|trans({}, 'admin') }}
+            </button>
+        </div>
+    </div>
+
+    {# Alertes de modification #}
+    <div class="alert alert-info d-flex align-items-center">
+        <i class="fas fa-info-circle me-3 fa-lg"></i>
+        <div>
+            <strong>{{ 'admin.product.last_modification'|trans({}, 'admin') }}:</strong> {{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : product.createdAt ? product.createdAt|date('d/m/Y H:i') : ('admin.common.unknown'|trans) }}
+            {% if product.updatedAt != product.createdAt %}
+                <br><small>{{ 'admin.product.created_at'|trans({}, 'admin') }}: {{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : ('admin.common.unknown'|trans) }}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': true}}) }}
+    
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Informations générales -->
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>{{ 'admin.product.general_info'|trans({}, 'admin') }}
+                    </h5>
+                    <div class="form-check form-switch">
+                        {{ form_widget(form.isActive, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label">{{ 'admin.product.active_product'|trans({}, 'admin') }}</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.code, {
+                                'attr': {'class': 'form-control form-control-lg', 'placeholder': ('admin.product.code_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.category, {
+                                'attr': {'class': 'form-select'},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.basePrice, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.price_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.surface, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.surface_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.dimensions, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.dimensions_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.rooms, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.rooms_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.height, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.height_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.assemblyTime, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.assembly_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spécifications techniques -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>{{ 'admin.product.technical_specs'|trans({}, 'admin') }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form.technicalSpecs, {
+                                'attr': {'class': 'form-control', 'rows': 4, 'placeholder': ('admin.product.technical_specs_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Traductions multilingues -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-globe me-2"></i>{{ 'admin.product.multilingual_content'|trans({}, 'admin') }}
+                        <small class="text-muted">{{ 'admin.product.edit_multilingual_content'|trans({}, 'admin') }}</small>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Onglets des langues -->
+                    {% set languages = get_languages() %}
+                    <ul class="nav nav-tabs" id="languageTabs" role="tablist">
+                        {% for language in languages %}
+                            {% set existingTranslation = product.translations|filter(t => t.language.code == language.code)|first %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {{ loop.first ? 'active' : '' }}" 
+                                        id="lang-{{ language.code }}-tab" 
+                                        data-bs-toggle="tab" 
+                                        data-bs-target="#lang-{{ language.code }}" 
+                                        type="button" role="tab">
+                                    {{ language.name }}
+                                    {% if existingTranslation and (not existingTranslation.name and not existingTranslation.description) %}
+                                        <span class="badge bg-warning text-dark ms-1">{{ 'admin.product.empty_translation'|trans({}, 'admin') }}</span>
+                                    {% endif %}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    
+                    <!-- Contenu des onglets -->
+                    <div class="tab-content mt-3" id="languageTabsContent">
+                        {% for language in languages %}
+                            {% set existingTranslation = product.translations|filter(t => t.language.code == language.code)|first %}
+                            {% set translation = existingTranslation ?? null %}
+                            <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
+                                 id="lang-{{ language.code }}" 
+                                 role="tabpanel">
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.product_name'|trans({}, 'admin') }}</label>
+                                        <input type="text" 
+                                               class="form-control form-control-lg" 
+                                               name="product[translations][{{ loop.index0 }}][name]" 
+                                               value="{{ translation ? translation.name : '' }}"
+                                               placeholder="{{ ('admin.product.product_name_placeholder'|trans({}, 'admin'))|replace({'%language%': language.name}) }}"
+                                               {{ not language.isActive ? 'disabled' : '' }}>
+                                        <div class="form-text">
+                                            {{ ('admin.product.name_display_info'|trans({}, 'admin'))|replace({'%language%': language.name}) }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.short_description'|trans({}, 'admin') }}</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               name="product[translations][{{ loop.index0 }}][shortDescription]" 
+                                               value="{{ translation ? translation.shortDescription : '' }}"
+                                               placeholder="{{ 'admin.product.short_description_placeholder'|trans({}, 'admin') }}"
+                                               {{ not language.isActive ? 'disabled' : '' }}>
+                                        <div class="form-text">
+                                            {{ 'admin.product.short_description_info'|trans({}, 'admin') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.complete_description'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][description]" 
+                                                  rows="5"
+                                                  placeholder="{{ ('admin.product.description_placeholder'|trans({}, 'admin'))|replace({'%language%': language.name}) }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.description : '' }}</textarea>
+                                        <div class="form-text">
+                                            {{ 'admin.product.description_info'|trans({}, 'admin') }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.concept_design'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][concept]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.concept_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.concept : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.materials_detail'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][materialsDetail]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.materials_detail_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.materialsDetail : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.equipment_detail'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][equipmentDetail]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.equipment_detail_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.equipmentDetail : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.performance'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][performanceDetails]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.performance_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.performanceDetails : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.specifications'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][specifications]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.specs_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.specifications : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.advantages'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][advantages]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.advantages_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.advantages : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.specifications'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][specifications]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.specs_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.specifications : '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label fw-bold">{{ 'admin.product.advantages'|trans({}, 'admin') }}</label>
+                                        <textarea class="form-control" 
+                                                  name="product[translations][{{ loop.index0 }}][advantages]" 
+                                                  rows="3"
+                                                  placeholder="{{ 'admin.product.advantages_placeholder'|trans({}, 'admin') }}"
+                                                  {{ not language.isActive ? 'disabled' : '' }}>{{ translation ? translation.advantages : '' }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <input type="hidden" 
+                                       name="product[translations][{{ loop.index0 }}][language]" 
+                                       value="{{ language.code }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Statuts avancés -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-toggle-on me-2"></i>{{ 'admin.product.advanced_statuses'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-check form-switch mb-3">
+                        {{ form_widget(form.isFeatured, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label fw-bold">{{ 'admin.product.featured_product'|trans({}, 'admin') }}</label>
+                        <div class="form-text">{{ 'admin.product.featured_product_info'|trans({}, 'admin') }}</div>
+                    </div>
+                    
+                    <div class="form-check form-switch">
+                        {{ form_widget(form.isCustomizable, {
+                            'attr': {'class': 'form-check-input'}
+                        }) }}
+                        <label class="form-check-label fw-bold">{{ 'admin.product.customizable_product'|trans({}, 'admin') }}</label>
+                        <div class="form-text">{{ 'admin.product.customizable_product_info'|trans({}, 'admin') }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options de garantie -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.warranty_performance'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{ form_row(form.energyClass, {
+                        'attr': {'class': 'form-select'},
+                        'label_attr': {'class': 'form-label fw-bold'}
+                    }) }}
+                    
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            {{ form_row(form.warrantyStructure, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.warranty_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.warrantyEquipment, {
+                                'attr': {'class': 'form-control', 'placeholder': ('admin.product.warranty_equipment_placeholder'|trans({}, 'admin'))},
+                                'label_attr': {'class': 'form-label fw-bold'}
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Options disponibles -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>{{ 'admin.product.available_options'|trans({}, 'admin') }}
+                        <small class="text-muted">({{ 'admin.common.multiple'|trans({}, 'admin') }})</small>
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{ form_row(form.availableOptions, {
+                        'attr': {'class': 'form-select', 'size': '8'},
+                        'label_attr': {'class': 'form-label fw-bold'}
+                    }) }}
+                    <div class="form-text">{{ 'admin.product.select_available_options_info'|trans({}, 'admin') }}</div>
+                </div>
+            </div>
+
+            <!-- Images du produit -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-images me-2"></i>{{ 'admin.product.images'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <!-- Image principale -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ 'admin.product.main_image'|trans({}, 'admin') }}</label>
+                        {% include 'components/media_selector.html.twig' with {
+                            'selectedMedia': product.mainImage,
+                            'inputName': 'main_image_id',
+                            'label': '',
+                            'required': false
+                        } %}
+                    </div>
+                    
+                    <!-- Images de galerie -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">{{ 'admin.product.gallery_images'|trans({}, 'admin') }}</label>
+                        <div id="galleryImages">
+                            {% for productMedia in product.productMedia %}
+                                {% if productMedia.mediaType == 'gallery' %}
+                                    <div class="gallery-image-item mb-3" data-index="{{ loop.index0 }}">
+                                        {% include 'components/media_selector.html.twig' with {
+                                            'selectedMedia': productMedia.media,
+                                            'inputName': 'gallery_images[' ~ loop.index0 ~ ']',
+                                            'label': '',
+                                            'required': false
+                                        } %}
+                                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeGalleryImage(this)">
+                                            <i class="fas fa-trash me-1"></i>Supprimer
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="addGalleryImage()">
+                            <i class="fas fa-plus me-1"></i>{{ 'admin.product.add_gallery_image'|trans({}, 'admin') }}
+                        </button>
+                    </div>
+                    
+                    <!-- Images techniques -->
+                    <div>
+                        <label class="form-label fw-bold">{{ 'admin.product.technical_images'|trans({}, 'admin') }}</label>
+                        <div id="technicalImages">
+                            {% for productMedia in product.productMedia %}
+                                {% if productMedia.mediaType == 'technical' %}
+                                    <div class="technical-image-item mb-3" data-index="{{ loop.index0 }}">
+                                        {% include 'components/media_selector.html.twig' with {
+                                            'selectedMedia': productMedia.media,
+                                            'inputName': 'technical_images[' ~ loop.index0 ~ ']',
+                                            'label': '',
+                                            'required': false
+                                        } %}
+                                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeTechnicalImage(this)">
+                                            <i class="fas fa-trash me-1"></i>Supprimer
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button type="button" class="btn btn-outline-primary btn-sm w-100" onclick="addTechnicalImage()">
+                            <i class="fas fa-plus me-1"></i>{{ 'admin.product.add_technical_image'|trans({}, 'admin') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ordre d'affichage -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-sort me-2"></i>{{ 'admin.product.display_order'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {{ form_row(form.sortOrder, {
+                        'attr': {'class': 'form-control', 'placeholder': ('admin.product.sort_order_placeholder'|trans({}, 'admin'))},
+                        'label_attr': {'class': 'form-label fw-bold'}
+                    }) }}
+                    <div class="form-text">{{ 'admin.product.sort_order_info'|trans({}, 'admin') }}</div>
+                </div>
+            </div>
+
+            <!-- Historique des modifications -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-history me-2"></i>{{ 'admin.product.information'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>{{ 'admin.product.id'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.id }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.created_at_label'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.updated_at_label'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.translations_label'|trans({}, 'admin') }}</strong></td>
+                            <td>
+                                {% set filledTranslations = 0 %}
+                                {% for translation in product.translations %}
+                                    {% if translation.name or translation.description %}
+                                        {% set filledTranslations = filledTranslations + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {{ filledTranslations }}/{{ product.translations|length }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Actions rapides -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-bolt me-2"></i>{{ 'admin.product.quick_actions'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body d-grid gap-2">
+                    <button type="button" class="btn btn-outline-info" onclick="duplicateProduct({{ product.id }})">
+                        <i class="fas fa-copy me-2"></i>{{ 'admin.product.duplicate_product'|trans({}, 'admin') }}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="quickPreview()">
+                        <i class="fas fa-eye me-2"></i>{{ ('admin.product.preview'|trans({}, 'admin')) }} {{ 'admin.product.quick_preview'|trans({}, 'admin') }}
+                    </button>
+                    <button type="button" class="btn btn-outline-dark" onclick="exportProduct()">
+                        <i class="fas fa-download me-2"></i>{{ 'admin.product.export_json'|trans({}, 'admin') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex gap-2">
+            <a href="{{ path('admin_product_show', {'id': product.id}) }}" class="btn btn-outline-primary">
+                <i class="fas fa-eye me-2"></i>{{ 'admin.product.view_details'|trans({}, 'admin') }}
+            </a>
+            <a href="{{ path('admin_product_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-list me-2"></i>{{ 'admin.product.back_to_list'|trans({}, 'admin') }}
+            </a>
+        </div>
+        
+        <div class="d-flex gap-2">
+            {{ form_widget(form.save_and_continue) }}
+            {{ form_widget(form.save) }}
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+{{parent()}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Détection des changements pour l'autosave
+    let hasChanges = false;
+    const form = document.querySelector('form');
+    
+    form?.addEventListener('input', function() {
+        hasChanges = true;
+    });
+    
+    // Avertissement avant de quitter si des modifications non sauvegardées
+    window.addEventListener('beforeunload', function(e) {
+        if (hasChanges) {
+            e.preventDefault();
+            e.returnValue = ('admin.product.unsaved_changes_message'|trans({}, 'admin'));
+        }
+    });
+    
+    // Réinitialiser l'état après sauvegarde réussie
+    form?.addEventListener('submit', function() {
+        hasChanges = false;
+    });
+    
+    // Validation en temps réel du code produit
+    const codeInput = document.querySelector('#product_code');
+    if (codeInput) {
+        codeInput.addEventListener('input', function() {
+            const value = this.value;
+            const validPattern = /^[A-Za-z0-9_-]*$/;
+            
+            if (!validPattern.test(value)) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    }
+    
+    // Statistiques des traductions en temps réel
+    updateTranslationStats();
+    
+    function updateTranslationStats() {
+        const nameInputs = document.querySelectorAll('[name*="[name]"]');
+        let filledCount = 0;
+        let totalCount = nameInputs.length;
+        
+        nameInputs.forEach(input => {
+            if (input.value.trim()) {
+                filledCount++;
+            }
+        });
+        
+        // Mettre à jour l'affichage des stats si nécessaire
+        console.log(('admin.product.translation_stats_message'|trans({}, 'admin')).replace('%filled%', filledCount).replace('%total%', totalCount));
+    }
+    
+    // Écouter les changements dans les champs de traduction
+    document.querySelectorAll('[name*="[name]"], [name*="[description]"]').forEach(input => {
+        input.addEventListener('input', updateTranslationStats);
+    });
+});
+
+function duplicateProduct(productId) {
+    if (confirm(('admin.product.duplicate_confirm_message'|trans({}, 'admin')))) {
+        fetch(`/admin/products/duplicate/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirection vers la page d'édition du produit dupliqué
+                window.location.href = `/admin/products/${data.productId}/edit`;
+            } else {
+                alert(('admin.product.duplicate_error_message'|trans({}, 'admin')));
+            }
+        })
+        .catch(error => {
+            console.error(('admin.product.duplicate_error_log'|trans({}, 'admin')), error);
+            alert('Erreur lors de la duplication du produit');
+        });
+    }
+}
+
+function quickPreview() {
+    // Ouvrir un aperçu rapide dans une nouvelle fenêtre
+    const previewUrl = `/admin/products/{{ product.id }}`;
+    window.open(previewUrl, '_blank', 'width=1200,height=800,scrollbars=yes,resizable=yes');
+}
+
+function exportProduct() {
+    const productData = {
+        id: {{ product.id }},
+        code: '{{ product.code }}',
+        category: '{{ product.category.name }}',
+        basePrice: {{ product.basePrice ? product.basePrice : 'null' }},
+        isActive: {{ product.isActive ? 'true' : 'false' }},
+        translations: [
+            {% for translation in product.translations %}
+            {
+                language: '{{ translation.language.code }}',
+                name: '{{ translation.name|e('js') }}',
+                description: '{{ translation.description|e('js') }}'
+            }{{ not loop.last ? ',' : '' }}
+            {% endfor %}
+        ]
+    };
+    
+    const dataStr = JSON.stringify(productData, null, 2);
+    const dataBlob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `product-${product.code}.json`;
+    link.click();
+    
+    URL.revokeObjectURL(url);
+}
+
+// Auto-sauvegarde locale (brouillon)
+let autoSaveTimeout;
+const form = document.querySelector('form');
+
+form?.addEventListener('input', function() {
+    clearTimeout(autoSaveTimeout);
+    autoSaveTimeout = setTimeout(function() {
+        saveDraft();
+    }, 3000);
+});
+
+function saveDraft() {
+    const formData = new FormData(form);
+    const data = {};
+    for (let [key, value] of formData.entries()) {
+        data[key] = value;
+    }
+    localStorage.setItem('product_edit_draft_{{ product.id }}', JSON.stringify(data));
+    
+    // Afficher une notification subtile
+    showAutoSaveNotification();
+}
+
+function showAutoSaveNotification() {
+    // Créer une notification temporaire
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success position-fixed';
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 250px;';
+    notification.innerHTML = '<i class="fas fa-save me-2"></i>' + ('admin.product.draft_saved_message'|trans({}, 'admin'));
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 2000);
+}
+
+// Restaurer le brouillon local si existant
+const savedDraft = localStorage.getItem('product_edit_draft_{{ product.id }}');
+if (savedDraft && confirm(('admin.product.restore_draft_confirm'|trans({}, 'admin')))) {
+    try {
+        const draft = JSON.parse(savedDraft);
+        Object.keys(draft).forEach(key => {
+            const input = form.querySelector(`[name="${key}"]`);
+            if (input) {
+                input.value = draft[key];
+            }
+        });
+    } catch (e) {
+        console.log(('admin.product.draft_restore_error'|trans({}, 'admin')), e);
+    }
+}
+
+// Effacer le brouillon après sauvegarde réussie
+form?.addEventListener('submit', function() {
+    localStorage.removeItem('product_edit_draft_{{ product.id }}');
+});
+
+// Gestion des images de galerie
+let galleryImageCounter = {{ product.productMedia|filter(m => m.mediaType == 'gallery')|length }};
+
+function addGalleryImage() {
+    const container = document.getElementById('galleryImages');
+    const newItem = document.createElement('div');
+    newItem.className = 'gallery-image-item mb-3';
+    newItem.setAttribute('data-index', galleryImageCounter);
+    
+    newItem.innerHTML = `
+        <div class="mb-3">
+            <div class="media-selector" id="mediaSelector_gallery_images[${galleryImageCounter}]">
+                <input type="hidden" name="gallery_images[${galleryImageCounter}]" value="" id="mediaInput_gallery_images[${galleryImageCounter}]">
+                <div class="media-preview d-none" id="mediaPreview_gallery_images[${galleryImageCounter}]">
+                    <div class="media-preview-container">
+                        <img src="" alt="" class="media-preview-image" style="display: none;">
+                        <div class="media-preview-overlay">
+                            <button type="button" class="btn btn-sm btn-outline-light me-2" onclick="openMediaLibrary('gallery_images[${galleryImageCounter}]')">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSelectedMedia('gallery_images[${galleryImageCounter}]')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="media-preview-info">
+                        <small class="text-muted">Image sélectionnée</small>
+                    </div>
+                </div>
+                <div class="media-selector-empty" id="mediaEmpty_gallery_images[${galleryImageCounter}]">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="openMediaLibrary('gallery_images[${galleryImageCounter}]')">
+                        <i class="bi bi-image me-2"></i>Sélectionner une image
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeGalleryImage(this)">
+            <i class="fas fa-trash me-1"></i>Supprimer
+        </button>
+    `;
+    
+    container.appendChild(newItem);
+    galleryImageCounter++;
+}
+
+function removeGalleryImage(button) {
+    button.closest('.gallery-image-item').remove();
+}
+
+// Gestion des images techniques
+let technicalImageCounter = {{ product.productMedia|filter(m => m.mediaType == 'technical')|length }};
+
+function addTechnicalImage() {
+    const container = document.getElementById('technicalImages');
+    const newItem = document.createElement('div');
+    newItem.className = 'technical-image-item mb-3';
+    newItem.setAttribute('data-index', technicalImageCounter);
+    
+    newItem.innerHTML = `
+        <div class="mb-3">
+            <div class="media-selector" id="mediaSelector_technical_images[${technicalImageCounter}]">
+                <input type="hidden" name="technical_images[${technicalImageCounter}]" value="" id="mediaInput_technical_images[${technicalImageCounter}]">
+                <div class="media-preview d-none" id="mediaPreview_technical_images[${technicalImageCounter}]">
+                    <div class="media-preview-container">
+                        <img src="" alt="" class="media-preview-image" style="display: none;">
+                        <div class="media-preview-overlay">
+                            <button type="button" class="btn btn-sm btn-outline-light me-2" onclick="openMediaLibrary('technical_images[${technicalImageCounter}]')">
+                                <i class="bi bi-pencil"></i> Modifier
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeSelectedMedia('technical_images[${technicalImageCounter}]')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="media-preview-info">
+                        <small class="text-muted">Image sélectionnée</small>
+                    </div>
+                </div>
+                <div class="media-selector-empty" id="mediaEmpty_technical_images[${technicalImageCounter}]">
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="openMediaLibrary('technical_images[${technicalImageCounter}]')">
+                        <i class="bi bi-image me-2"></i>Sélectionner une image
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-danger mt-2 w-100" onclick="removeTechnicalImage(this)">
+            <i class="fas fa-trash me-1"></i>Supprimer
+        </button>
+    `;
+    
+    container.appendChild(newItem);
+    technicalImageCounter++;
+}
+
+function removeTechnicalImage(button) {
+    button.closest('.technical-image-item').remove();
+}
+</script>
+{% endblock %}

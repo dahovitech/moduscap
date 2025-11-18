@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} {{setting('siteName')}} {% endblock %}</title>
+    
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    
+    <link rel="icon" href="{{ asset('images/favicon.png') }}" type="image/png"/>
+</head>
+<body>
+    {{ render(controller('App\\Controller\\WidgetController::header')) }}
+    
+    {% block body %}{% endblock %}
+    
+    {{ render(controller('App\\Controller\\WidgetController::footer')) }}
+    
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,157 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Éditeur Personnalisé - Exemple Basique{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">
+                    <i class="bi bi-file-text me-2"></i>Exemple Basique
+                </h1>
+                <a href="{{ path('admin_editor_demo_index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Retour aux exemples
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Formulaire avec éditeur personnalisé</h5>
+                        </div>
+                        <div class="card-body">
+                            {{ form_start(form) }}
+                                <div class="mb-3">
+                                    {{ form_row(form.title) }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form_row(form.content) }}
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    {{ form_row(form.submit) }}
+                                    <button type="button" class="btn btn-outline-info" onclick="showEditorDemo()">
+                                        <i class="bi bi-lightbulb me-1"></i>Démonstration
+                                    </button>
+                                </div>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">Fonctionnalités disponibles</h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-type-bold text-primary me-2"></i>
+                                    <strong>Formatage de texte</strong><br>
+                                    <small class="text-muted">Gras, italique, souligné, barré</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-type-h1 text-primary me-2"></i>
+                                    <strong>Titres et paragraphes</strong><br>
+                                    <small class="text-muted">H1, H2, H3, paragraphe</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-link text-primary me-2"></i>
+                                    <strong>Liens</strong><br>
+                                    <small class="text-muted">Créer et supprimer des liens</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-collection text-primary me-2"></i>
+                                    <strong>Gestionnaire de médias</strong><br>
+                                    <small class="text-muted">Insérer images et médias</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-list-ul text-primary me-2"></i>
+                                    <strong>Listes</strong><br>
+                                    <small class="text-muted">Listes à puces et numérotées</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-quote text-primary me-2"></i>
+                                    <strong>Citations et code</strong><br>
+                                    <small class="text-muted">Blocs de citation et code</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-arrows-fullscreen text-primary me-2"></i>
+                                    <strong>Mode plein écran</strong><br>
+                                    <small class="text-muted">Édition en plein écran</small>
+                                </li>
+                                <li>
+                                    <i class="bi bi-123 text-primary me-2"></i>
+                                    <strong>Compteur de mots</strong><br>
+                                    <small class="text-muted">Statistiques du texte</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Configuration utilisée</h6>
+                        </div>
+                        <div class="card-body">
+                            <pre class="small mb-0"><code>MediaTextareaType::class, [
+    'enable_media' => true,
+    'enable_editor' => true,
+    'editor_height' => 400
+]</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showEditorDemo() {
+    const editor = $('textarea[data-editor-height]').data('customEditor');
+    if (editor) {
+        // Insérer du contenu de démonstration
+        const demoContent = `
+            <h2>Titre de démonstration</h2>
+            <p>Voici un exemple de contenu avec <strong>texte en gras</strong> et <em>texte en italique</em>.</p>
+            <blockquote>
+                "Ceci est une citation importante qui illustre les capacités de l'éditeur."
+            </blockquote>
+            <ul>
+                <li>Premier élément de liste</li>
+                <li>Deuxième élément avec <a href="#">un lien</a></li>
+                <li>Troisième élément</li>
+            </ul>
+            <p>Utilisez la barre d'outils pour <code>formater le texte</code> et insérer des médias !</p>
+        `;
+        
+        editor.setContent(demoContent);
+        
+        // Afficher une notification
+        const toast = $(`
+            <div class="toast align-items-center text-white bg-info border-0 position-fixed" 
+                 style="top: 20px; right: 20px; z-index: 9999;" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-lightbulb me-2"></i>Contenu de démonstration inséré !
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `);
+        
+        $('body').append(toast);
+        
+        if (typeof bootstrap !== 'undefined' && bootstrap.Toast) {
+            new bootstrap.Toast(toast[0]).show();
+        } else {
+            toast.show();
+            setTimeout(() => toast.fadeOut(() => toast.remove()), 3000);
+        }
+    }
+}
+</script>
+{% endblock %}

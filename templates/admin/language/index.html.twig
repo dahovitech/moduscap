@@ -1,0 +1,126 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    {{ 'language.index.title'|trans }} - {{ 'admin.title'|trans }} - {{ setting('siteName') }} 
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-globe me-2 text-success"></i>{{ 'language.index.heading'|trans }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ path('admin_language_new') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle me-2"></i>{{ 'language.index.create_button'|trans }}
+        </a>
+    </div>
+</div>
+
+{% if languages|length > 0 %}
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>{{ 'language.table.code'|trans }}</th>
+                            <th>{{ 'language.table.name'|trans }}</th>
+                            <th>{{ 'language.table.native_name'|trans }}</th>
+                            <th>{{ 'language.table.status'|trans }}</th>
+                            <th>{{ 'language.table.default'|trans }}</th>
+                            <th>{{ 'language.table.order'|trans }}</th>
+                            <th>{{ 'language.table.actions'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for language in languages %}
+                        <tr class="{% if not language.isActive %}table-secondary{% endif %}">
+                            <td>
+                                <span class="badge bg-primary">{{ language.code|upper }}</span>
+                            </td>
+                            <td>
+                                <strong>{{ language.name }}</strong>
+                            </td>
+                            <td>
+                                {{ language.nativeName }}
+                            </td>
+                            <td>
+                                {% if language.isActive %}
+                                    <span class="badge bg-success">{{ 'language.status.active'|trans }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ 'language.status.inactive'|trans }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if language.default %}
+                                    <i class="bi bi-star-fill text-warning" title="{{ 'language.default.title'|trans }}"></i>
+                                {% else %}
+                                    <form method="post" action="{{ path('admin_language_set_default', {id: language.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('set_default' ~ language.id) }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-warning"
+                                                title="{{ 'language.action.set_default'|trans }}"
+                                                {% if not language.isActive %}disabled{% endif %}>
+                                            <i class="bi bi-star"></i>
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge bg-info">{{ language.sortOrder }}</span>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ path('admin_language_show', {id: language.id}) }}"
+                                       class="btn btn-sm btn-outline-info"
+                                       title="{{ 'action.view'|trans }}">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="{{ path('admin_language_edit', {id: language.id}) }}"
+                                       class="btn btn-sm btn-outline-primary"
+                                       title="{{ 'action.edit'|trans }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <form method="post" action="{{ path('admin_language_toggle_status', {id: language.id}) }}" class="d-inline">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('toggle_status' ~ language.id) }}">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-{{ language.isActive ? 'warning' : 'success' }}"
+                                                title="{{ language.isActive ? 'action.deactivate'|trans : 'action.activate'|trans }}"
+                                                {% if language.default and language.isActive %}disabled title="{{ 'language.cannot_disable_default'|trans }}"{% endif %}>
+                                            <i class="bi bi-{{ language.isActive ? 'pause' : 'play' }}-fill"></i>
+                                        </button>
+                                    </form>
+                                    {% if not language.default %}
+                                        <form method="post" action="{{ path('admin_language_delete', {id: language.id}) }}"
+                                              class="d-inline"
+                                              onsubmit="return confirm('{{ 'language.confirm.delete'|trans({'%name%': language.name}) }}')">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ language.id) }}">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    title="{{ 'action.delete'|trans }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-globe display-1 text-muted mb-4"></i>
+            <h4 class="text-muted mb-3">{{ 'language.index.empty.title'|trans }}</h4>
+            <p class="text-muted mb-4">{{ 'language.index.empty.description'|trans }}</p>
+            <a href="{{ path('admin_language_new') }}" class="btn btn-success">
+                <i class="bi bi-plus-circle me-2"></i>{{ 'language.index.empty.create_button'|trans }}
+            </a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

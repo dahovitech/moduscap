@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="{{ locale|default('fr') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ 'email.order_approved_title'|trans({'%order_number%': order.orderNumber}) }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .email-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .success-icon {
+            font-size: 48px;
+            color: #28a745;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .order-info {
+            background: #f8f9ff;
+            border: 1px solid #e3f2fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .order-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 10px 0;
+        }
+        .payment-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .payment-section h3 {
+            color: #856404;
+            margin: 0 0 15px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 10px;
+            text-align: center;
+        }
+        .cta-button-primary {
+            background: #28a745;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .contact-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 5px;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .urgent {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+            .cta-button {
+                display: block;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🎉 {{ 'email.order_approved_header'|trans }}</h1>
+            <p>{{ site_name }}</p>
+        </div>
+
+        <div class="content">
+            <div class="success-icon">✅</div>
+            
+            <p>{{ 'email.greeting'|trans({'%name%': client_name }) }}</p>
+
+            <p>{{ 'email.order_approved_intro'|trans({'%order_number%': order_number }) }}</p>
+
+            <div class="order-info">
+                <div class="order-number">{{ 'email.order_number'|trans({'%order_number%': order_number}) }}</div>
+                <p><strong>{{ 'email.amount_to_pay'|trans }}:</strong></p>
+                <div class="amount">{{ total|number_format(0, ',', ' ') }} €</div>
+                <p><strong>{{ 'email.approved_on'|trans }}:</strong> {{ order.approvedAt|date('d/m/Y à H:i') }}</p>
+            </div>
+
+            <div class="urgent">
+                🚀 <strong>{{ 'email.action_required'|trans }}:</strong> {{ 'email.proceed_to_payment'|trans }}
+            </div>
+
+            <div class="payment-section">
+                <h3>💳 {{ 'email.payment_instructions'|trans }}</h3>
+                {{ payment_info|raw }}
+            </div>
+
+            <p><strong>{{ 'email.how_to_proceed_payment'|trans }}</strong></p>
+            <ol>
+                <li>{{ 'email.make_payment_according_instructions'|trans }}</li>
+                <li>{{ 'email.upload_proof_client_space'|trans }}</li>
+                <li>{{ 'email.team_confirm_receipt_24h'|trans }}</li>
+                <li>{{ 'email.habitat_production_starts_immediately'|trans }}</li>
+            </ol>
+
+            <center>
+                <a href="https://{{ app.request.host }}{{ path('app_quote_confirmation', {order_number: order.orderNumber}) }}" class="cta-button cta-button-primary">
+                    💳 {{ 'email.make_payment'|trans }}
+                </a>
+                <a href="https://{{ app.request.host }}{{ path('app_quote_track', {order_number: order.orderNumber}) }}" class="cta-button">
+                    📊 {{ 'email.track_order'|trans }}
+                </a>
+            </center>
+
+            <div class="contact-info">
+                <p><strong>{{ 'email.payment_help_needed'|trans }}</strong></p>
+                <p>{{ 'email.support_team_accompany_you'|trans }}</p>
+                <p>
+                    📧 <a href="mailto:{{ contact_email }}">{{ contact_email }}</a><br>
+                    📞 {{ setting.phone|default('+33 1 23 45 67 89') }}
+                </p>
+            </div>
+
+            <p><strong>{{ 'email.production_timeline'|trans }}:</strong> {{ 'email.production_timeline_description'|trans }}</p>
+
+            <p>{{ 'email.excited_to_create_home'|trans }}</p>
+
+            <p>{{ 'email.best_regards'|trans({'%team%': site_name }) }}</p>
+        </div>
+
+        <div class="footer">
+            <p>{{ 'email.auto_generated_notice'|trans }}</p>
+            <p>© 2024 {{ site_name }} - {{ 'email.all_rights_reserved'|trans }}</p>
+        </div>
+    </div>
+</body>
+</html>

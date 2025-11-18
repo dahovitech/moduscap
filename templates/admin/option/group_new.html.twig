@@ -1,0 +1,163 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.option.group_new.title'|trans({}, 'admin') }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ path('admin_option_index') }}">{{ 'admin.navigation.options'|trans({}, 'admin') }}</a>
+            </li>
+            <li class="breadcrumb-item active">{{ 'admin.option.group_new.title'|trans({}, 'admin') }}</li>
+        </ol>
+    </nav>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-diagram-3 me-2"></i>{{ 'admin.option.group_new.title'|trans({}, 'admin') }}
+                </h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'novalidate': true}}) }}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.code) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.inputType) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.isRequired) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.isActive) }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.sortOrder) }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h6 class="mb-3">
+                        <i class="bi bi-translate me-2"></i>{{ 'admin.option.translations'|trans({}, 'admin') }}
+                    </h6>
+
+                    {% if languages is defined and languages|length > 0 %}
+                     <ul class="nav nav-tabs" role="tablist">
+                            {% for language in languages %}
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link {% if loop.first %}active{% endif %}" 
+                                            type="button" 
+                                            data-bs-toggle="tab" 
+                                            data-bs-target="#lang-{{ language.code }}" 
+                                            role="tab">
+                                        {{ language.nativeName }}
+                                        {% if language.isDefault() %}
+                                            <i class="bi bi-star-fill text-warning ms-1" title="{{ 'language.default.title'|trans }}"></i>
+                                        {% endif %}
+                                    </button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content" id="languageTabs">
+                            {% for language in languages %}
+                                <div class="tab-pane fade {% if loop.first %}show active{% endif %}" 
+                                     id="lang-{{ language.code }}" 
+                                     role="tabpanel">
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    {{ 'admin.option.group.name'|trans({}, 'admin') }}
+                                                    <span class="badge bg-primary">{{ language.code|upper }}</span>
+                                                </label>
+                                                <input type="text" 
+                                                       class="form-control" 
+                                                       name="product_option_group[translations][{{ loop.index0 }}][name]" 
+                                                       placeholder="{{ 'admin.option.group.name_placeholder'|trans({}, 'admin') }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">{{ 'admin.option.group.description'|trans({}, 'admin') }}</label>
+                                                <textarea class="form-control" 
+                                                          name="product_option_group[translations][{{ loop.index0 }}][description]" 
+                                                          rows="3"
+                                                          placeholder="{{ 'admin.option.group.description_placeholder'|trans({}, 'admin') }}"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="hidden" 
+                                           name="product_option_group[translations][{{ loop.index0 }}][language]" 
+                                           value="{{ language.code }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                       
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            {{ 'admin.option.no_active_languages'|trans({}, 'admin') }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ path('admin_option_index') }}" class="btn btn-secondary">
+                            {{ 'common.actions.cancel'|trans({}, 'admin') }}
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>{{ 'common.actions.save'|trans({}, 'admin') }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>{{ 'admin.option.help.title'|trans({}, 'admin') }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <h6>{{ 'admin.option.group_new.help_types'|trans({}, 'admin') }}</h6>
+                <ul class="list-unstyled">
+                    <li><strong>select:</strong> {{ 'admin.option.help.type_select'|trans({}, 'admin') }}</li>
+                    <li><strong>radio:</strong> {{ 'admin.option.help.type_radio'|trans({}, 'admin') }}</li>
+                    <li><strong>checkbox:</strong> {{ 'admin.option.help.type_checkbox'|trans({}, 'admin') }}</li>
+                    <li><strong>multiselect:</strong> {{ 'admin.option.help.type_multiselect'|trans({}, 'admin') }}</li>
+                </ul>
+                
+                <hr>
+                
+                <h6>{{ 'admin.option.help.tips'|trans({}, 'admin') }}</h6>
+                <ul class="list-unstyled small">
+                    <li><i class="bi bi-check text-success me-1"></i> {{ 'admin.option.help.tip_code'|trans({}, 'admin') }}</li>
+                    <li><i class="bi bi-check text-success me-1"></i> {{ 'admin.option.help.tip_required'|trans({}, 'admin') }}</li>
+                    <li><i class="bi bi-check text-success me-1"></i> {{ 'admin.option.help.tip_sort'|trans({}, 'admin') }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

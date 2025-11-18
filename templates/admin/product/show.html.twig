@@ -1,0 +1,442 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ product.code }} - {{ 'admin.product.details_page_title'|trans({}, 'admin') }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{ path('admin_product_index') }}">{{ 'admin.navigation.products'|trans({}, 'admin') }}</a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ product.code }}</li>
+                </ol>
+            </nav>
+            <h1 class="h3 mb-1">{{ product.code }}</h1>
+            <p class="text-muted">{{ 'admin.product.details_description'|trans({}, 'admin') }}</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{{ path('admin_product_edit', {'id': product.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i>{{ 'admin.common.edit'|trans({}, 'admin') }}
+            </a>
+            <button type="button" class="btn btn-secondary" onclick="duplicateProduct({{ product.id }})">
+                <i class="fas fa-copy me-2"></i>{{ 'admin.product.duplicate'|trans({}, 'admin') }}
+            </button>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete({{ product.id }})">
+                <i class="fas fa-trash me-2"></i>{{ 'admin.common.delete'|trans({}, 'admin') }}
+            </button>
+        </div>
+    </div>
+
+    <!-- En-tête du produit -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    {% set frenchName = product.translations|filter(t => t.language.code == 'fr')|first %}
+                    {% if frenchName %}
+                        <h2 class="h4 mb-2">{{ frenchName.name }}</h2>
+                    {% endif %}
+                    <p class="text-muted mb-2">
+                        <i class="fas fa-tag me-2"></i>
+                        Catégorie: <strong>{{ product.category.name }}</strong>
+                    </p>
+                    {% if frenchName.shortDescription %}
+                        <p class="text-muted mb-0">{{ frenchName.shortDescription }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex flex-column align-items-end gap-2">
+                        <div class="d-flex gap-2">
+                            {% if product.isActive %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i>{{ 'admin.common.active'|trans({}, 'admin') }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-times-circle me-1"></i>{{ 'admin.common.inactive'|trans({}, 'admin') }}
+                                </span>
+                            {% endif %}
+                            
+                            {% if product.isFeatured %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star me-1"></i>{{ 'admin.product.featured'|trans({}, 'admin') }}
+                                </span>
+                            {% endif %}
+                            
+                            {% if product.isCustomizable %}
+                                <span class="badge bg-info">
+                                    <i class="fas fa-cog me-1"></i>{{ 'admin.product.customizable'|trans({}, 'admin') }}
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if product.basePrice %}
+                            <div class="h4 text-success mb-0">
+                                {{ product.basePrice|number_format(2, ',', ' ') }} €
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Contenu multilingue -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" id="contentTabs" role="tablist">
+                        {% for translation in product.translations %}
+                            {% set language = translation.language %}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link {{ loop.first ? 'active' : '' }}" 
+                                        id="lang-{{ language.code }}-tab" 
+                                        data-bs-toggle="tab" 
+                                        data-bs-target="#lang-{{ language.code }}" 
+                                        type="button" role="tab">
+                                    {{ language.name }}
+                                </button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="contentTabsContent">
+                        {% for translation in product.translations %}
+                            {% set language = translation.language %}
+                            <div class="tab-pane fade {{ loop.first ? 'show active' : '' }}" 
+                                 id="lang-{{ language.code }}" 
+                                 role="tabpanel">
+                                
+                                {% if translation.name %}
+                                    <h4 class="mb-3">{{ translation.name }}</h4>
+                                {% endif %}
+                                
+                                {% if translation.shortDescription %}
+                                    <div class="alert alert-info">
+                                        <strong>{{ 'admin.product.short_description'|trans({}, 'admin') }}:</strong> {{ translation.shortDescription }}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if translation.description %}
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-file-text me-2"></i>{{ 'admin.product.description'|trans({}, 'admin') }}</h5>
+                                        <div class="border rounded p-3 bg-light">
+                                            {{ translation.description|replace({"\n": "<br>"|raw})|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if translation.concept %}
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-lightbulb me-2"></i>{{ 'admin.product.concept_design'|trans({}, 'admin') }}</h5>
+                                        <div class="border rounded p-3 bg-light">
+                                            {{ translation.concept|replace({"\n": "<br>"|raw})|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if translation.materialsDetail %}
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-tools me-2"></i>{{ 'admin.product.materials'|trans({}, 'admin') }}</h5>
+                                        <div class="border rounded p-3 bg-light">
+                                            {{ translation.materialsDetail|replace({"\n": "<br>"|raw})|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if translation.equipmentDetail %}
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-cogs me-2"></i>{{ 'admin.product.equipment'|trans({}, 'admin') }}</h5>
+                                        <div class="border rounded p-3 bg-light">
+                                            {{ translation.equipmentDetail|replace({"\n": "<br>"|raw})|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if translation.performanceDetails %}
+                                    <div class="mb-4">
+                                        <h5><i class="fas fa-chart-line me-2"></i>{{ 'admin.product.performance'|trans({}, 'admin') }}</h5>
+                                        <div class="border rounded p-3 bg-light">
+                                            {{ translation.performanceDetails|replace({"\n": "<br>"|raw})|raw }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                {% if not (translation.name or translation.description or translation.concept or translation.materialsDetail or translation.equipmentDetail or translation.performanceDetails) %}
+                                    <div class="text-center py-4 text-muted">
+                                        <i class="fas fa-file-alt fa-2x mb-2"></i>
+                                        <p>{{ ('admin.product.no_content_for'|trans({}, 'admin'))|replace({'%language%': language.name}) }}</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Informations générales -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>{{ 'admin.product.general_info'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>{{ 'admin.product.code'|trans({}, 'admin') }}</strong></td>
+                            <td><code>{{ product.code }}</code></td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.category'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.category.name }}</td>
+                        </tr>
+                        {% if product.surface %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.surface'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.surface }} m²</td>
+                            </tr>
+                        {% endif %}
+                        {% if product.dimensions %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.dimensions'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.dimensions }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if product.rooms %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.rooms'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.rooms }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if product.height %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.height'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.height }} cm</td>
+                            </tr>
+                        {% endif %}
+                        {% if product.assemblyTime %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.assembly_time'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.assemblyTime }} jours</td>
+                            </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+            <!-- Statuts et garanties -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>{{ 'admin.product.statuses_warranties'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>{{ 'admin.product.status'|trans({}, 'admin') }}</strong></td>
+                            <td>
+                                {% if product.isActive %}
+                                    <span class="badge bg-success">{{ 'admin.common.active'|trans({}, 'admin') }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{{ 'admin.common.inactive'|trans({}, 'admin') }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.featured'|trans({}, 'admin') }}</strong></td>
+                            <td>
+                                {% if product.isFeatured %}
+                                    <span class="badge bg-warning text-dark">{{ 'admin.common.yes'|trans({}, 'admin') }}</span>
+                                {% else %}
+                                    <span class="text-muted">{{ 'admin.common.no'|trans({}, 'admin') }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.customizable'|trans({}, 'admin') }}</strong></td>
+                            <td>
+                                {% if product.isCustomizable %}
+                                    <span class="badge bg-info">Oui</span>
+                                {% else %}
+                                    <span class="text-muted">{{ 'admin.common.no'|trans({}, 'admin') }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if product.energyClass %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.energy_class'|trans({}, 'admin') }}</strong></td>
+                                <td>
+                                    <span class="badge bg-primary">{{ product.energyClass }}</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% if product.warrantyStructure %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.warranty_structure'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.warrantyStructure }} ans</td>
+                            </tr>
+                        {% endif %}
+                        {% if product.warrantyEquipment %}
+                            <tr>
+                                <td><strong>{{ 'admin.product.warranty_equipment'|trans({}, 'admin') }}</strong></td>
+                                <td>{{ product.warrantyEquipment }} ans</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td><strong>{{ 'admin.product.sort_order'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.sortOrder }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+
+
+            <!-- Options disponibles -->
+            {% if product.availableOptions|length > 0 %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>{{ 'admin.product.available_options'|trans({}, 'admin') }}
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-1">
+                            {% for option in product.availableOptions %}
+                                <span class="badge bg-light text-dark border">
+                                    {{ option.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Dates -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-calendar me-2"></i>{{ 'admin.product.dates'|trans({}, 'admin') }}
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm">
+                        <tr>
+                            <td><strong>{{ 'admin.product.created_at'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.createdAt ? product.createdAt|date('d/m/Y H:i') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ 'admin.product.updated_at'|trans({}, 'admin') }}</strong></td>
+                            <td>{{ product.updatedAt ? product.updatedAt|date('d/m/Y H:i') : '' }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal de confirmation de suppression #}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'admin.product.delete_confirmation_title'|trans({}, 'admin') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ ('admin.product.delete_confirmation_message'|trans({}, 'admin'))|replace({'%code%': product.code}) }}</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {{ 'admin.product.delete_warning_text'|trans({}, 'admin') }}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'admin.common.cancel'|trans({}, 'admin') }}</button>
+                <form id="deleteForm" method="post" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                    <button type="submit" class="btn btn-danger">{{ 'admin.product.delete_permanently'|trans({}, 'admin') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+{{parent()}}
+<script>
+function confirmDelete(productId) {
+    const deleteForm = document.getElementById('deleteForm');
+    deleteForm.action = `/admin/products/${productId}`;
+    
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+function duplicateProduct(productId) {
+    if (confirm('{{ 'admin.product.duplicate_confirmation'|trans({}, 'admin') }}')) {
+        fetch(`/admin/products/duplicate/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirection vers la page d'édition du produit dupliqué
+                window.location.href = `/admin/products/${data.productId}/edit`;
+            } else {
+                alert('{{ 'admin.product.duplicate_error'|trans({}, 'admin') }}');
+            }
+        })
+        .catch(error => {
+            console.error('{{ 'admin.product.duplicate_error_console'|trans({}, 'admin') }}', error);
+            alert('{{ 'admin.product.duplicate_error'|trans({}, 'admin') }}');
+        });
+    }
+}
+
+// Impression rapide
+function printProduct() {
+    window.print();
+}
+
+// Export PDF
+function exportPDF() {
+    // Implémentation de l'export PDF
+    alert('Export PDF en cours de développement');
+}
+</script>
+
+<style>
+@media print {
+    .btn, .card-header, .d-flex.justify-content-between, .breadcrumb {
+        display: none !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+    
+    .container-fluid {
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+</style>
+{% endblock %}

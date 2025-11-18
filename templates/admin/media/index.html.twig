@@ -1,0 +1,407 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}
+    {{ 'media.manager_title'|trans }} - {{ 'admin.title'|trans }} - {{ setting('siteName') }} 
+{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="bi bi-images me-2 text-primary"></i>{{ 'media.library_title'|trans }}
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button type="button" class="btn btn-primary" id="uploadMediaBtn">
+            <i class="bi bi-cloud-upload me-2"></i>{{ 'media.upload_button'|trans }}
+        </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-collection me-2"></i>{{ 'media.library_header'|trans }}
+                        </h5>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row g-2">
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="mediaSearch"
+                                       placeholder="{{ 'media.search_placeholder'|trans }}">
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="mediaTypeFilter">
+                                    <option value="">{{ 'media.filter.all_types'|trans }}</option>
+                                    <option value="image">{{ 'media.filter.images'|trans }}</option>
+                                    <option value="video">{{ 'media.filter.videos'|trans }}</option>
+                                    <option value="audio">{{ 'media.filter.audio'|trans }}</option>
+                                    <option value="document">{{ 'media.filter.documents'|trans }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="mediaGrid" class="row g-3">
+                    <!-- Les médias seront chargés ici via JavaScript -->
+                </div>
+
+                <div id="mediaPagination" class="d-flex justify-content-center mt-4">
+                    <!-- Pagination sera générée ici -->
+                </div>
+
+                <div id="mediaEmpty" class="text-center py-5" style="display: none;">
+                    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    <h5 class="text-muted mt-3">{{ 'media.empty.title'|trans }}</h5>
+                    <p class="text-muted">{{ 'media.empty.description'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'upload -->
+<div class="modal fade" id="uploadModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-cloud-upload me-2"></i>{{ 'media.upload_modal.title'|trans }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-zone" id="uploadZone">
+                    <div class="text-center py-5">
+                        <i class="bi bi-cloud-upload text-primary" style="font-size: 3rem;"></i>
+                        <h6 class="mt-3">{{ 'media.upload.drop_here'|trans }}</h6>
+                        <p class="text-muted mb-3">{{ 'media.upload.or'|trans }}</p>
+                        <button type="button" class="btn btn-outline-primary" id="selectFilesBtn">
+                            {{ 'media.upload.select_files'|trans }}
+                        </button>
+                        <input type="file" id="fileInput" multiple accept="image/*,video/*,audio/*,.pdf" style="display: none;">
+                    </div>
+                </div>
+
+                <div id="uploadProgress" style="display: none;">
+                    <h6>{{ 'media.upload.in_progress'|trans }}</h6>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="uploadResults" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'action.close'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de détails média -->
+<div class="modal fade" id="mediaDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'media.details_modal.title'|trans }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="mediaPreview" class="text-center mb-3">
+                            <!-- Preview sera généré ici -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <form id="mediaEditForm">
+                            <input type="hidden" id="mediaId">
+                            <div class="mb-3">
+                                <label for="mediaAlt" class="form-label">{{ 'media.form.alt_label'|trans }}</label>
+                                <input type="text" class="form-control" id="mediaAlt">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{ 'media.form.url_label'|trans }}</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="mediaUrl" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" id="copyUrlBtn">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">{{ 'media.form.filename_label'|trans }}</label>
+                                <input type="text" class="form-control" id="mediaFileName" readonly>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="deleteMediaBtn">
+                    <i class="bi bi-trash me-2"></i>{{ 'action.delete'|trans }}
+                </button>
+                <button type="button" class="btn btn-primary" id="saveMediaBtn">
+                    <i class="bi bi-check-lg me-2"></i>{{ 'action.save'|trans }}
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'action.close'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_javascripts %}
+    {{ parent() }}
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
+
+    <script>
+        class MediaManager {
+            constructor() {
+                this.currentPage = 1;
+                this.searchQuery = '';
+                this.typeFilter = '';
+                this.translations = {{ {
+                    'upload_success': 'media.upload.success'|trans,
+                    'upload_error': 'media.upload.error'|trans,
+                    'update_success': 'media.update.success'|trans,
+                    'update_error': 'media.update.error'|trans,
+                    'delete_confirm': 'media.delete.confirm'|trans,
+                    'delete_success': 'media.delete.success'|trans,
+                    'delete_error': 'media.delete.error'|trans,
+                    'copy_success': 'media.copy_success'|trans,
+                    'previous': 'pagination.previous'|trans,
+                    'next': 'pagination.next'|trans
+                }|json_encode|raw }};
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadMedias();
+            }
+
+            bindEvents() {
+                $('#uploadMediaBtn').on('click', () => $('#uploadModal').modal('show'));
+                $('#selectFilesBtn').on('click', () => $('#fileInput').click());
+                $('#fileInput').on('change', e => this.handleFiles(e.target.files));
+
+                const zone = $('#uploadZone');
+                zone.on('dragover dragenter', e => { e.preventDefault(); zone.addClass('dragover'); });
+                zone.on('dragleave dragend drop', e => { e.preventDefault(); zone.removeClass('dragover'); });
+                zone.on('drop', e => this.handleFiles(e.originalEvent.dataTransfer.files));
+
+                $('#mediaSearch').on('input', e => {
+                    this.searchQuery = e.target.value;
+                    this.currentPage = 1;
+                    this.loadMedias();
+                });
+
+                $('#mediaTypeFilter').on('change', e => {
+                    this.typeFilter = e.target.value;
+                    this.currentPage = 1;
+                    this.loadMedias();
+                });
+
+                $('#saveMediaBtn').on('click', () => this.saveMediaDetails());
+                $('#deleteMediaBtn').on('click', () => this.deleteMedia());
+                $('#copyUrlBtn').on('click', () => {
+                    navigator.clipboard.writeText($('#mediaUrl').val());
+                    this.showToast(this.translations.copy_success, 'success');
+                });
+            }
+
+            async handleFiles(files) {
+                if (!files.length) return;
+
+                $('#uploadProgress').show();
+                $('#uploadResults').empty();
+                const progressBar = $('#uploadProgress .progress-bar');
+                let completed = 0;
+
+                for (let file of files) {
+                    try {
+                        const result = await this.uploadFile(file);
+                        const msg = result.success
+                            ? `<div class="alert alert-success"><strong>${file.name}</strong> — ${this.translations.upload_success}</div>`
+                            : `<div class="alert alert-danger"><strong>${file.name}</strong>: ${result.message}</div>`;
+                        $('#uploadResults').append(msg);
+                    } catch {
+                        $('#uploadResults').append(`<div class="alert alert-danger"><strong>${file.name}</strong>: ${this.translations.upload_error}</div>`);
+                    }
+                    completed++;
+                    progressBar.css('width', (completed / files.length * 100) + '%');
+                }
+
+                setTimeout(() => {
+                    $('#uploadProgress').hide();
+                    this.loadMedias();
+                }, 1000);
+            }
+
+            uploadFile(file) {
+                return new Promise((resolve, reject) => {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    $.ajax({
+                        url: '{{ path("admin_media_upload") }}',
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: resolve,
+                        error: reject
+                    });
+                });
+            }
+
+            async loadMedias() {
+                try {
+                    const response = await $.get('{{ path("admin_media_list") }}', {
+                        page: this.currentPage,
+                        search: this.searchQuery,
+                        type: this.typeFilter
+                    });
+                    this.renderMedias(response.medias);
+                    this.renderPagination(response.pagination);
+                } catch (error) {
+                    console.error('Erreur chargement médias:', error);
+                }
+            }
+
+            renderMedias(medias) {
+                const grid = $('#mediaGrid').empty();
+                if (!medias.length) {
+                    $('#mediaEmpty').show();
+                    return;
+                }
+                $('#mediaEmpty').hide();
+                medias.forEach(media => grid.append(this.createMediaItem(media)));
+            }
+
+            createMediaItem(media) {
+                const isImage = media.isImage;
+                const preview = isImage
+                    ? `<img src="${media.url}" alt="${media.alt}">`
+                    : `<div class="d-flex align-items-center justify-content-center h-100"><i class="bi bi-file-earmark text-muted" style="font-size: 3rem;"></i></div>`;
+
+                return $(`
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                        <div class="media-item" data-media-id="${media.id}">
+                            ${preview}
+                            <div class="media-overlay"><i class="bi bi-eye" style="font-size: 1.5rem;"></i></div>
+                            <div class="media-info"><div class="text-truncate">${media.alt || media.fileName}</div></div>
+                        </div>
+                    </div>
+                `).on('click', () => this.showMediaDetails(media));
+            }
+
+            showMediaDetails(media) {
+                $('#mediaId').val(media.id);
+                $('#mediaAlt').val(media.alt || '');
+                $('#mediaUrl').val(window.location.origin + media.url);
+                $('#mediaFileName').val(media.fileName);
+
+                const preview = media.isImage
+                    ? `<img src="${media.url}" class="img-fluid" alt="${media.alt}">`
+                    : `<div class="text-center py-4"><i class="bi bi-file-earmark" style="font-size: 4rem;"></i><p class="mt-2">${media.fileName}</p></div>`;
+
+                $('#mediaPreview').html(preview);
+                $('#mediaDetailModal').modal('show');
+            }
+
+            async saveMediaDetails() {
+                const mediaId = $('#mediaId').val();
+                const alt = $('#mediaAlt').val();
+
+                try {
+                    await $.ajax({
+                        url: `{{ path("admin_media_update", {id: "MEDIA_ID"}) }}`.replace('MEDIA_ID', mediaId),
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ alt })
+                    });
+                    this.showToast(this.translations.update_success, 'success');
+                    $('#mediaDetailModal').modal('hide');
+                    this.loadMedias();
+                } catch {
+                    this.showToast(this.translations.update_error, 'error');
+                }
+            }
+
+            async deleteMedia() {
+                if (!confirm(this.translations.delete_confirm)) return;
+
+                const mediaId = $('#mediaId').val();
+                try {
+                    await $.ajax({
+                        url: `{{ path("admin_media_delete", {id: "MEDIA_ID"}) }}`.replace('MEDIA_ID', mediaId),
+                        method: 'DELETE'
+                    });
+                    this.showToast(this.translations.delete_success, 'success');
+                    $('#mediaDetailModal').modal('hide');
+                    this.loadMedias();
+                } catch {
+                    this.showToast(this.translations.delete_error, 'error');
+                }
+            }
+
+            renderPagination(pagination) {
+                const container = $('#mediaPagination').empty();
+                if (pagination.total <= 1) return;
+
+                const nav = $('<nav><ul class="pagination"></ul></nav>');
+                const ul = nav.find('ul');
+
+                if (pagination.current > 1) {
+                    ul.append(`<li class="page-item"><a class="page-link" href="#" data-page="${pagination.current - 1}">${this.translations.previous}</a></li>`);
+                }
+
+                for (let i = Math.max(1, pagination.current - 2); i <= Math.min(pagination.total, pagination.current + 2); i++) {
+                    ul.append(`<li class="page-item ${i === pagination.current ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`);
+                }
+
+                if (pagination.current < pagination.total) {
+                    ul.append(`<li class="page-item"><a class="page-link" href="#" data-page="${pagination.current + 1}">${this.translations.next}</a></li>`);
+                }
+
+                ul.find('a[data-page]').on('click', e => {
+                    e.preventDefault();
+                    this.currentPage = parseInt($(e.target).data('page'));
+                    this.loadMedias();
+                });
+
+                container.append(nav);
+            }
+
+            showToast(message, type = 'info') {
+                const alertClass = type === 'success' ? 'alert-success' : type === 'error' ? 'alert-danger' : 'alert-info';
+                const toast = $(`
+                    <div class="alert ${alertClass} alert-dismissible fade show position-fixed" 
+                         style="top: 20px; right: 20px; z-index: 9999;">
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `);
+                $('body').append(toast);
+                setTimeout(() => toast.remove(), 5000);
+            }
+        }
+
+        $(document).ready(() => {
+            window.mediaManager = new MediaManager();
+        });
+    </script>
+{% endblock %}

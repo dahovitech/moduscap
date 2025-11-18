@@ -1,0 +1,593 @@
+# Traductions pour l'interface admin MODUSCAP
+
+# Navigation
+admin.navigation.dashboard: "Tableau de bord"
+admin.navigation.products: "Produits"
+admin.navigation.categories: "Catégories"
+admin.navigation.options: "Options"
+admin.navigation.medias: "Médias"
+admin.navigation.settings: "Paramètres"
+admin.navigation.users: "Utilisateurs"
+admin.navigation.translations: "Traductions"
+
+# Messages généraux
+admin.common.create: "Créer"
+admin.common.edit: "Modifier"
+admin.common.save: "Enregistrer"
+admin.common.cancel: "Annuler"
+admin.common.delete: "Supprimer"
+admin.common.duplicate: "Dupliquer"
+admin.common.view: "Voir"
+admin.common.search: "Rechercher"
+admin.common.filter: "Filtrer"
+admin.common.reset: "Réinitialiser"
+admin.common.yes: "Oui"
+admin.common.no: "Non"
+admin.common.active: "Actif"
+admin.common.inactive: "Inactif"
+admin.common.featured: "Mis en avant"
+admin.common.status: "Statut"
+admin.common.actions: "Actions"
+admin.common.back: "Retour"
+admin.common.next: "Suivant"
+admin.common.previous: "Précédent"
+admin.common.upload: "Télécharger"
+admin.common.preview: "Aperçu"
+admin.common.loading: "Chargement..."
+admin.common.success: "Succès"
+admin.common.error: "Erreur"
+admin.common.warning: "Attention"
+admin.common.info: "Information"
+admin.common.profile: "Profil"
+admin.common.logout: "Déconnexion"
+
+# Clés pour le titre admin
+admin.title: "Administration MODUSCAP"
+
+# Clés pour les actions communes
+common.actions.view_site: "Voir le site"
+action.close: "Fermer"
+common.item: "élément"
+common.confirm.delete: "Êtes-vous sûr de vouloir supprimer cet "
+
+# Clés pour les langues
+language.change_interface: "Changer la langue de l'interface"
+language.default.title: "Langue par défaut"
+
+# Clé pour le thème
+theme.toggle: "Basculer le thème"
+
+# Messages de validation
+admin.validation.required: "Ce champ est obligatoire"
+admin.validation.invalid_email: "Adresse email invalide"
+admin.validation.min_length: "Longueur minimum : %{min} caractères"
+admin.validation.max_length: "Longueur maximum : %{max} caractères"
+admin.validation.invalid_number: "Veuillez saisir un nombre valide"
+admin.validation.invalid_date: "Date invalide"
+
+# Messages de confirmation
+admin.confirmation.delete_title: "Confirmer la suppression"
+admin.confirmation.delete_message: "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible."
+admin.confirmation.duplicate_title: "Confirmer la duplication"
+admin.confirmation.duplicate_message: "Êtes-vous sûr de vouloir dupliquer cet élément ?"
+admin.confirmation.save_title: "Confirmer l'enregistrement"
+admin.confirmation.save_message: "Voulez-vous enregistrer les modifications ?"
+
+# Messages de succès
+admin.success.created: "Élément créé avec succès"
+admin.success.updated: "Élément mis à jour avec succès"
+admin.success.deleted: "Élément supprimé avec succès"
+admin.success.duplicated: "Élément dupliqué avec succès"
+admin.success.saved: "Modifications enregistrées avec succès"
+
+# Messages d'erreur
+admin.error.creation_failed: "Erreur lors de la création"
+admin.error.update_failed: "Erreur lors de la mise à jour"
+admin.error.deletion_failed: "Erreur lors de la suppression"
+admin.error.duplicate_failed: "Erreur lors de la duplication"
+admin.error.generic_error: "Une erreur s'est produite"
+
+# Pagination
+admin.pagination.showing: "Affichage de %{start} à %{end} sur %{total} éléments"
+admin.pagination.per_page: "Éléments par page"
+admin.pagination.first: "Premier"
+admin.pagination.last: "Dernier"
+admin.pagination.previous: "Précédent"
+admin.pagination.next: "Suivant"
+
+# Produits
+admin.product.title: "Gestion des produits"
+admin.product.create_title: "Créer un nouveau produit"
+admin.product.edit_title: "Modifier le produit"
+admin.product.view_title: "Détails du produit"
+admin.product.list_title: "Liste des produits"
+
+# Champs produit
+admin.product.code: "Code produit"
+admin.product.name: "Nom"
+admin.product.description: "Description"
+admin.product.short_description: "Description courte"
+admin.product.concept: "Concept"
+admin.product.base_price: "Prix de base"
+admin.product.surface: "Surface"
+admin.product.dimensions: "Dimensions"
+admin.product.rooms: "Nombre de pièces"
+admin.product.height: "Hauteur"
+admin.product.materials: "Matériaux"
+admin.product.equipment: "Équipement"
+admin.product.specifications: "Spécifications"
+admin.product.advantages: "Avantages"
+admin.product.technical_specs: "Spécifications techniques"
+admin.product.assembly_time: "Temps de montage"
+admin.product.energy_class: "Classe énergétique"
+admin.product.warranty_structure: "Garantie structure"
+admin.product.warranty_equipment: "Garantie équipement"
+admin.product.category: "Catégorie"
+admin.product.is_active: "Actif"
+admin.product.is_featured: "Mis en avant"
+admin.product.is_customizable: "Personnalisable"
+admin.product.sort_order: "Ordre de tri"
+admin.product.status: "Statut"
+
+# Onglets produit
+admin.product.general_info: "Informations générales"
+admin.product.translations: "Traductions"
+admin.product.media: "Médias"
+admin.product.options: "Options"
+admin.product.seo: "SEO"
+
+# Traductions produit
+admin.product.translations.select_language: "Sélectionner une langue"
+admin.product.translations.no_translations: "Aucune traduction disponible"
+admin.product.translations.add_translation: "Ajouter une traduction"
+admin.product.translations.edit_translation: "Modifier la traduction"
+
+# Médias produit
+admin.product.media.main_image: "Image principale"
+admin.product.media.gallery: "Galerie"
+admin.product.media.technical_images: "Images techniques"
+admin.product.media.upload_image: "Télécharger une image"
+admin.product.media.drag_drop: "Glissez-déposez vos fichiers ici"
+admin.product.media.no_media: "Aucun média sélectionné"
+admin.product.media.remove_media: "Supprimer le média"
+admin.product.media.set_main: "Définir comme image principale"
+
+# Catégories
+admin.category.title: "Gestion des catégories"
+admin.category.create_title: "Créer une nouvelle catégorie"
+admin.category.edit_title: "Modifier la catégorie"
+admin.category.list_title: "Liste des catégories"
+
+# Champs catégorie
+admin.category.code: "Code catégorie"
+admin.category.name: "Nom"
+admin.category.description: "Description"
+admin.category.short_description: "Description courte"
+admin.category.base_price: "Prix de base"
+admin.category.is_active: "Active"
+admin.category.is_featured: "Mise en avant"
+admin.category.sort_order: "Ordre de tri"
+admin.category.parent_category: "Catégorie parente"
+admin.category.translations_label: "Traductions"
+
+# Onglets catégorie
+admin.category.general_info: "Informations générales"
+
+# Sections détaillées produit
+admin.product.sections.general_info: "Informations générales"
+admin.product.sections.multilingual_content: "Contenu multilingue"
+admin.product.sections.product_names: "Noms des produits"
+admin.product.sections.product_descriptions: "Descriptions des produits"
+admin.product.sections.concept: "Concept"
+admin.product.sections.materials: "Matériaux"
+admin.product.sections.equipment: "Équipement"
+admin.product.sections.performance: "Performances"
+admin.product.sections.advanced_statuses: "Statuts avancés"
+admin.product.sections.is_active: "Produit actif"
+admin.product.sections.is_customizable: "Personnalisable"
+admin.product.sections.can_be_built_on_site: "Montage sur site"
+admin.product.sections.warranty: "Garantie et performance"
+admin.product.sections.structure_warranty: "Garantie structure (années)"
+admin.product.sections.equipment_warranty: "Garantie équipement (années)"
+admin.product.sections.thermal_performance: "Performance thermique"
+admin.product.sections.available_options: "Options disponibles"
+admin.product.sections.display_order: "Ordre d'affichage"
+admin.product.sections.sort_order: "Ordre de tri"
+admin.product.sections.information_table: "Tableau d'informations"
+admin.product.sections.quick_actions: "Actions rapides"
+admin.product.sections.performance_indicators: "Indicateurs de performance"
+admin.product.sections.construction_time: "Temps de construction"
+admin.product.sections.surface_area: "Surface au sol"
+
+# Messages JavaScript produits
+admin.product.js_messages.unsaved_changes: "Vous avez des modifications non enregistrées"
+admin.product.js_messages.confirm_leave: "Êtes-vous sûr de vouloir quitter cette page ? Toutes les modifications non enregistrées seront perdues."
+admin.product.js_messages.draft_saving: "Sauvegarde du brouillon en cours..."
+admin.product.js_messages.draft_saved: "Brouillon sauvegardé"
+admin.product.js_messages.duplicate_confirm: "Êtes-vous sûr de vouloir dupliquer ce produit ?"
+admin.product.js_messages.error_duplicate: "Erreur lors de la duplication du produit"
+admin.product.js_messages.success_duplicate: "Produit dupliqué avec succès"
+admin.product.js_messages.confirm_deletion: "Confirmer la suppression du produit"
+admin.product.js_messages.confirm_delete: "Êtes-vous sûr de vouloir supprimer ce produit ? Cette action est irréversible."
+admin.product.js_messages.order_updated: "Ordre mis à jour avec succès"
+admin.product.js_messages.error_update: "Erreur lors de la mise à jour"
+admin.product.js_messages.performance_saved: "Performances sauvegardées avec succès"
+admin.product.js_messages.error_performance: "Erreur lors de la sauvegarde des performances"
+
+# Gestion des images de produits
+admin.product.images: "Images"
+admin.product.main_image: "Image principale"
+admin.product.gallery_images: "Images de galerie"
+admin.product.technical_images: "Images techniques"
+admin.product.add_gallery_image: "Ajouter une image de galerie"
+admin.product.add_technical_image: "Ajouter une image technique"
+
+
+# Catégories - liste et actions
+admin.category.list.title: "Gestion des catégories"
+admin.category.list.search_placeholder: "Rechercher par nom, code ou description..."
+admin.category.list.total_categories: "Total des catégories"
+admin.category.list.active_categories: "Catégories actives"
+admin.category.list.featured_categories: "Catégories mises en avant"
+admin.category.list.no_categories: "Aucune catégorie trouvée"
+admin.category.list.no_search_results: "Aucun résultat pour votre recherche"
+admin.category.list.categories_found: "%{count} catégorie(s) trouvée(s)"
+admin.category.list.created_on: "Créée le %{date}"
+admin.category.list.updated_on: "Modifiée le %{date}"
+admin.category.list.show_all: "Tout afficher"
+admin.category.list.hide_all: "Tout masquer"
+admin.category.list.active_status: "Actif"
+admin.category.list.inactive_status: "Inactif"
+admin.category.list.order_number: "N° %{number}"
+admin.category.list.created_date: "Créée le %{date}"
+
+# Actions catégories
+admin.category.actions.edit_category: "Modifier la catégorie"
+admin.category.actions.duplicate_category: "Dupliquer la catégorie"
+admin.category.actions.delete_category: "Supprimer la catégorie"
+admin.category.actions.view_details: "Voir les détails"
+admin.category.actions.quick_edit: "Modification rapide"
+admin.category.actions.set_order: "Définir l'ordre"
+
+# Modal de suppression catégorie
+admin.category.delete_modal.title: "Supprimer la catégorie"
+admin.category.delete_modal.message: "Êtes-vous sûr de vouloir supprimer la catégorie '%{name}' ? Cette action est irréversible."
+admin.category.delete_modal.confirm_delete: "Supprimer"
+admin.category.delete_modal.cancel: "Annuler"
+admin.category.delete_modal.error_delete: "Erreur lors de la suppression de la catégorie"
+
+# Messages JavaScript catégories
+admin.category.js_messages.delete_error: "Erreur lors de la suppression de la catégorie"
+admin.category.js_messages.duplicate_confirm: "Êtes-vous sûr de vouloir dupliquer cette catégorie ?"
+admin.category.js_messages.success_duplicate: "Catégorie dupliquée avec succès"
+admin.category.js_messages.error_duplicate: "Erreur lors de la duplication de la catégorie"
+admin.category.js_messages.reorder_error: "Erreur lors de la réorganisation des catégories"
+admin.category.js_messages.order_updated: "Ordre mis à jour avec succès"
+
+# Filtres
+admin.filter.title: "Filtres"
+admin.filter.search_placeholder: "Rechercher par nom, code..."
+admin.filter.category_filter: "Filtrer par catégorie"
+admin.filter.status_filter: "Filtrer par statut"
+admin.filter.active_only: "Actifs uniquement"
+admin.filter.inactive_only: "Inactifs uniquement"
+admin.filter.featured_only: "Mis en avant uniquement"
+admin.filter.all_categories: "Toutes les catégories"
+admin.filter.all_status: "Tous les statuts"
+admin.filter.clear_filters: "Effacer les filtres"
+
+# Formulaires
+admin.form.submit: "Soumettre"
+admin.form.reset: "Réinitialiser"
+admin.form.required_field: "Champ requis"
+admin.form.optional_field: "Champ optionnel"
+admin.form.character_count: "%{count} caractères"
+admin.form.minimum_characters: "Minimum %{min} caractères"
+admin.form.maximum_characters: "Maximum %{max} caractères"
+admin.form.invalid_format: "Format invalide"
+
+# Interface utilisateur
+admin.ui.tabs: "Onglets"
+admin.ui.accordion: "Accordéon"
+admin.ui.modal: "Fenêtre modale"
+admin.ui.dropdown: "Menu déroulant"
+admin.ui.tooltip: "Info-bulle"
+admin.ui.breadcrumb: "Fil d'Ariane"
+admin.ui.notification: "Notification"
+admin.ui.progress_bar: "Barre de progression"
+admin.ui.spinner: "Chargement"
+admin.ui.avatar: "Avatar"
+admin.ui.badge: "Badge"
+admin.ui.chip: "Chip"
+admin.ui.card: "Carte"
+admin.ui.button: "Bouton"
+admin.ui.input: "Champ de saisie"
+admin.ui.select: "Liste déroulante"
+admin.ui.textarea: "Zone de texte"
+admin.ui.checkbox: "Case à cocher"
+admin.ui.radio_button: "Bouton radio"
+admin.ui.switch: "Interrupteur"
+admin.ui.slider: "Curseur"
+admin.ui.date_picker: "Sélecteur de date"
+admin.ui.time_picker: "Sélecteur d'heure"
+
+# États vides
+admin.empty_states.no_products: "Aucun produit disponible"
+admin.empty_states.no_categories: "Aucune catégorie disponible"
+admin.empty_states.no_users: "Aucun utilisateur disponible"
+admin.empty_states.no_media: "Aucun média disponible"
+admin.empty_states.create_first: "Créer votre premier %{item}"
+admin.empty_states.add_some: "Ajoutez du contenu pour commencer"
+admin.empty_states.nothing_here: "Rien à afficher ici"
+
+# Messages de statut
+admin.status.loading: "Chargement..."
+admin.status.processing: "Traitement en cours..."
+admin.status.saving: "Sauvegarde en cours..."
+admin.status.updating: "Mise à jour en cours..."
+admin.status.deleting: "Suppression en cours..."
+admin.status.completed: "Terminé"
+admin.status.failed: "Échec"
+admin.status.pending: "En attente"
+
+# Messages de confirmation détaillés
+admin.confirmation.detailed.delete_product_title: "Supprimer le produit"
+admin.confirmation.detailed.delete_product_message: "Êtes-vous sûr de vouloir supprimer le produit '%{name}' ? Cette action supprimera également tous les médias et traductions associés. Cette action est irréversible."
+admin.confirmation.detailed.delete_category_title: "Supprimer la catégorie"
+admin.confirmation.detailed.delete_category_message: "Êtes-vous sûr de vouloir supprimer la catégorie '%{name}' ? Cette action est irréversible."
+admin.confirmation.detailed.leave_page_title: "Quitter la page"
+admin.confirmation.detailed.leave_page_message: "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter cette page ?"
+
+# === OPTIONS ===
+# Actions
+admin.option.actions.new_group: "Nouveau groupe"
+admin.option.actions.new_option: "Nouvelle option"
+admin.option.actions.add_option: "Ajouter une option"
+admin.option.actions.add_first_option: "Ajouter la première option"
+admin.option.actions.edit_group: "Modifier le groupe"
+admin.option.actions.edit_option: "Modifier l'option"
+admin.option.actions.delete_group: "Supprimer le groupe"
+admin.option.actions.delete_option: "Supprimer l'option"
+admin.option.actions.create_first: "Créer votre premier groupe d'options"
+admin.option.actions.save: "Enregistrer"
+admin.option.actions.update: "Mettre à jour"
+admin.option.actions.cancel: "Annuler"
+
+# État vide
+admin.option.empty_state.title: "Aucun groupe d'options"
+admin.option.empty_state.description: "Commencez par créer votre premier groupe d'options pour vos produits."
+admin.option.empty_options: "Aucune option dans ce groupe"
+
+# Groupes d'options
+admin.option.group_new.title: "Nouveau groupe d'options"
+admin.option.group_edit.title: "Modifier le groupe d'options"
+admin.option.group_info.title: "Informations du groupe"
+admin.option.group.code: "Code"
+admin.option.group.type: "Type"
+admin.option.group.required: "Obligatoire"
+admin.option.group.active: "Actif"
+admin.option.group.options_count: "Nombre d'options"
+admin.option.group.created: "Créé le"
+admin.option.group.updated: "Mis à jour le"
+admin.option.group.name: "Nom"
+admin.option.group.description: "Description"
+admin.option.group.name_placeholder: "Nom du groupe d'options"
+admin.option.group.description_placeholder: "Description du groupe d'options"
+admin.option.group.options_in_group: "Options du groupe"
+admin.option.group_translations: "Traductions du groupe"
+
+# Options individuelles
+admin.option.option_new.title: "Nouvelle option"
+admin.option.option_edit.title: "Modifier l'option"
+admin.option.option_info.title: "Informations de l'option"
+admin.option.option.code: "Code"
+admin.option.option.name: "Nom"
+admin.option.option.description: "Description"
+admin.option.option.price: "Prix"
+admin.option.option.active: "Actif"
+admin.option.option.sort_order: "Ordre de tri"
+admin.option.option.created: "Créée le"
+admin.option.option.updated: "Mise à jour le"
+admin.option.option.products_count: "Produits associés"
+admin.option.option.used_in_products: "Utilisée dans les produits"
+admin.option.option.group_options: "Options du même groupe"
+admin.option.option.no_price: "Aucun prix"
+admin.option.option.name_placeholder: "Nom de l'option"
+admin.option.option.description_placeholder: "Description de l'option"
+
+# Propriétés d'options
+admin.option.required: "Obligatoire"
+admin.option.inactive: "Inactif"
+admin.option.active: "Actif"
+admin.option.yes: "Oui"
+admin.option.no: "Non"
+
+# Types d'input
+admin.option.input_types.select: "Liste déroulante"
+admin.option.input_types.radio: "Boutons radio"
+admin.option.input_types.checkbox: "Cases à cocher"
+admin.option.input_types.multiselect: "Sélection multiple"
+
+# Groupes
+admin.option.groups.new: "Nouveau groupe"
+admin.option.groups.edit: "Modifier le groupe"
+admin.option.groups.delete: "Supprimer le groupe"
+admin.option.groups.list: "Liste des groupes"
+
+# Tableau
+admin.option.table.code: "Code"
+admin.option.table.name: "Nom"
+admin.option.table.price: "Prix"
+admin.option.table.active: "Actif"
+admin.option.table.actions: "Actions"
+admin.option.table.type: "Type"
+admin.option.table.required: "Obligatoire"
+
+# Modales de suppression
+admin.option.delete_group.title: "Supprimer le groupe d'options"
+admin.option.delete_group.message: "Êtes-vous sûr de vouloir supprimer le groupe d'options '%{name}' ? Cette action supprimera également toutes les options associées. Cette action est irréversible."
+admin.option.delete_option.title: "Supprimer l'option"
+admin.option.delete_option.message: "Êtes-vous sûr de vouloir supprimer l'option '%{name}' ? Cette action est irréversible."
+
+# Messages d'aide
+admin.option.help.title: "Aide"
+admin.option.help.types: "Types d'input"
+admin.option.help.tips: "Conseils"
+admin.option.help.tip_code: "Le code doit être unique et ne contenir que des lettres, chiffres et tirets."
+admin.option.help.tip_required: "Cochez cette case si ce groupe d'options doit être obligatoirement sélectionné."
+admin.option.help.tip_sort: "L'ordre de tri détermine l'ordre d'affichage des groupes et options."
+admin.option.help.tip_price: "Le prix peut être positif (surcharge) ou négatif (remise). Laissez à 0.00 pour aucun impact sur le prix."
+admin.option.help.tip_code_option: "Le code de l'option doit être unique dans le groupe."
+admin.option.help.tip_translations: "Traduisez le nom et la description dans toutes les langues actives."
+
+# Types d'input - Aide
+admin.option.group_new.help_types: "Types d'input disponibles"
+admin.option.help.type_select: "Liste déroulante à choix unique"
+admin.option.help.type_radio: "Boutons radio (choix unique)"
+admin.option.help.type_checkbox: "Cases à cocher (choix multiple)"
+admin.option.help.type_multiselect: "Liste déroulante à choix multiple"
+
+# Sélection de langue et traductions
+admin.option.translations: "Traductions"
+admin.option.no_active_languages: "Aucune langue active trouvée. Activez au moins une langue pour créer des traductions."
+admin.option.no_translations: "Aucune traduction trouvée."
+admin.option.option_new.help_price: "Configuration du prix"
+admin.option.option_new.existing_options: "Options existantes dans ce groupe"
+admin.option.option_new.no_existing_options: "Aucune option dans ce groupe pour le moment"
+admin.option.option_edit.group: "Groupe"
+
+# Messages d'erreur pour les contrôleurs
+admin.errors:
+  # Produits
+  product:
+    not_found: "Produit non trouvé"
+    options_invalid: "Certaines options sélectionnées ne sont pas valides."
+    created_successfully: "Produit créé avec succès !"
+    updated_successfully: "Produit modifié avec succès !"
+    deleted_successfully: "Produit supprimé avec succès !"
+    duplicated_successfully: "Produit dupliqué avec succès !"
+    data_invalid: "Données invalides"
+    field_invalid: "Champ non valide"
+    image_added_successfully: "Image ajoutée avec succès"
+    image_deleted_successfully: "Image supprimée avec succès"
+    image_updated_successfully: "Image mise à jour avec succès"
+    action_invalid: "Action invalide ou erreur"
+    csrf_token_invalid: "Token de sécurité invalide !"
+    media_types:
+      main_image: "Image principale"
+      gallery: "Galerie"
+      technical: "Technique"
+      lifestyle: "Lifestyle"
+  
+  # Commandes
+  order:
+    not_found: "Commande non trouvée"
+    cannot_be_approved: "Cette commande ne peut pas être approuvée."
+    approved_successfully: "Commande approuvée avec succès."
+    cannot_be_rejected: "Cette commande ne peut pas être rejetée."
+    rejection_reason_required: "Un motif de refus est requis."
+    rejected_successfully: "Commande rejetée avec succès."
+    no_payment_proof: "Aucun justificatif de paiement fourni pour cette commande."
+    marked_as_paid: "Commande marquée comme payée."
+    reminder_cannot_be_sent: "Un rappel de paiement ne peut pas être envoyé pour cette commande."
+    reminder_sent_successfully: "Rappel de paiement envoyé avec succès à %email%"
+    reminder_send_error: "Erreur lors de l'envoi du rappel: %error%"
+    no_order_selected: "Aucune commande sélectionnée."
+    bulk_rejected_reason: "Rejet groupé par l'administrateur"
+    processing_error: "Erreur pour la commande %number%: %error%"
+    orders_processed_successfully: "%count% commandes traitées avec succès."
+    invalid_status: "Statut invalide"
+    status_updated_successfully: "Statut mis à jour avec succès"
+    no_payment_proof_file: "Aucun justificatif de paiement pour cette commande"
+    payment_proof_not_found: "Fichier de justificatif non trouvé"
+    unsupported_export_format: "Format d'export non supporté."
+    csv_headers: "Numéro de commande,Client,Email,Téléphone,Statut,Total,Date de création"
+  
+  # Utilisateurs
+  user:
+    created_success: "Utilisateur créé avec succès"
+    updated_success: "Utilisateur modifié avec succès"
+    deleted_success: "Utilisateur supprimé avec succès"
+    cannot_delete_self: "Vous ne pouvez pas supprimer votre propre compte"
+    toggled_success: "Utilisateur %status% avec succès"
+    profile_updated_success: "Profil modifié avec succès"
+    invalid_csrf_token: "Token de sécurité invalide"
+    status:
+      activated: "activé"
+      deactivated: "désactivé"
+
+  # Démonstration d'éditeur
+  editor_demo:
+    article_saved_success: "Article \"%title%\" enregistré avec succès ! Contenu: %count% caractères."
+    document_saved_success: "Document \"%title%\" enregistré avec succès !"
+    content_auto_saved: "Contenu sauvegardé automatiquement"
+    save_error: "Erreur lors de la sauvegarde"
+
+  # Commutateur de langue
+  language_switch:
+    invalid_or_inactive: "Langue %locale% invalide ou inactive"
+    error_switching: "Erreur lors du changement de langue: %error%"
+
+  # Médias
+  media:
+    upload:
+      no_file: "Aucun fichier sélectionné"
+      invalid_file: "Fichier invalide à la position %index%"
+      file_error: "Erreur avec le fichier %file%: %message%"
+      exception: "Exception pour le fichier %file%: %error%"
+      success_with_errors: "%count% fichiers téléchargés avec succès (%errors% erreurs)"
+      no_success: "Aucun fichier téléchargé avec succès"
+      forbidden_type: "Type de fichier non autorisé"
+      too_large: "Fichier trop volumineux (taille max: 10MB)"
+      file_exception: "Erreur lors du téléchargement: %error%"
+    delete:
+      success: "Média supprimé avec succès"
+      error: "Erreur lors de la suppression du média"
+    update:
+      error: "Erreur lors de la mise à jour du média"
+
+  # Options
+  option:
+    group:
+      created_success: "Groupe d'options créé avec succès !"
+      updated_success: "Groupe d'options modifié avec succès !"
+      deleted_success: "Groupe d'options supprimé avec succès !"
+      cannot_delete_with_options: "Impossible de supprimer ce groupe d'options car il contient encore des options."
+      not_found: "Groupe d'options non trouvé."
+    option:
+      created_success: "Option créée avec succès !"
+      updated_success: "Option modifiée avec succès !"
+      deleted_success: "Option supprimée avec succès !"
+      cannot_delete_in_use: "Impossible de supprimer cette option car elle est utilisée par des produits."
+      not_found: "Option non trouvée"
+    invalid_data: "Données invalides"
+    invalid_field: "Champ non valide"
+
+  # Catégories
+  category:
+    created_success: "Catégorie créée avec succès !"
+    updated_success: "Catégorie modifiée avec succès !"
+    deleted_success: "Catégorie supprimée avec succès !"
+    duplicated_success: "Catégorie dupliquée avec succès !"
+    not_found: "Catégorie non trouvée"
+    invalid_data: "Données invalides"
+    invalid_field: "Champ non valide"
+
+  # Langues
+  language:
+    created_success: "Langue créée avec succès"
+    updated_success: "Langue modifiée avec succès"
+    deleted_success: "Langue supprimée avec succès"
+    cannot_delete_default: "Impossible de supprimer la langue par défaut"
+    cannot_deactivate_default: "Impossible de désactiver la langue par défaut"
+    cannot_set_inactive_as_default: "Impossible de définir une langue inactive comme par défaut"
+    activated_success: "Langue activée avec succès"
+    deactivated_success: "Langue désactivée avec succès"
+    set_as_default_success: "Langue définie comme par défaut avec succès"
+
+  # Système
+  system:
+    payment_info_unavailable: "Informations de paiement non disponibles"
+    csrf_token_invalid: "Token de sécurité invalide !"
+    reminder_sent: "Rappel envoyé avec succès"
+    reminder_send_failed: "Erreur lors de l'envoi du rappel"

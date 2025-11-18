@@ -1,0 +1,192 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ 'admin.navigation.options'|trans({}, 'admin') }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">{{ 'admin.navigation.options'|trans({}, 'admin') }}</h1>
+    <a href="{{ path('admin_option_group_new') }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-2"></i>{{ 'admin.option.actions.new_group'|trans({}, 'admin') }}
+    </a>
+</div>
+
+{% if optionGroups is empty %}
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-inboxes text-muted" style="font-size: 3rem;"></i>
+            <h4 class="mt-3 text-muted">{{ 'admin.option.empty_state.title'|trans({}, 'admin') }}</h4>
+            <p class="text-muted">{{ 'admin.option.empty_state.description'|trans({}, 'admin') }}</p>
+            <a href="{{ path('admin_option_group_new') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>{{ 'admin.option.actions.create_first'|trans({}, 'admin') }}
+            </a>
+        </div>
+    </div>
+{% else %}
+    <div class="row">
+        {% for group in optionGroups %}
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">{{ group.name(app.request.locale) ?: group.code }}</h5>
+                            <small class="text-muted">
+                                <i class="bi bi-diagram-3 me-1"></i>
+                                {{ group.inputType|title }}
+                                {% if group.isRequired %}
+                                    <span class="badge bg-warning ms-2">{{ 'admin.option.required'|trans({}, 'admin') }}</span>
+                                {% endif %}
+                                {% if not group.isActive %}
+                                    <span class="badge bg-secondary ms-2">{{ 'admin.option.inactive'|trans({}, 'admin') }}</span>
+                                {% endif %}
+                            </small>
+                        </div>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="{{ path('admin_option_new', {'groupId': group.id}) }}" 
+                               class="btn btn-outline-primary" 
+                               title="{{ 'admin.option.actions.add_option'|trans({}, 'admin') }}">
+                                <i class="bi bi-plus"></i>
+                            </a>
+                            <a href="{{ path('admin_option_group_edit', {'id': group.id}) }}" 
+                               class="btn btn-outline-secondary" 
+                               title="{{ 'admin.option.actions.edit_group'|trans({}, 'admin') }}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteGroupModal{{ group.id }}"
+                                    title="{{ 'admin.option.actions.delete_group'|trans({}, 'admin') }}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        {% if group.options is not empty %}
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'admin.option.table.code'|trans({}, 'admin') }}</th>
+                                            <th>{{ 'admin.option.table.name'|trans({}, 'admin') }}</th>
+                                            <th>{{ 'admin.option.table.price'|trans({}, 'admin') }}</th>
+                                            <th>{{ 'admin.option.table.active'|trans({}, 'admin') }}</th>
+                                            <th class="text-end">{{ 'admin.option.table.actions'|trans({}, 'admin') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for option in group.options %}
+                                            <tr>
+                                                <td>
+                                                    <code>{{ option.code }}</code>
+                                                </td>
+                                                <td>
+                                                    {{ option.name(app.request.locale) ?: '—' }}
+                                                </td>
+                                                <td>
+                                                    {% if option.price != '0.00' %}
+                                                        {{ option.price|number_format(2, ',') }} €
+                                                    {% else %}
+                                                        <span class="text-muted">—</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% if option.isActive %}
+                                                        <span class="badge bg-success">{{ 'admin.option.active'|trans({}, 'admin') }}</span>
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">{{ 'admin.option.inactive'|trans({}, 'admin') }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-end">
+                                                    <div class="btn-group btn-group-sm" role="group">
+                                                        <a href="{{ path('admin_option_edit', {'id': option.id}) }}" 
+                                                           class="btn btn-outline-secondary btn-sm"
+                                                           title="{{ 'admin.option.actions.edit_option'|trans({}, 'admin') }}">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#deleteOptionModal{{ option.id }}"
+                                                                title="{{ 'admin.option.actions.delete_option'|trans({}, 'admin') }}">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-3">
+                                <p class="text-muted mb-2">{{ 'admin.option.empty_options'|trans({}, 'admin') }}</p>
+                                <a href="{{ path('admin_option_new', {'groupId': group.id}) }}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-plus-circle me-1"></i>{{ 'admin.option.actions.add_first_option'|trans({}, 'admin') }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# Modal de suppression du groupe #}
+            <div class="modal fade" id="deleteGroupModal{{ group.id }}" tabindex="-1" aria-labelledby="deleteGroupModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteGroupModalLabel">
+                                {{ 'admin.option.delete_group.title'|trans({}, 'admin') }}
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ 'admin.option.delete_group.message'|trans({'%name%': group.name(app.request.locale) ?: group.code}, 'admin') }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                {{ 'common.actions.cancel'|trans }}
+                            </button>
+                            <form method="post" action="{{ path('admin_option_group_delete', {'id': group.id}) }}" class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group.id) }}">
+                                <button type="submit" class="btn btn-danger">
+                                    {{ 'common.actions.delete'|trans }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# Modals de suppression des options #}
+            {% for option in group.options %}
+                <div class="modal fade" id="deleteOptionModal{{ option.id }}" tabindex="-1" aria-labelledby="deleteOptionModalLabel{{ option.id }}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteOptionModalLabel{{ option.id }}">
+                                    {{ 'admin.option.delete_option.title'|trans({}, 'admin') }}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'admin.option.delete_option.message'|trans({'%name%': option.name(app.request.locale) ?: option.code}, 'admin') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    {{ 'common.actions.cancel'|trans }}
+                                </button>
+                                <form method="post" action="{{ path('admin_option_delete', {'id': option.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
+                                    <button type="submit" class="btn btn-danger">
+                                        {{ 'common.actions.delete'|trans }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

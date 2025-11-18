@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rappel de paiement - {{ order.orderNumber }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .email-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 30px 20px;
+        }
+        .order-info {
+            background: #f8f9ff;
+            border: 1px solid #e3f2fd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .order-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin: 10px 0;
+        }
+        .payment-info {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .payment-info h3 {
+            color: #856404;
+            margin: 0 0 15px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .contact-info {
+            margin: 20px 0;
+            padding: 15px;
+            background: #e8f5e8;
+            border-radius: 5px;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>🕰️ Rappel de paiement</h1>
+            <p>{{ site_name }}</p>
+        </div>
+
+        <div class="content">
+            <p>Bonjour <strong>{{ client_name }}</strong>,</p>
+
+            <p>Nous hope vous rappler que votre commande <span class="highlight">{{ order_number }}</span> est en attente de paiement.</p>
+
+            <div class="order-info">
+                <div class="order-number">Commande {{ order_number }}</div>
+                <p><strong>Montant à payer :</strong></p>
+                <div class="amount">{{ total|number_format(0, ',', ' ') }} €</div>
+                <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+            </div>
+
+            <p>Pour finaliser votre commande et accélérer le processus de production, nous vous invitons à procéder au paiement selon les instructions ci-dessous :</p>
+
+            <div class="payment-info">
+                <h3>💳 Instructions de paiement</h3>
+                {{ payment_info|raw }}
+            </div>
+
+            <p><strong>Prochaines étapes :</strong></p>
+            <ul>
+                <li>Effectuez le paiement selon les instructions ci-dessus</li>
+                <li>Téléchargez votre justificatif de paiement sur votre espace client</li>
+                <li>Notre équipe validera votre paiement sous 24-48h</li>
+                <li>La production de votre habitat modulaire commencera</li>
+            </ul>
+
+            <center>
+                <a href="https://{{ app.request.host }}{{ path('app_quote_confirmation', {order_number: order.orderNumber}) }}" class="cta-button">
+                    📋 Voir ma commande
+                </a>
+            </center>
+
+            <div class="contact-info">
+                <p><strong>Besoin d'aide ?</strong></p>
+                <p>Si vous avez des questions ou rencontrez des difficultés, n'hésitez pas à nous contacter :</p>
+                <p>
+                    📧 <a href="mailto:{{ contact_email }}">{{ contact_email }}</a><br>
+                    📞 {{ setting.phone|default('+33 1 23 45 67 89') }}
+                </p>
+            </div>
+
+            <p>Nous restons à votre disposition pour toute question concernant votre projet.</p>
+
+            <p>Cordialement,<br>L'équipe {{ site_name }}</p>
+        </div>
+
+        <div class="footer">
+            <p>Cet email a été envoyé automatiquement, merci de ne pas répondre à cette adresse.</p>
+            <p>© 2024 {{ site_name }} - Tous droits réservés</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{% set role_class = '' %}
+{% if role == 'ROLE_SUPER_ADMIN' %}
+    {% set role_class = 'bg-dark' %}
+{% elseif role == 'ROLE_ADMIN' %}
+    {% set role_class = 'bg-danger' %}
+{% endif %}

@@ -1,0 +1,546 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Gestion des commandes{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0 text-gray-800">
+                <i class="fas fa-shopping-cart"></i> Gestion des commandes
+            </h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('admin_dashboard') }}">Tableau de bord</a></li>
+                    <li class="breadcrumb-item active">Commandes</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportModal">
+                <i class="fas fa-download"></i> Exporter
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Commandes
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_orders }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                En attente
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.pending_orders }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Approuvées
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.approved_orders }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Payées
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.paid_orders }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-euro-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Card -->
+    <div class="row mb-4">
+        <div class="col-xl-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Chiffre d'affaires total
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">
+                                {{ stats.total_revenue|number_format(0, ',', ' ') }} €
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if pending_reminders|length > 0 %}
+        <div class="col-xl-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Rappels de paiement à envoyer
+                            </div>
+                            <div class="h4 mb-0 font-weight-bold text-gray-800">{{ pending_reminders|length }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#reminders" class="btn btn-danger btn-sm">
+                                <i class="fas fa-bell"></i> Envoyer rappels
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <i class="fas fa-list"></i> Liste des commandes
+            </h6>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="location.reload()">
+                    <i class="fas fa-sync-alt"></i> Actualiser
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="GET" class="mb-4">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Statut</label>
+                        <select name="status" class="form-select">
+                            <option value="">Tous les statuts</option>
+                            <option value="pending" {% if current_status == 'pending' %}selected{% endif %}>En attente</option>
+                            <option value="approved" {% if current_status == 'approved' %}selected{% endif %}>Approuvée</option>
+                            <option value="rejected" {% if current_status == 'rejected' %}selected{% endif %}>Rejetée</option>
+                            <option value="paid" {% if current_status == 'paid' %}selected{% endif %}>Payée</option>
+                            <option value="processing" {% if current_status == 'processing' %}selected{% endif %}>En production</option>
+                            <option value="shipped" {% if current_status == 'shipped' %}selected{% endif %}>Expédiée</option>
+                            <option value="delivered" {% if current_status == 'delivered' %}selected{% endif %}>Livrée</option>
+                            <option value="cancelled" {% if current_status == 'cancelled' %}selected{% endif %}>Annulée</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Recherche</label>
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Numéro de commande, nom, email..." 
+                               value="{{ search }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Trier par</label>
+                        <select name="sort_by" class="form-select">
+                            <option value="createdAt" {% if sort_by == 'createdAt' %}selected{% endif %}>Date de création</option>
+                            <option value="total" {% if sort_by == 'total' %}selected{% endif %}>Montant</option>
+                            <option value="status" {% if sort_by == 'status' %}selected{% endif %}>Statut</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Ordre</label>
+                        <select name="sort_order" class="form-select">
+                            <option value="DESC" {% if sort_order == 'DESC' %}selected{% endif %}>Décroissant</option>
+                            <option value="ASC" {% if sort_order == 'ASC' %}selected{% endif %}>Croissant</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            {% if pending_reminders|length > 0 %}
+            <div id="reminders" class="alert alert-warning">
+                <h6><i class="fas fa-bell"></i> Commandes nécessitant un rappel de paiement</h6>
+                <p>Les commandes suivantes sont en attente depuis plus de 3 jours :</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    {% for order in pending_reminders %}
+                        <span class="badge bg-warning text-dark me-2">{{ order.orderNumber }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Orders Table -->
+            <div class="table-responsive">
+                <form id="bulkActionForm">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="30">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th>Commande</th>
+                                <th>Client</th>
+                                <th>Statut</th>
+                                <th>Total</th>
+                                <th>Date</th>
+                                <th>Paiement</th>
+                                <th width="120">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" name="order_ids[]" value="{{ order.id }}" class="order-checkbox">
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold">{{ order.orderNumber }}</div>
+                                        {% if order.orderItems|length > 0 %}
+                                            <small class="text-muted">
+                                                {{ order.orderItems|first.productName }}
+                                                {% if order.orderItems|length > 1 %}
+                                                    (+{{ order.orderItems|length - 1 }} autre{{ order.orderItems|length > 2 ? 's' : '' }})
+                                                {% endif %}
+                                            </small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div>{{ order.clientName }}</div>
+                                        <small class="text-muted">{{ order.clientEmail }}</small>
+                                        {% if order.clientPhone %}
+                                            <br><small class="text-muted">{{ order.clientPhone }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge status-badge status-{{ order.status }}">
+                                            {% if order.status == 'pending' %}En attente{% endif %}
+                                            {% if order.status == 'approved' %}Approuvée{% endif %}
+                                            {% if order.status == 'rejected' %}Rejetée{% endif %}
+                                            {% if order.status == 'paid' %}Payée{% endif %}
+                                            {% if order.status == 'processing' %}En production{% endif %}
+                                            {% if order.status == 'shipped' %}Expédiée{% endif %}
+                                            {% if order.status == 'delivered' %}Livrée{% endif %}
+                                            {% if order.status == 'cancelled' %}Annulée{% endif %}
+                                        </span>
+                                        {% if order.status in ['pending', 'approved'] and order.createdAt < date('-3 days') %}
+                                            <br><small class="text-warning">
+                                                <i class="fas fa-clock"></i> En attente depuis {{ (date().diff(order.createdAt)).days }} jours
+                                            </small>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        <strong>{{ order.total|number_format(0, ',', ' ') }} €</strong>
+                                    </td>
+                                    <td>
+                                        <div>{{ order.createdAt|date('d/m/Y') }}</div>
+                                        <small class="text-muted">{{ order.createdAt|date('H:i') }}</small>
+                                    </td>
+                                    <td>
+                                        {% if order.paymentProof %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check"></i> Justificatif
+                                            </span>
+                                            {% if order.status != 'paid' %}
+                                                <br><small class="text-muted">
+                                                    <a href="{{ path('admin_order_download_payment_proof', {id: order.id}) }}" 
+                                                       target="_blank" class="text-decoration-none">
+                                                        <i class="fas fa-download"></i> Télécharger
+                                                    </a>
+                                                </small>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if order.status in ['approved', 'pending'] %}
+                                                <span class="badge bg-warning text-dark">En attente</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">N/A</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a href="{{ path('admin_order_show', {id: order.id}) }}" 
+                                               class="btn btn-outline-primary" title="Voir">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            {% if order.status in ['pending', 'approved'] %}
+                                                <a href="{{ path('admin_order_send_reminder', {id: order.id}) }}" 
+                                                   class="btn btn-outline-warning" title="Envoyer rappel" 
+                                                   onclick="return confirm('Envoyer un rappel de paiement à {{ order.clientEmail }} ?')">
+                                                    <i class="fas fa-bell"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">
+                                        <i class="fas fa-inbox fa-2x mb-2"></i>
+                                        <div>Aucune commande trouvée</div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+
+            <!-- Bulk Actions -->
+            <div class="mt-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <select id="bulkAction" class="form-select form-select-sm" style="width: auto;">
+                            <option value="">Actions groupées</option>
+                            <option value="approve">Approuver</option>
+                            <option value="reject">Rejeter</option>
+                            <option value="send_reminders">Envoyer rappels</option>
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" id="executeBulkAction" class="btn btn-primary btn-sm" disabled>
+                            Exécuter
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Modal -->
+<div class="modal fade" id="exportModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Exporter les commandes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ path('admin_orders_export') }}" method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Statut</label>
+                            <select name="status" class="form-select">
+                                <option value="">Tous les statuts</option>
+                                <option value="pending">En attente</option>
+                                <option value="approved">Approuvée</option>
+                                <option value="paid">Payée</option>
+                                <option value="processing">En production</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Format</label>
+                            <select name="format" class="form-select">
+                                <option value="csv">CSV</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Date de début</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date de fin</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-download"></i> Exporter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all functionality
+    const selectAllCheckbox = document.getElementById('selectAll');
+    const orderCheckboxes = document.querySelectorAll('.order-checkbox');
+    const executeBulkActionBtn = document.getElementById('executeBulkAction');
+    const bulkActionSelect = document.getElementById('bulkAction');
+    const bulkActionForm = document.getElementById('bulkActionForm');
+
+    selectAllCheckbox.addEventListener('change', function() {
+        orderCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateBulkActionButton();
+    });
+
+    orderCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateBulkActionButton);
+    });
+
+    function updateBulkActionButton() {
+        const checkedBoxes = document.querySelectorAll('.order-checkbox:checked');
+        const hasSelection = checkedBoxes.length > 0;
+        const hasAction = bulkActionSelect.value !== '';
+        
+        executeBulkActionBtn.disabled = !(hasSelection && hasAction);
+        executeBulkActionBtn.textContent = hasSelection ? 
+            `Exécuter sur ${checkedBoxes.length} commande(s)` : 'Exécuter';
+    }
+
+    bulkActionSelect.addEventListener('change', updateBulkActionButton);
+
+    // Execute bulk action
+    executeBulkActionBtn.addEventListener('click', function() {
+        const action = bulkActionSelect.value;
+        const checkedBoxes = document.querySelectorAll('.order-checkbox:checked');
+        
+        if (!action || checkedBoxes.length === 0) return;
+
+        let message = '';
+        switch (action) {
+            case 'approve':
+                message = `Approuver ${checkedBoxes.length} commande(s) sélectionnée(s) ?`;
+                break;
+            case 'reject':
+                message = `Rejeter ${checkedBoxes.length} commande(s) sélectionnée(s) ?`;
+                break;
+            case 'send_reminders':
+                message = `Envoyer des rappels de paiement pour ${checkedBoxes.length} commande(s) sélectionnée(s) ?`;
+                break;
+        }
+
+        if (confirm(message)) {
+            // Create form and submit
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ path('admin_orders_bulk_action') }}';
+            
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            form.appendChild(actionInput);
+            
+            checkedBoxes.forEach(checkbox => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'order_ids[]';
+                input.value = checkbox.value;
+                form.appendChild(input);
+            });
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+
+    // Auto-refresh every 30 seconds
+    setInterval(function() {
+        // Only refresh if no forms are being filled
+        const activeElement = document.activeElement;
+        if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
+            return;
+        }
+        location.reload();
+    }, 30000);
+});
+</script>
+
+<style>
+.status-badge {
+    font-size: 0.75rem;
+}
+
+.status-pending { background-color: #fff3cd; color: #856404; }
+.status-approved { background-color: #d1ecf1; color: #0c5460; }
+.status-paid { background-color: #d4edda; color: #155724; }
+.status-processing { background-color: #f8d7da; color: #721c24; }
+.status-shipped { background-color: #d1ecf1; color: #0c5460; }
+.status-delivered { background-color: #d4edda; color: #155724; }
+.status-rejected { background-color: #f8d7da; color: #721c24; }
+.status-cancelled { background-color: #f8d7da; color: #721c24; }
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #5a5c69;
+}
+
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.775rem;
+}
+
+.border-left-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.border-left-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-danger {
+    border-left: 0.25rem solid #e74a3b !important;
+}
+
+.shadow {
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+</style>
+{% endblock %}
