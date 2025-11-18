@@ -76,15 +76,15 @@
           {% for product in products %}
             <div class="col-lg-4 col-md-6">
               <div class="card product-card h-100 shadow-sm">
-                {% if product.images|length > 0 %}
-                  <img src="{{ asset('uploads/media/' ~ product.images[0].filename) }}" class="card-img-top" alt="{{ product.name }}">
+                {% if product.mainImage %}
+                  <img src="{{ asset('uploads/media/' ~ product.mainImage.filename) }}" class="card-img-top" alt="{{ product.getName(app.request.locale) }}">
                 {% else %}
-                  <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" class="card-img-top" alt="{{ product.name }}">
+                  <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" class="card-img-top" alt="{{ product.getName(app.request.locale) }}">
                 {% endif %}
                 
                 <div class="card-body">
-                  <h3 class="h5 card-title">{{ product.name }}</h3>
-                  <p class="card-text text-muted">{{ product.description|striptags|slice(0, 120) }}...</p>
+                  <h3 class="h5 card-title">{{ product.getName(app.request.locale) }}</h3>
+                  <p class="card-text text-muted">{{ product.getDescription(app.request.locale)|striptags|slice(0, 120) }}...</p>
                   
                   <div class="product-specs mb-3">
                     <div class="row g-2 text-center">
@@ -93,7 +93,7 @@
                           <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
                             <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
                           </svg>
-                          <div class="small">{{ product.surface|default('90') }} m²</div>
+                          <div class="small">{{ product.surface ? product.surface : '90' }} m²</div>
                         </div>
                       </div>
                       <div class="col-4">
@@ -101,7 +101,7 @@
                           <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
                             <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
                           </svg>
-                          <div class="small">{{ product.bedrooms|default('2') }} {{ 'products.bedrooms'|trans({}, 'default') }}</div>
+                          <div class="small">{{ product.rooms ? product.rooms : '2' }} {{ 'products.bedrooms'|trans({}, 'default') }}</div>
                         </div>
                       </div>
                       <div class="col-4">
@@ -109,21 +109,21 @@
                           <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" class="text-primary mb-1">
                             <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
                           </svg>
-                          <div class="small">{{ product.bathrooms|default('1') }} {{ 'products.bathrooms'|trans({}, 'default') }}</div>
+                          <div class="small">1 {{ 'products.bathrooms'|trans({}, 'default') }}</div>
                         </div>
                       </div>
                     </div>
                   </div>
                   
-                  {% if product.price %}
+                  {% if product.basePrice %}
                     <div class="product-price mb-3">
-                      <span class="h4 text-primary mb-0">{{ product.price|number_format(0, ',', ' ') }}€</span>
+                      <span class="h4 text-primary mb-0">{{ product.basePrice|number_format(0, ',', ' ') }}€</span>
                       <span class="text-muted small">{{ 'products.starting_from'|trans({}, 'default') }}</span>
                     </div>
                   {% endif %}
                   
                   <div class="d-grid gap-2">
-                    <a href="{{ path('app_products_show', {'slug': product.slug, '_locale': app.request.locale}) }}" class="btn btn-primary">
+                    <a href="{{ path('app_products_show', {'slug': product.code, '_locale': app.request.locale}) }}" class="btn btn-primary">
                       {{ 'products.view_details'|trans({}, 'default') }}
                     </a>
                     <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-outline-primary">
