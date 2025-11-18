@@ -1,0 +1,62 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'auth.login.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h1 class="h3 text-center mb-4">{{ 'auth.login.title'|trans({}, 'default') }}</h1>
+
+              {% if error %}
+                <div class="alert alert-danger">
+                  {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+              {% endif %}
+
+              <form method="post">
+                <div class="mb-3">
+                  <label for="username" class="form-label">{{ 'auth.login.email'|trans({}, 'default') }}</label>
+                  <input type="email" class="form-control" id="username" name="_username" 
+                         value="{{ last_username }}" required autofocus>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">{{ 'auth.login.password'|trans({}, 'default') }}</label>
+                  <input type="password" class="form-control" id="password" name="_password" required>
+                </div>
+
+                <div class="mb-3 form-check">
+                  <input type="checkbox" class="form-check-input" id="_remember_me" name="_remember_me">
+                  <label class="form-check-label" for="_remember_me">
+                    {{ 'auth.login.remember_me'|trans({}, 'default') }}
+                  </label>
+                </div>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    {{ 'auth.login.submit'|trans({}, 'default') }}
+                  </button>
+                </div>
+              </form>
+
+              <hr class="my-4">
+
+              <p class="text-center mb-0">
+                {{ 'auth.login.no_account'|trans({}, 'default') }}
+                <a href="{{ path('app_user_register', {'_locale': app.request.locale}) }}">
+                  {{ 'auth.login.register_link'|trans({}, 'default') }}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

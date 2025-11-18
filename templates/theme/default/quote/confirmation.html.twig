@@ -1,0 +1,99 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'quote.confirmation.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto text-center">
+          <div class="mb-4">
+            <svg width="80" height="80" fill="currentColor" class="text-success" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </svg>
+          </div>
+          
+          <h1 class="mb-3">{{ 'quote.confirmation.title'|trans({}, 'default') }}</h1>
+          <p class="lead text-muted mb-4">
+            {{ 'quote.confirmation.subtitle'|trans({'%number%': order.orderNumber}, 'default') }}
+          </p>
+
+          <div class="card shadow-sm text-start mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.confirmation.order_details'|trans({}, 'default') }}</h3>
+              
+              <dl class="row mb-0">
+                <dt class="col-sm-4">{{ 'quote.confirmation.order_number'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-8"><strong>{{ order.orderNumber }}</strong></dd>
+
+                <dt class="col-sm-4">{{ 'quote.confirmation.date'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-8">{{ order.createdAt|date('d/m/Y H:i') }}</dd>
+
+                <dt class="col-sm-4">{{ 'quote.confirmation.status'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-8">
+                  <span class="badge bg-warning">{{ ('order.status.' ~ order.status)|trans({}, 'default') }}</span>
+                </dd>
+
+                <dt class="col-sm-4">{{ 'quote.confirmation.total'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-8"><strong class="text-primary">{{ order.total|number_format(2, ',', ' ') }}€</strong></dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="card shadow-sm text-start mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.confirmation.items_title'|trans({}, 'default') }}</h3>
+              
+              {% for item in order.orderItems %}
+                <div class="mb-3 pb-3 border-bottom">
+                  <h5>{{ item.product.getName(app.request.locale) }}</h5>
+                  <p class="text-muted small mb-1">{{ 'quote.confirmation.quantity'|trans({}, 'default') }}: {{ item.quantity }}</p>
+                  <p class="text-muted small mb-1">{{ 'quote.confirmation.unit_price'|trans({}, 'default') }}: {{ item.unitPrice|number_format(2, ',', ' ') }}€</p>
+                  {% if item.optionsPrice > 0 %}
+                    <p class="text-muted small mb-1">{{ 'quote.confirmation.options'|trans({}, 'default') }}: {{ item.optionsPrice|number_format(2, ',', ' ') }}€</p>
+                  {% endif %}
+                  <p class="mb-0"><strong>{{ 'quote.confirmation.subtotal'|trans({}, 'default') }}: {{ item.totalPrice|number_format(2, ',', ' ') }}€</strong></p>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          {% if payment_info %}
+            <div class="alert alert-info text-start">
+              <h5 class="alert-heading">{{ 'quote.confirmation.next_steps'|trans({}, 'default') }}</h5>
+              <div>{{ payment_info|raw }}</div>
+              
+              {% if order.status == 'pending' %}
+                <hr>
+                <p class="mb-0">{{ 'quote.confirmation.upload_payment_instruction'|trans({}, 'default') }}</p>
+                
+                <form method="post" action="{{ path('app_quote_upload_payment', {'order_number': order.orderNumber, '_locale': app.request.locale}) }}" 
+                      enctype="multipart/form-data" class="mt-3">
+                  <div class="mb-3">
+                    <label for="payment_proof" class="form-label">{{ 'quote.confirmation.upload_label'|trans({}, 'default') }}</label>
+                    <input type="file" class="form-control" id="payment_proof" name="payment_proof" 
+                           accept="image/*,.pdf" required>
+                    <div class="form-text">{{ 'quote.confirmation.upload_help'|trans({}, 'default') }}</div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    {{ 'quote.confirmation.upload_button'|trans({}, 'default') }}
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+            <a href="{{ path('app_quote_track', {'order_number': order.orderNumber, '_locale': app.request.locale}) }}" 
+               class="btn btn-outline-primary">
+              {{ 'quote.confirmation.track_order'|trans({}, 'default') }}
+            </a>
+            <a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}" class="btn btn-secondary">
+              {{ 'common.back_home'|trans({}, 'default') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'auth.profile.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <h1 class="mb-4">{{ 'auth.profile.title'|trans({}, 'default') }}</h1>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'auth.profile.personal_info'|trans({}, 'default') }}</h3>
+              
+              <dl class="row mb-0">
+                <dt class="col-sm-3">{{ 'auth.profile.full_name'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ user.fullName }}</dd>
+
+                <dt class="col-sm-3">{{ 'auth.profile.email'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ user.email }}</dd>
+
+                <dt class="col-sm-3">{{ 'auth.profile.member_since'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ user.createdAt|date('d/m/Y') }}</dd>
+              </dl>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ path('app_user_profile_edit', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+              {{ 'auth.profile.edit_button'|trans({}, 'default') }}
+            </a>
+            <a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+              {{ 'common.back_home'|trans({}, 'default') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

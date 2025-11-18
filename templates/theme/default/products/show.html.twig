@@ -122,13 +122,173 @@
             </div>
           </div>
 
+          <!-- Customization Form -->
+          {% if grouped_options is defined and grouped_options|length > 0 %}
+            <div class="card mb-4 border-primary">
+              <div class="card-header bg-primary text-white">
+                <h3 class="h5 mb-0">{{ 'products.show.customize_title'|trans({}, 'default') }}</h3>
+              </div>
+              <div class="card-body">
+                <form id="customization-form" method="post">
+                  <!-- Options Selection -->
+                  {% for group in grouped_options %}
+                    <div class="mb-4">
+                      <h5 class="mb-3">{{ group.name }}</h5>
+                      {% if group.description %}
+                        <p class="text-muted small">{{ group.description }}</p>
+                      {% endif %}
+                      
+                      {% for option in group.options %}
+                        <div class="form-check mb-2">
+                          <input class="form-check-input option-checkbox" 
+                                 type="checkbox" 
+                                 name="selected_options[]" 
+                                 value="{{ option.code }}" 
+                                 id="option_{{ option.id }}"
+                                 data-price="{{ option.price }}">
+                          <label class="form-check-label d-flex justify-content-between align-items-center" 
+                                 for="option_{{ option.id }}">
+                            <span>{{ option.name }}</span>
+                            <span class="badge bg-secondary">+{{ option.price|number_format(0, ',', ' ') }}€</span>
+                          </label>
+                          {% if option.description %}
+                            <div class="form-text ms-4">{{ option.description }}</div>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                    {% if not loop.last %}<hr>{% endif %}
+                  {% endfor %}
+
+                  <!-- Quantity -->
+                  <div class="mb-4">
+                    <label for="quantity" class="form-label">{{ 'products.show.quantity'|trans({}, 'default') }}</label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" 
+                           value="1" min="1" max="10" required>
+                  </div>
+
+                  <!-- Price Summary -->
+                  <div class="card bg-light mb-4">
+                    <div class="card-body">
+                      <h6 class="mb-3">{{ 'products.show.price_summary'|trans({}, 'default') }}</h6>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>{{ 'products.show.base_price'|trans({}, 'default') }}</span>
+                        <span id="base-price">{{ product.basePrice|number_format(0, ',', ' ') }}€</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>{{ 'products.show.options_total'|trans({}, 'default') }}</span>
+                        <span id="options-price">0€</span>
+                      </div>
+                      <div class="d-flex justify-content-between mb-2">
+                        <span>{{ 'products.show.quantity_label'|trans({}, 'default') }}</span>
+                        <span id="quantity-display">1</span>
+                      </div>
+                      <hr>
+                      <div class="d-flex justify-content-between">
+                        <strong>{{ 'products.show.total_price'|trans({}, 'default') }}</strong>
+                        <strong class="text-primary h4 mb-0" id="total-price">{{ product.basePrice|number_format(0, ',', ' ') }}€</strong>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Client Information -->
+                  <h5 class="mb-3">{{ 'products.show.client_info'|trans({}, 'default') }}</h5>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="client_name" class="form-label">{{ 'products.show.full_name'|trans({}, 'default') }}</label>
+                      <input type="text" class="form-control" id="client_name" name="client_name" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="client_email" class="form-label">{{ 'products.show.email'|trans({}, 'default') }}</label>
+                      <input type="email" class="form-control" id="client_email" name="client_email" required>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="client_phone" class="form-label">{{ 'products.show.phone'|trans({}, 'default') }}</label>
+                      <input type="tel" class="form-control" id="client_phone" name="client_phone" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="client_address" class="form-label">{{ 'products.show.address'|trans({}, 'default') }}</label>
+                      <input type="text" class="form-control" id="client_address" name="client_address">
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="customization_notes" class="form-label">{{ 'products.show.notes'|trans({}, 'default') }}</label>
+                    <textarea class="form-control" id="customization_notes" name="customization_notes" rows="3"></textarea>
+                  </div>
+
+                  <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      {{ 'products.show.configure_quote'|trans({}, 'default') }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <script>
+              // Price calculation
+              const basePrice = {{ product.basePrice }};
+              const optionCheckboxes = document.querySelectorAll('.option-checkbox');
+              const quantityInput = document.getElementById('quantity');
+              const basePriceEl = document.getElementById('base-price');
+              const optionsPriceEl = document.getElementById('options-price');
+              const quantityDisplayEl = document.getElementById('quantity-display');
+              const totalPriceEl = document.getElementById('total-price');
+
+              function formatPrice(price) {
+                return new Intl.NumberFormat('fr-FR', { style: 'decimal', minimumFractionDigits: 0 }).format(price) + '€';
+              }
+
+              function calculateTotal() {
+                let optionsTotal = 0;
+                optionCheckboxes.forEach(checkbox => {
+                  if (checkbox.checked) {
+                    optionsTotal += parseFloat(checkbox.dataset.price);
+                  }
+                });
+
+                const quantity = parseInt(quantityInput.value) || 1;
+                const unitPrice = basePrice + optionsTotal;
+                const total = unitPrice * quantity;
+
+                optionsPriceEl.textContent = formatPrice(optionsTotal);
+                quantityDisplayEl.textContent = quantity;
+                totalPriceEl.textContent = formatPrice(total);
+              }
+
+              optionCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', calculateTotal);
+              });
+
+              quantityInput.addEventListener('input', calculateTotal);
+            </script>
+          {% else %}
+            <!-- Simple Quote Buttons (no options) -->
+            <div class="d-grid gap-2 mb-3">
+              <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                  <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                </svg>
+                {{ 'products.show.request_quote'|trans({}, 'default') }}
+              </a>
+              <a href="https://wa.me/{{ setting('whatsapp')|replace({' ': '', '+': '', '-': ''}) }}?text={{ 'whatsapp.product_inquiry'|trans({'%product%': product.getName(app.request.locale)}, 'default')|url_encode }}" 
+                 class="btn btn-success" target="_blank" rel="noopener">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                  <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                </svg>
+                {{ 'whatsapp.contact_us'|trans({}, 'default') }}
+              </a>
+            </div>
+          {% endif %}
+
           <div class="d-grid gap-2 mb-3">
-            <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
-                <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
-              </svg>
-              {{ 'products.show.request_quote'|trans({}, 'default') }}
-            </a>
             <a href="https://wa.me/{{ setting('whatsapp')|replace({' ': '', '+': '', '-': ''}) }}?text={{ 'whatsapp.product_inquiry'|trans({'%product%': product.getName(app.request.locale)}, 'default')|url_encode }}" 
                class="btn btn-success" target="_blank" rel="noopener">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">

@@ -1,0 +1,210 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'quote.track.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 class="mb-4 text-center">{{ 'quote.track.title'|trans({}, 'default') }}</h1>
+          <p class="text-center text-muted mb-5">{{ 'quote.track.subtitle'|trans({'%number%': order.orderNumber}, 'default') }}</p>
+
+          <!-- Order Progress Tracker -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <div class="progress-tracker">
+                <div class="row text-center">
+                  {% set statusOrder = ['pending', 'approved', 'paid', 'processing', 'shipped', 'delivered'] %}
+                  {% set currentIndex = statusOrder|keys|filter(k => statusOrder[k] == order.status)|first ?? 0 %}
+                  
+                  {% for status in statusOrder %}
+                    {% set statusIndex = loop.index0 %}
+                    {% set isCompleted = statusIndex < currentIndex %}
+                    {% set isCurrent = statusIndex == currentIndex %}
+                    
+                    <div class="col">
+                      <div class="progress-step {% if isCompleted %}completed{% elseif isCurrent %}active{% endif %}">
+                        <div class="step-icon">
+                          {% if isCompleted %}
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                            </svg>
+                          {% elseif isCurrent %}
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                              <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                            </svg>
+                          {% else %}
+                            <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                              <circle cx="8" cy="8" r="7" stroke="currentColor" fill="none" stroke-width="2"/>
+                            </svg>
+                          {% endif %}
+                        </div>
+                        <div class="step-label mt-2">{{ ('order.status.' ~ status)|trans({}, 'default') }}</div>
+                        {% if statusIndex < (statusOrder|length - 1) %}
+                          <div class="step-connector {% if isCompleted %}completed{% endif %}"></div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Details -->
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <h3 class="h5 mb-3">{{ 'quote.track.order_info'|trans({}, 'default') }}</h3>
+                  
+                  <dl class="row mb-0">
+                    <dt class="col-sm-5">{{ 'quote.track.order_number'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7"><strong>{{ order.orderNumber }}</strong></dd>
+
+                    <dt class="col-sm-5">{{ 'quote.track.order_date'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7">{{ order.createdAt|date('d/m/Y H:i') }}</dd>
+
+                    <dt class="col-sm-5">{{ 'quote.track.current_status'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7">
+                      <span class="badge 
+                        {% if order.status == 'pending' %}bg-warning
+                        {% elseif order.status == 'approved' %}bg-info
+                        {% elseif order.status == 'paid' %}bg-success
+                        {% elseif order.status == 'processing' %}bg-primary
+                        {% elseif order.status == 'shipped' %}bg-primary
+                        {% elseif order.status == 'delivered' %}bg-success
+                        {% elseif order.status == 'rejected' %}bg-danger
+                        {% else %}bg-secondary{% endif %}">
+                        {{ ('order.status.' ~ order.status)|trans({}, 'default') }}
+                      </span>
+                    </dd>
+
+                    <dt class="col-sm-5">{{ 'quote.track.total'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7"><strong class="text-primary">{{ order.total|number_format(2, ',', ' ') }}€</strong></dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <h3 class="h5 mb-3">{{ 'quote.track.client_info'|trans({}, 'default') }}</h3>
+                  
+                  <dl class="row mb-0">
+                    <dt class="col-sm-5">{{ 'quote.track.name'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7">{{ order.clientName }}</dd>
+
+                    <dt class="col-sm-5">{{ 'quote.track.email'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7">{{ order.clientEmail }}</dd>
+
+                    <dt class="col-sm-5">{{ 'quote.track.phone'|trans({}, 'default') }}</dt>
+                    <dd class="col-sm-7">{{ order.clientPhone }}</dd>
+
+                    {% if order.clientAddress %}
+                      <dt class="col-sm-5">{{ 'quote.track.address'|trans({}, 'default') }}</dt>
+                      <dd class="col-sm-7">{{ order.clientAddress }}</dd>
+                    {% endif %}
+                  </dl>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.track.order_items'|trans({}, 'default') }}</h3>
+              
+              {% for item in order.orderItems %}
+                <div class="row align-items-center mb-3 pb-3 {% if not loop.last %}border-bottom{% endif %}">
+                  <div class="col-md-3">
+                    {% if item.product.mainImage %}
+                      <img src="{{ asset('uploads/media/' ~ item.product.mainImage.filename) }}" 
+                           class="img-fluid rounded" alt="{{ item.product.getName(app.request.locale) }}">
+                    {% endif %}
+                  </div>
+                  <div class="col-md-9">
+                    <h5>{{ item.product.getName(app.request.locale) }}</h5>
+                    <p class="text-muted small mb-1">{{ 'quote.track.quantity'|trans({}, 'default') }}: {{ item.quantity }}</p>
+                    <p class="mb-0"><strong>{{ item.totalPrice|number_format(2, ',', ' ') }}€</strong></p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Status specific messages -->
+          {% if order.status == 'rejected' and order.rejectionReason %}
+            <div class="alert alert-danger">
+              <h5 class="alert-heading">{{ 'quote.track.rejection_notice'|trans({}, 'default') }}</h5>
+              <p>{{ order.rejectionReason }}</p>
+            </div>
+          {% endif %}
+
+          {% if order.status == 'pending' %}
+            <div class="alert alert-info">
+              <p class="mb-0">{{ 'quote.track.pending_message'|trans({}, 'default') }}</p>
+            </div>
+          {% elseif order.status == 'approved' %}
+            <div class="alert alert-success">
+              <p class="mb-0">{{ 'quote.track.approved_message'|trans({}, 'default') }}</p>
+            </div>
+          {% endif %}
+
+          <div class="text-center">
+            <a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}" class="btn btn-secondary">
+              {{ 'common.back_home'|trans({}, 'default') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .progress-tracker .progress-step {
+      position: relative;
+    }
+    .progress-tracker .step-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e9ecef;
+      color: #6c757d;
+    }
+    .progress-tracker .progress-step.completed .step-icon,
+    .progress-tracker .progress-step.active .step-icon {
+      background: #0d6efd;
+      color: white;
+    }
+    .progress-tracker .step-label {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+    .progress-tracker .progress-step.completed .step-label,
+    .progress-tracker .progress-step.active .step-label {
+      color: #0d6efd;
+      font-weight: 600;
+    }
+    .progress-tracker .step-connector {
+      position: absolute;
+      top: 25px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: #e9ecef;
+      z-index: -1;
+    }
+    .progress-tracker .step-connector.completed {
+      background: #0d6efd;
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'auth.register.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h1 class="h3 text-center mb-4">{{ 'auth.register.title'|trans({}, 'default') }}</h1>
+
+              <form method="post">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="first_name" class="form-label">{{ 'auth.register.first_name'|trans({}, 'default') }}</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label for="last_name" class="form-label">{{ 'auth.register.last_name'|trans({}, 'default') }}</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">{{ 'auth.register.email'|trans({}, 'default') }}</label>
+                  <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">{{ 'auth.register.password'|trans({}, 'default') }}</label>
+                  <input type="password" class="form-control" id="password" name="password" required minlength="8">
+                  <div class="form-text">{{ 'auth.register.password_help'|trans({}, 'default') }}</div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="confirm_password" class="form-label">{{ 'auth.register.confirm_password'|trans({}, 'default') }}</label>
+                  <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                </div>
+
+                <div class="d-grid mb-3">
+                  <button type="submit" class="btn btn-primary">
+                    {{ 'auth.register.submit'|trans({}, 'default') }}
+                  </button>
+                </div>
+              </form>
+
+              <hr class="my-3">
+
+              <p class="text-center mb-0">
+                {{ 'auth.register.have_account'|trans({}, 'default') }}
+                <a href="{{ path('app_user_login', {'_locale': app.request.locale}) }}">
+                  {{ 'auth.register.login_link'|trans({}, 'default') }}
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

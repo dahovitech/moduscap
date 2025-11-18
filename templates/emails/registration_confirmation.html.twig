@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #0d6efd; color: white; padding: 20px; text-align: center; }
+        .content { padding: 30px; background: #f8f9fa; }
+        .footer { text-align: center; padding: 20px; color: #6c757d; font-size: 12px; }
+        .success-icon { font-size: 48px; text-align: center; color: #198754; margin-bottom: 20px; }
+        .info-box { background: white; padding: 20px; margin: 20px 0; border-radius: 4px; }
+        table { width: 100%; border-collapse: collapse; }
+        table td { padding: 10px; border-bottom: 1px solid #dee2e6; }
+        table td:first-child { font-weight: bold; width: 40%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ site_name }}</h1>
+        </div>
+        
+        <div class="content">
+            <div class="success-icon">✓</div>
+            <h2 style="text-align: center;">Bienvenue {{ user_name }} !</h2>
+            
+            <p>Votre compte a été créé avec succès sur {{ site_name }}.</p>
+            
+            <div class="info-box">
+                <p><strong>Email de connexion:</strong> {{ user_email }}</p>
+            </div>
+            
+            <p>Vous pouvez dès maintenant vous connecter à votre espace client pour:</p>
+            <ul>
+                <li>Consulter nos produits</li>
+                <li>Demander des devis personnalisés</li>
+                <li>Suivre vos commandes</li>
+                <li>Gérer votre profil</li>
+            </ul>
+            
+            <p>Merci de votre confiance !</p>
+            
+            <p>Cordialement,<br>L'équipe {{ site_name }}</p>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. Tous droits réservés.</p>
+        </div>
+    </div>
+</body>
+</html>

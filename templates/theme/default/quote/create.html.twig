@@ -1,0 +1,138 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'quote.create.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}">{{ 'nav.home'|trans({}, 'default') }}</a></li>
+              <li class="breadcrumb-item"><a href="{{ path('app_products_index', {'_locale': app.request.locale}) }}">{{ 'nav.products'|trans({}, 'default') }}</a></li>
+              <li class="breadcrumb-item active">{{ 'quote.create.title'|trans({}, 'default') }}</li>
+            </ol>
+          </nav>
+
+          <h1 class="mb-4">{{ 'quote.create.title'|trans({}, 'default') }}</h1>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.create.product_summary'|trans({}, 'default') }}</h3>
+              
+              <div class="row align-items-center mb-3">
+                <div class="col-md-3">
+                  {% if product.mainImage %}
+                    <img src="{{ asset('uploads/media/' ~ product.mainImage.filename) }}" 
+                         class="img-fluid rounded" alt="{{ product.getName(app.request.locale) }}">
+                  {% endif %}
+                </div>
+                <div class="col-md-9">
+                  <h4>{{ product.getName(app.request.locale) }}</h4>
+                  <p class="text-muted">{{ product.getDescription(app.request.locale)|striptags|slice(0, 150) }}...</p>
+                  
+                  <div class="row g-2 mt-2">
+                    {% if product.surface %}
+                      <div class="col-auto">
+                        <span class="badge bg-light text-dark">{{ product.surface }} m²</span>
+                      </div>
+                    {% endif %}
+                    {% if product.rooms %}
+                      <div class="col-auto">
+                        <span class="badge bg-light text-dark">{{ product.rooms }} {{ 'products.bedrooms'|trans({}, 'default') }}</span>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              {% if customization.selected_options|length > 0 %}
+                <hr>
+                <h5 class="mb-3">{{ 'quote.create.selected_options'|trans({}, 'default') }}</h5>
+                <ul class="list-unstyled">
+                  {% for option_code in customization.selected_options %}
+                    <li><i class="bi bi-check-circle text-success me-2"></i> {{ option_code }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.create.pricing_details'|trans({}, 'default') }}</h3>
+              
+              <table class="table table-borderless">
+                <tr>
+                  <td>{{ 'quote.create.base_price'|trans({}, 'default') }}</td>
+                  <td class="text-end fw-bold">{{ pricing.base_price|number_format(2, ',', ' ') }}€</td>
+                </tr>
+                {% if pricing.options_price > 0 %}
+                  <tr>
+                    <td>{{ 'quote.create.options_price'|trans({}, 'default') }}</td>
+                    <td class="text-end fw-bold">{{ pricing.options_price|number_format(2, ',', ' ') }}€</td>
+                  </tr>
+                {% endif %}
+                <tr>
+                  <td>{{ 'quote.create.quantity'|trans({}, 'default') }}</td>
+                  <td class="text-end fw-bold">{{ customization.quantity }}</td>
+                </tr>
+                <tr class="border-top">
+                  <td class="h5 mb-0">{{ 'quote.create.total'|trans({}, 'default') }}</td>
+                  <td class="text-end h4 text-primary mb-0">{{ pricing.total|number_format(2, ',', ' ') }}€</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'quote.create.client_info'|trans({}, 'default') }}</h3>
+              
+              <dl class="row">
+                <dt class="col-sm-3">{{ 'quote.create.name'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ customization.client_info.name }}</dd>
+
+                <dt class="col-sm-3">{{ 'quote.create.email'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ customization.client_info.email }}</dd>
+
+                <dt class="col-sm-3">{{ 'quote.create.phone'|trans({}, 'default') }}</dt>
+                <dd class="col-sm-9">{{ customization.client_info.phone }}</dd>
+
+                {% if customization.client_info.address %}
+                  <dt class="col-sm-3">{{ 'quote.create.address'|trans({}, 'default') }}</dt>
+                  <dd class="col-sm-9">{{ customization.client_info.address }}</dd>
+                {% endif %}
+
+                {% if customization.customization_notes %}
+                  <dt class="col-sm-3">{{ 'quote.create.notes'|trans({}, 'default') }}</dt>
+                  <dd class="col-sm-9">{{ customization.customization_notes }}</dd>
+                {% endif %}
+              </dl>
+            </div>
+          </div>
+
+          {% if payment_info %}
+            <div class="alert alert-info">
+              <h5 class="alert-heading">{{ 'quote.create.payment_info_title'|trans({}, 'default') }}</h5>
+              <div>{{ payment_info|raw }}</div>
+            </div>
+          {% endif %}
+
+          <form method="post">
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                {{ 'quote.create.confirm_order'|trans({}, 'default') }}
+              </button>
+              <a href="{{ path('app_product_show', {'code': product.code, '_locale': app.request.locale}) }}" 
+                 class="btn btn-outline-secondary">
+                {{ 'common.back'|trans({}, 'default') }}
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\ContactMessage;
 use App\Repository\LanguageRepository;
 use App\Repository\ProductRepository;
+use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class FrontController
@@ -20,7 +24,11 @@ class FrontController extends AbstractController
 {
     public function __construct(
         private LanguageRepository $languageRepository,
-        private ProductRepository $productRepository
+        private ProductRepository $productRepository,
+        private EntityManagerInterface $entityManager,
+        private EmailService $emailService,
+        private ValidatorInterface $validator,
+        private TranslatorInterface $translator
     ) {}
 
     /**
@@ -40,11 +48,40 @@ class FrontController extends AbstractController
         ]);
     }
 
-    #[Route('/contact', name: 'app_contact')]
+    #[Route('/contact', name: 'app_contact', methods: ['GET', 'POST'])]
     public function contact(Request $request): Response
     {
         $locale = $request->getLocale();
         $currentLanguage = $this->languageRepository->findByCode($locale);
+
+        if ($request->isMethod('POST')) {
+            $contactMessage = new ContactMessage();
+            $contactMessage->setFirstName($request->request->get('first_name'));
+            $contactMessage->setLastName($request->request->get('last_name'));
+            $contactMessage->setEmail($request->request->get('email'));
+            $contactMessage->setPhone($request->request->get('phone'));
+            $contactMessage->setSubject($request->request->get('subject'));
+            $contactMessage->setMessage($request->request->get('message'));
+            $contactMessage->setIpAddress($request->getClientIp());
+
+            $errors = $this->validator->validate($contactMessage);
+
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            } else {
+                $this->entityManager->persist($contactMessage);
+                $this->entityManager->flush();
+
+                // Send emails
+                $this->emailService->sendContactNotification($contactMessage);
+                $this->emailService->sendContactConfirmation($contactMessage);
+
+                $this->addFlash('success', $this->translator->trans('contact.success_message', [], 'default'));
+                return $this->redirectToRoute('app_contact', ['_locale' => $locale]);
+            }
+        }
 
         return $this->render('@theme/contact.html.twig', [
             'currentLanguage' => $currentLanguage,
