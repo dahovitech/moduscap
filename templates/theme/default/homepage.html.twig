@@ -1,8 +1,251 @@
 {% extends '@theme/base.html.twig' %}
 
-{% block title %} {{ parent() }} - {{ 'page.homepage.title'|trans }}{% endblock %}
+{% block title %}{{ setting('siteName') }} - {{ 'nav.home'|trans({}, 'default') }}{% endblock %}
 
 {% block body %}
-    <h1>homepage</h1>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content">
+          <h1 class="fade-in-up">{{ 'hero.title'|trans({}, 'default') }}</h1>
+          <p class="fade-in-up">{{ 'hero.subtitle'|trans({}, 'default') }}</p>
+          <div class="fade-in-up">
+            <a href="{{ path('app_products', {'_locale': app.request.locale}) }}" class="btn btn-outline me-3">{{ 'hero.discover_models'|trans({}, 'default') }}</a>
+            <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-primary-custom">{{ 'hero.get_quote'|trans({}, 'default') }}</a>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div id="heroCarousel" class="carousel slide hero-carousel fade-in-up" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+              <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+              </div>
+              <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Points Forts -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3 animate-on-scroll">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+              </svg>
+            </div>
+            <h3>{{ 'features.fast_delivery.title'|trans({}, 'default') }}</h3>
+            <p>{{ 'features.fast_delivery.description'|trans({}, 'default') }}</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 animate-on-scroll">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+              </svg>
+            </div>
+            <h3>{{ 'features.transparent_pricing.title'|trans({}, 'default') }}</h3>
+            <p>{{ 'features.transparent_pricing.description'|trans({}, 'default') }}</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 animate-on-scroll">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+              </svg>
+            </div>
+            <h3>{{ 'features.quality.title'|trans({}, 'default') }}</h3>
+            <p>{{ 'features.quality.description'|trans({}, 'default') }}</p>
+          </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3 animate-on-scroll">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+              </svg>
+            </div>
+            <h3>{{ 'features.customization.title'|trans({}, 'default') }}</h3>
+            <p>{{ 'features.customization.description'|trans({}, 'default') }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Chiffres clés -->
+      <div class="row mt-5 text-center">
+        <div class="col-6 col-md-3 mb-4">
+          <h2 class="text-primary mb-0">15+</h2>
+          <p class="text-secondary">{{ 'stats.experience'|trans({}, 'default') }}</p>
+        </div>
+        <div class="col-6 col-md-3 mb-4">
+          <h2 class="text-primary mb-0">500+</h2>
+          <p class="text-secondary">{{ 'stats.homes_delivered'|trans({}, 'default') }}</p>
+        </div>
+        <div class="col-6 col-md-3 mb-4">
+          <h2 class="text-primary mb-0">98%</h2>
+          <p class="text-secondary">{{ 'stats.satisfied_clients'|trans({}, 'default') }}</p>
+        </div>
+        <div class="col-6 col-md-3 mb-4">
+          <h2 class="text-primary mb-0">10 {{ 'stats.warranty'|trans({}, 'default') }}</h2>
+          <p class="text-secondary">{{ 'stats.warranty'|trans({}, 'default') }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aperçu Produits -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>{{ 'products.featured_title'|trans({}, 'default') }}</h2>
+        <p>{{ 'products.featured_subtitle'|trans({}, 'default') }}</p>
+      </div>
+      
+      <div class="text-center mt-5">
+        <a href="{{ path('app_products', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">
+          {{ 'products.view_all'|trans({}, 'default') }}
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Témoignages -->
+  <section class="section bg-light">
+    <div class="container">
+      <div class="section-header">
+        <h2>{{ 'testimonials.title'|trans({}, 'default') }}</h2>
+        <p>{{ 'testimonials.subtitle'|trans({}, 'default') }}</p>
+      </div>
+      
+      <div class="row g-4">
+        <div class="col-lg-4 animate-on-scroll">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "Un projet clé en main parfaitement réalisé ! L'équipe ModusCap a été professionnelle 
+              du début à la fin. Notre maison a été livrée en 85 jours exactement."
+            </div>
+            <div class="testimonial-author">
+              <img src="https://i.pravatar.cc/100?img=1" alt="Sophie Martin" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>Sophie Martin</h5>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Family 90</p>
+                <div class="testimonial-rating">
+                  ★★★★★
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 animate-on-scroll">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "Excellent rapport qualité-prix. Les finitions sont impeccables et la personnalisation 
+              proposée nous a permis d'avoir exactement la maison dont nous rêvions."
+            </div>
+            <div class="testimonial-author">
+              <img src="https://i.pravatar.cc/100?img=12" alt="Pierre Dubois" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>Pierre Dubois</h5>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Prestige 120</p>
+                <div class="testimonial-rating">
+                  ★★★★★
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-4 animate-on-scroll">
+          <div class="testimonial-card">
+            <div class="testimonial-text">
+              "Processus très transparent avec un suivi constant. Le configurateur en ligne nous a 
+              aidés à visualiser notre projet avant de nous engager. Je recommande !"
+            </div>
+            <div class="testimonial-author">
+              <img src="https://i.pravatar.cc/100?img=5" alt="Marie Lefebvre" class="testimonial-avatar">
+              <div class="testimonial-info">
+                <h5>Marie Lefebvre</h5>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Urban 60</p>
+                <div class="testimonial-rating">
+                  ★★★★★
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Final -->
+  <section class="section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2>{{ 'cta.title'|trans({}, 'default') }}</h2>
+          <p class="lead">{{ 'cta.subtitle'|trans({}, 'default') }}</p>
+          <ul class="list-unstyled">
+            <li class="mb-2">
+              <svg width="20" height="20" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              {{ 'cta.free_quote'|trans({}, 'default') }}
+            </li>
+            <li class="mb-2">
+              <svg width="20" height="20" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              {{ 'cta.response_24h'|trans({}, 'default') }}
+            </li>
+            <li class="mb-2">
+              <svg width="20" height="20" fill="currentColor" class="text-success me-2" viewBox="0 0 16 16">
+                <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+              </svg>
+              {{ 'cta.personalized_support'|trans({}, 'default') }}
+            </li>
+          </ul>
+          <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-success btn-lg mt-3">{{ 'cta.get_quote_btn'|trans({}, 'default') }}</a>
+        </div>
+        <div class="col-lg-6 mt-4 mt-lg-0">
+          <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop" 
+               alt="{{ setting('siteName') }}" 
+               class="img-fluid rounded shadow">
+        </div>
+      </div>
+    </div>
+  </section>
 
 {% endblock %}

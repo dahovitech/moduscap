@@ -1,63 +1,52 @@
 # Messages from controllers (domain: frontend)
 
 # Flash messages
-flash:
-  success:
-    quote_submitted: 'Votre demande de devis a été envoyée avec succès. Nous vous contacterons sous 48h.'
-    contact_sent: 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.'
-    account_created: 'Votre compte a été créé avec succès.'
-    password_reset: 'Votre mot de passe a été réinitialisé avec succès.'
-  error:
-    generic: 'Une erreur est survenue. Veuillez réessayer.'
-    invalid_form: 'Le formulaire contient des erreurs. Veuillez vérifier les champs.'
-    email_failed: 'L\'envoi de l\'email a échoué. Veuillez réessayer.'
-  warning:
-    session_expired: 'Votre session a expiré. Veuillez vous reconnecter.'
-  info:
-    processing: 'Votre demande est en cours de traitement.'
+flash.success.quote_submitted: 'Votre demande de devis a été envoyée avec succès. Nous vous contacterons sous 48h.'
+flash.success.contact_sent: 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.'
+flash.success.account_created: 'Votre compte a été créé avec succès.'
+flash.success.password_reset: 'Votre mot de passe a été réinitialisé avec succès.'
+flash.error.generic: 'Une erreur est survenue. Veuillez réessayer.'
+flash.error.invalid_form: 'Le formulaire contient des erreurs. Veuillez vérifier les champs.'
+flash.error.email_failed: 'L''envoi de l''email a échoué. Veuillez réessayer.'
+flash.warning.session_expired: 'Votre session a expiré. Veuillez vous reconnecter.'
+flash.info.processing: 'Votre demande est en cours de traitement.'
 
 # Email subjects
-email:
-  subject:
-    quote_request: 'Nouvelle demande de devis - %site_name%'
-    contact_form: 'Nouveau message de contact - %site_name%'
-    order_confirmation: 'Confirmation de commande #%order_number%'
-    order_approved: 'Votre devis a été approuvé'
-    order_rejected: 'Mise à jour concernant votre devis'
-    payment_confirmed: 'Paiement confirmé pour la commande #%order_number%'
-    payment_reminder: 'Rappel de paiement - Commande #%order_number%'
+email.subject.quote_request: 'Nouvelle demande de devis - %site_name%'
+email.subject.contact_form: 'Nouveau message de contact - %site_name%'
+email.subject.order_confirmation: 'Confirmation de commande #%order_number%'
+email.subject.order_approved: 'Votre devis a été approuvé'
+email.subject.order_rejected: 'Mise à jour concernant votre devis'
+email.subject.payment_confirmed: 'Paiement confirmé pour la commande #%order_number%'
+email.subject.payment_reminder: 'Rappel de paiement - Commande #%order_number%'
 
 # Form labels and placeholders
-form:
-  label:
-    first_name: 'Prénom'
-    last_name: 'Nom'
-    email: 'Adresse email'
-    phone: 'Téléphone'
-    subject: 'Sujet'
-    message: 'Message'
-    company: 'Société (optionnel)'
-    project_type: 'Type de projet'
-    budget: 'Budget estimé'
-    timeline: 'Délai souhaité'
-    address: 'Adresse du terrain'
-    city: 'Ville'
-    postal_code: 'Code postal'
-    country: 'Pays'
-  placeholder:
-    first_name: 'Votre prénom'
-    last_name: 'Votre nom'
-    email: 'exemple@email.com'
-    phone: '+33 6 12 34 56 78'
-    message: 'Décrivez votre projet...'
-    company: 'Nom de votre société'
+form.label.first_name: 'Prénom'
+form.label.last_name: 'Nom'
+form.label.email: 'Adresse email'
+form.label.phone: 'Téléphone'
+form.label.subject: 'Sujet'
+form.label.message: 'Message'
+form.label.company: 'Société (optionnel)'
+form.label.project_type: 'Type de projet'
+form.label.budget: 'Budget estimé'
+form.label.timeline: 'Délai souhaité'
+form.label.address: 'Adresse du terrain'
+form.label.city: 'Ville'
+form.label.postal_code: 'Code postal'
+form.label.country: 'Pays'
+form.placeholder.first_name: 'Votre prénom'
+form.placeholder.last_name: 'Votre nom'
+form.placeholder.email: 'exemple@email.com'
+form.placeholder.phone: '+33 6 12 34 56 78'
+form.placeholder.message: 'Décrivez votre projet...'
+form.placeholder.company: 'Nom de votre société'
 
 # Validation messages
-validation:
-  required: 'Ce champ est obligatoire.'
-  email: 'Veuillez entrer une adresse email valide.'
-  phone: 'Veuillez entrer un numéro de téléphone valide.'
-  min_length: 'Ce champ doit contenir au moins %min% caractères.'
-  max_length: 'Ce champ ne peut pas dépasser %max% caractères.'
-  numeric: 'Ce champ doit contenir uniquement des chiffres.'
-  alpha: 'Ce champ doit contenir uniquement des lettres.'
+validation.required: 'Ce champ est obligatoire.'
+validation.email: 'Veuillez entrer une adresse email valide.'
+validation.phone: 'Veuillez entrer un numéro de téléphone valide.'
+validation.min_length: 'Ce champ doit contenir au moins %min% caractères.'
+validation.max_length: 'Ce champ ne peut pas dépasser %max% caractères.'
+validation.numeric: 'Ce champ doit contenir uniquement des chiffres.'
+validation.alpha: 'Ce champ doit contenir uniquement des lettres.'

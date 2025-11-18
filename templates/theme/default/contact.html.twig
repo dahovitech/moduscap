@@ -1,12 +1,109 @@
 {% extends "@theme/base.html.twig" %}
 
-{% block title %}  {{ parent() }} - {{ 'pages.contact.title'|trans }}{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-  
-{% endblock %}
+{% block title %}{{ setting('siteName') }} - {{ 'contact.title'|trans({}, 'default') }}{% endblock %}
 
 {% block body %}
-   
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mx-auto text-center mb-5">
+          <h1 class="mb-4">{{ 'contact.title'|trans({}, 'default') }}</h1>
+          <p class="lead">{{ 'contact.subtitle'|trans({}, 'default') }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-8 mb-4 mb-lg-0">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <form method="post" action="{{ path('app_contact', {'_locale': app.request.locale}) }}">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="first_name" class="form-label">{{ 'form.label.first_name'|trans({}, 'frontend') }}</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                           placeholder="{{ 'form.placeholder.first_name'|trans({}, 'frontend') }}" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="last_name" class="form-label">{{ 'form.label.last_name'|trans({}, 'frontend') }}</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                           placeholder="{{ 'form.placeholder.last_name'|trans({}, 'frontend') }}" required>
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">{{ 'form.label.email'|trans({}, 'frontend') }}</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           placeholder="{{ 'form.placeholder.email'|trans({}, 'frontend') }}" required>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="phone" class="form-label">{{ 'form.label.phone'|trans({}, 'frontend') }}</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" 
+                           placeholder="{{ 'form.placeholder.phone'|trans({}, 'frontend') }}">
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="subject" class="form-label">{{ 'form.label.subject'|trans({}, 'frontend') }}</label>
+                  <input type="text" class="form-control" id="subject" name="subject" required>
+                </div>
+
+                <div class="mb-3">
+                  <label for="message" class="form-label">{{ 'form.label.message'|trans({}, 'frontend') }}</label>
+                  <textarea class="form-control" id="message" name="message" rows="5" 
+                            placeholder="{{ 'form.placeholder.message'|trans({}, 'frontend') }}" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                  {{ 'contact.form.send'|trans({}, 'default') }}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card shadow-sm mb-4">
+            <div class="card-body">
+              <h3 class="h5 mb-3">{{ 'contact.info.title'|trans({}, 'default') }}</h3>
+              
+              <div class="mb-3">
+                <h4 class="h6 mb-2">{{ 'contact.info.address'|trans({}, 'default') }}</h4>
+                <p class="mb-0">{{ setting('address') }}</p>
+              </div>
+
+              <div class="mb-3">
+                <h4 class="h6 mb-2">{{ 'contact.info.phone'|trans({}, 'default') }}</h4>
+                <p class="mb-0"><a href="tel:{{ setting('phone') }}">{{ setting('phone') }}</a></p>
+              </div>
+
+              <div class="mb-3">
+                <h4 class="h6 mb-2">{{ 'contact.info.email'|trans({}, 'default') }}</h4>
+                <p class="mb-0"><a href="mailto:{{ setting('email') }}">{{ setting('email') }}</a></p>
+              </div>
+
+              <div class="mb-3">
+                <h4 class="h6 mb-2">{{ 'contact.info.hours'|trans({}, 'default') }}</h4>
+                <p class="mb-0">{{ 'contact.info.hours_value'|trans({}, 'default') }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h3 class="h5 mb-3">WhatsApp</h3>
+              <p>{{ 'whatsapp.contact_us'|trans({}, 'default') }}</p>
+              <a href="https://wa.me/{{ setting('whatsapp') }}?text={{ 'whatsapp.default_message'|trans({}, 'default')|url_encode }}" 
+                 class="btn btn-success w-100" target="_blank" rel="noopener">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16" class="me-2">
+                  <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                </svg>
+                {{ 'whatsapp.contact_us'|trans({}, 'default') }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}

@@ -1,0 +1,50 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'legal.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 class="mb-4">{{ 'legal.title'|trans({}, 'default') }}</h1>
+          
+          <div class="content-block mb-5">
+            <h2>{{ 'legal.company_info'|trans({}, 'default') }}</h2>
+            <ul class="list-unstyled">
+              <li class="mb-2"><strong>{{ 'legal.company_name'|trans({}, 'default') }}:</strong> {{ setting('siteName') }}</li>
+              <li class="mb-2"><strong>{{ 'legal.legal_form'|trans({}, 'default') }}:</strong> SAS (Société par Actions Simplifiée)</li>
+              <li class="mb-2"><strong>{{ 'legal.capital'|trans({}, 'default') }}:</strong> 100 000 €</li>
+              <li class="mb-2"><strong>{{ 'legal.siret'|trans({}, 'default') }}:</strong> 123 456 789 00012</li>
+              <li class="mb-2"><strong>{{ 'legal.vat'|trans({}, 'default') }}:</strong> FR12 345678900</li>
+              <li class="mb-2"><strong>{{ 'legal.headquarters'|trans({}, 'default') }}:</strong> {{ setting('address') }}</li>
+              <li class="mb-2"><strong>{{ 'footer.phone'|trans({}, 'default') }}:</strong> {{ setting('phone') }}</li>
+              <li class="mb-2"><strong>{{ 'footer.email'|trans({}, 'default') }}:</strong> {{ setting('email') }}</li>
+            </ul>
+          </div>
+
+          <div class="content-block mb-5">
+            <h2>{{ 'legal.director'|trans({}, 'default') }}</h2>
+            <p>Prudence Dieudonné ASSOGBA</p>
+          </div>
+
+          <div class="content-block mb-5">
+            <h2>{{ 'legal.host'|trans({}, 'default') }}</h2>
+            <p>{{ 'legal.host_info'|trans({}, 'default') }} :</p>
+            <ul class="list-unstyled">
+              <li>Nom de l'hébergeur</li>
+              <li>Adresse de l'hébergeur</li>
+              <li>Téléphone de l'hébergeur</li>
+            </ul>
+          </div>
+
+          <div class="content-block">
+            <h2>Propriété intellectuelle</h2>
+            <p>L'ensemble de ce site relève de la législation française et internationale sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents téléchargeables et les représentations iconographiques et photographiques.</p>
+            <p>La reproduction de tout ou partie de ce site sur un support électronique ou autre quel qu'il soit est formellement interdite sauf autorisation expresse du directeur de la publication.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
