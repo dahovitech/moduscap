@@ -352,6 +352,7 @@
 {% endblock %}
 
 {% block javascripts %}
+{{ parent() }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Status change form handler
