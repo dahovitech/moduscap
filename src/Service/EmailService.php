@@ -13,6 +13,8 @@ use Twig\Environment;
 
 class EmailService
 {
+    private ?Setting $cachedSetting = null;
+
     public function __construct(
         private MailerInterface $mailer,
         private Environment $twig,
@@ -20,12 +22,60 @@ class EmailService
     ) {}
 
     /**
+     * Get site settings (cached during request)
+     */
+    private function getSettings(): ?Setting
+    {
+        if ($this->cachedSetting === null) {
+            $this->cachedSetting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+        }
+        
+        return $this->cachedSetting;
+    }
+
+    /**
+     * Get site name from settings
+     */
+    private function getSiteName(): string
+    {
+        $setting = $this->getSettings();
+        return $setting?->getSiteName() ?: 'Site';
+    }
+
+    /**
+     * Get sender email from settings
+     */
+    private function getSenderEmail(): string
+    {
+        $setting = $this->getSettings();
+        return $setting?->getEmailSender() ?: 'noreply@example.com';
+    }
+
+    /**
+     * Get receiver email from settings (for admin notifications)
+     */
+    private function getReceiverEmail(): string
+    {
+        $setting = $this->getSettings();
+        return $setting?->getEmailReceived() ?: $setting?->getEmail() ?: 'admin@example.com';
+    }
+
+    /**
+     * Get contact email from settings
+     */
+    private function getContactEmail(): string
+    {
+        $setting = $this->getSettings();
+        return $setting?->getEmail() ?: 'contact@example.com';
+    }
+
+    /**
      * Send payment reminder email
      */
     public function sendPaymentReminder(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$order->getClientEmail()) {
                 return false;
@@ -37,12 +87,12 @@ class EmailService
                 'order_number' => $order->getOrderNumber(),
                 'total' => $order->getTotal(),
                 'payment_info' => $setting->getPaymentInfo(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($order->getClientEmail())
                 ->subject('Rappel de paiement - Commande ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/payment_reminder.html.twig', $emailData));
@@ -63,7 +113,7 @@ class EmailService
     public function sendOrderApproval(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$order->getClientEmail()) {
                 return false;
@@ -75,12 +125,12 @@ class EmailService
                 'order_number' => $order->getOrderNumber(),
                 'total' => $order->getTotal(),
                 'payment_info' => $setting->getPaymentInfo(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($order->getClientEmail())
                 ->subject('Commande approuvée - ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/order_approved.html.twig', $emailData));
@@ -100,7 +150,7 @@ class EmailService
     public function sendOrderRejection(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$order->getClientEmail()) {
                 return false;
@@ -112,13 +162,13 @@ class EmailService
                 'order_number' => $order->getOrderNumber(),
                 'total' => $order->getTotal(),
                 'rejection_reason' => $order->getRejectionReason(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com',
-                'contact_email' => $setting->getEmail() ?: 'contact@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail(),
+                'contact_email' => $this->getContactEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($order->getClientEmail())
                 ->subject('Information importante concernant votre commande ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/order_rejected.html.twig', $emailData));
@@ -138,7 +188,7 @@ class EmailService
     public function sendOrderConfirmation(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$order->getClientEmail()) {
                 return false;
@@ -149,12 +199,12 @@ class EmailService
                 'client_name' => $order->getClientName(),
                 'order_number' => $order->getOrderNumber(),
                 'total' => $order->getTotal(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($order->getClientEmail())
                 ->subject('Confirmation de votre commande ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/order_confirmation.html.twig', $emailData));
@@ -174,7 +224,7 @@ class EmailService
     public function sendPaymentConfirmation(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$order->getClientEmail()) {
                 return false;
@@ -186,12 +236,12 @@ class EmailService
                 'order_number' => $order->getOrderNumber(),
                 'total' => $order->getTotal(),
                 'paid_at' => $order->getPaidAt(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($order->getClientEmail())
                 ->subject('Paiement confirmé - ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/payment_confirmed.html.twig', $emailData));
@@ -227,23 +277,21 @@ class EmailService
     public function sendContactNotification(ContactMessage $contact): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting) {
                 return false;
             }
 
-            $receiverEmail = $setting->getEmailReceived() ?: $setting->getEmail() ?: 'contact@moduscap.com';
-
             $emailData = [
                 'contact' => $contact,
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
-                ->to($receiverEmail)
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
+                ->to($this->getReceiverEmail())
                 ->subject('Nouveau message de contact - ' . $contact->getSubject())
                 ->html($this->twig->render('emails/contact_notification.html.twig', $emailData));
 
@@ -262,7 +310,7 @@ class EmailService
     public function sendContactConfirmation(ContactMessage $contact): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting || !$contact->getEmail()) {
                 return false;
@@ -270,16 +318,16 @@ class EmailService
 
             $emailData = [
                 'contact' => $contact,
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com',
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail(),
                 'site_phone' => $setting->getPhone(),
                 'site_address' => $setting->getAddress()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($contact->getEmail())
-                ->subject('Confirmation de votre message - ' . ($setting->getSiteName() ?: 'MODUSCAP'))
+                ->subject('Confirmation de votre message - ' . $this->getSiteName())
                 ->html($this->twig->render('emails/contact_confirmation.html.twig', $emailData));
 
             $this->mailer->send($email);
@@ -297,7 +345,7 @@ class EmailService
     public function sendRegistrationConfirmation(string $userEmail, string $userName): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting) {
                 return false;
@@ -306,14 +354,14 @@ class EmailService
             $emailData = [
                 'user_name' => $userName,
                 'user_email' => $userEmail,
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
                 ->to($userEmail)
-                ->subject('Bienvenue sur ' . ($setting->getSiteName() ?: 'MODUSCAP'))
+                ->subject('Bienvenue sur ' . $this->getSiteName())
                 ->html($this->twig->render('emails/registration_confirmation.html.twig', $emailData));
 
             $this->mailer->send($email);
@@ -331,13 +379,11 @@ class EmailService
     public function sendPaymentProofUploadNotification(Order $order): bool
     {
         try {
-            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            $setting = $this->getSettings();
             
             if (!$setting) {
                 return false;
             }
-
-            $receiverEmail = $setting->getEmailReceived() ?: $setting->getEmail() ?: 'contact@moduscap.com';
 
             $emailData = [
                 'order' => $order,
@@ -346,13 +392,13 @@ class EmailService
                 'total' => $order->getTotal(),
                 'client_email' => $order->getClientEmail(),
                 'client_phone' => $order->getClientPhone(),
-                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
-                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+                'site_name' => $this->getSiteName(),
+                'site_email' => $this->getSenderEmail()
             ];
 
             $email = (new Email())
-                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
-                ->to($receiverEmail)
+                ->from(new Address($this->getSenderEmail(), $this->getSiteName()))
+                ->to($this->getReceiverEmail())
                 ->subject('Nouveau justificatif de paiement - Commande ' . $order->getOrderNumber())
                 ->html($this->twig->render('emails/payment_proof_uploaded.html.twig', $emailData));
 
