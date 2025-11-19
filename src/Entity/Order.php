@@ -75,6 +75,11 @@ class Order
     private ?string $paymentProof = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    #[Assert\NotNull(message: 'order.user.required')]
+    private ?User $user = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $approvedBy = null;
 
@@ -264,6 +269,17 @@ class Order
     public function setPaymentProof(?string $paymentProof): static
     {
         $this->paymentProof = $paymentProof;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
         return $this;
     }
 

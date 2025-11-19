@@ -180,22 +180,41 @@ class ProductController extends AbstractController
      */
     private function handleProductCustomization(Request $request, Product $product): Response
     {
+        // Check if user is logged in - redirect to login if not
+        if (!$this->getUser()) {
+            // Store the customization in session to resume after login
+            $formData = $request->request->all();
+            $request->getSession()->set('pending_customization', [
+                'product_code' => $product->getCode(),
+                'form_data' => $formData
+            ]);
+            
+            $this->addFlash('info', $this->translator->trans('controller.auth.login_required_for_quote'));
+            return $this->redirectToRoute('app_user_login', ['_locale' => $request->getLocale()]);
+        }
+        
         $formData = $request->request->all();
         
         $selectedOptions = $formData['selected_options'] ?? [];
         $quantity = max(1, intval($formData['quantity'] ?? 1));
         $customizationNotes = $formData['customization_notes'] ?? null;
-        $clientName = $formData['client_name'] ?? null;
-        $clientEmail = $formData['client_email'] ?? null;
-        $clientPhone = $formData['client_phone'] ?? null;
-        $clientAddress = $formData['client_address'] ?? null;
+        
+        // Get user info to pre-fill
+        $user = $this->getUser();
+        $clientName = $formData['client_name'] ?? ($user->getFirstName() . ' ' . $user->getLastName());
+        $clientEmail = $formData['client_email'] ?? $user->getEmail();
+        $clientPhone = $formData['client_phone'] ?? '';
+        $clientAddress = $formData['client_address'] ?? '';
 
         // Validate product and options
         $validation = $this->priceCalculator->validateProductOptions($product, $selectedOptions);
         
         if (!$validation['is_valid']) {
             $this->addFlash('error', $this->translator->trans('controller.product.options_invalid'));
-            return $this->redirectToRoute('app_product_show', ['code' => $product->getCode()]);
+            return $this->redirectToRoute('app_product_show', [
+                'code' => $product->getCode(),
+                '_locale' => $request->getLocale()
+            ]);
         }
 
         // Store customization in session for next step
@@ -212,7 +231,7 @@ class ProductController extends AbstractController
             ]
         ]);
 
-        return $this->redirectToRoute('app_quote_create');
+        return $this->redirectToRoute('app_quote_create', ['_locale' => $request->getLocale()]);
     }
 
     /**

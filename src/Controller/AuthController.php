@@ -111,9 +111,9 @@ class AuthController extends AbstractController
         
         $user = $this->getUser();
         
-        // Get user's orders by email
+        // Get user's orders using the user relationship
         $orders = $this->orderRepository->findBy(
-            ['clientEmail' => $user->getEmail()],
+            ['user' => $user],
             ['createdAt' => 'DESC']
         );
 
@@ -151,10 +151,10 @@ class AuthController extends AbstractController
         $status = $request->query->get('status');
         $search = $request->query->get('search');
 
-        // Build query
+        // Build query using user relationship
         $queryBuilder = $this->orderRepository->createQueryBuilder('o')
-            ->where('o.clientEmail = :email')
-            ->setParameter('email', $user->getEmail())
+            ->where('o.user = :user')
+            ->setParameter('user', $user)
             ->orderBy('o.createdAt', 'DESC');
 
         if ($status) {
@@ -189,8 +189,8 @@ class AuthController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
         }
 
-        // Security: Check if order belongs to this user
-        if ($order->getClientEmail() !== $user->getEmail()) {
+        // Security: Check if order belongs to this user using relationship
+        if ($order->getUser() !== $user) {
             throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
         }
 
@@ -213,8 +213,8 @@ class AuthController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
         }
 
-        // Security: Check if order belongs to this user
-        if ($order->getClientEmail() !== $user->getEmail()) {
+        // Security: Check if order belongs to this user using relationship
+        if ($order->getUser() !== $user) {
             throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
         }
 
@@ -247,8 +247,8 @@ class AuthController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
         }
 
-        // Security: Check if order belongs to this user
-        if ($order->getClientEmail() !== $user->getEmail()) {
+        // Security: Check if order belongs to this user using relationship
+        if ($order->getUser() !== $user) {
             throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
         }
 

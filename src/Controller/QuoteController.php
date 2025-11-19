@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/{_locale}/quote', requirements: ['_locale' => '[a-z]{2}'])]
 class QuoteController extends AbstractController
@@ -33,6 +34,7 @@ class QuoteController extends AbstractController
      * Create quote from product customization
      */
     #[Route('/create', name: 'app_quote_create', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function create(Request $request): Response
     {
         $customization = $request->getSession()->get('product_customization');
@@ -84,12 +86,16 @@ class QuoteController extends AbstractController
     {
         $order = new Order();
         
-        // Set client information
+        // Associate user to order (MANDATORY)
+        $user = $this->getUser();
+        $order->setUser($user);
+        
+        // Set client information from customization or user profile
         $clientInfo = $customization['client_info'];
-        $order->setClientName($clientInfo['name']);
-        $order->setClientEmail($clientInfo['email']);
-        $order->setClientPhone($clientInfo['phone']);
-        $order->setClientAddress($clientInfo['address']);
+        $order->setClientName($clientInfo['name'] ?? ($user->getFirstName() . ' ' . $user->getLastName()));
+        $order->setClientEmail($clientInfo['email'] ?? $user->getEmail());
+        $order->setClientPhone($clientInfo['phone'] ?? '');
+        $order->setClientAddress($clientInfo['address'] ?? '');
         $order->setClientNotes($customization['customization_notes']);
 
         // Create order item
@@ -149,12 +155,18 @@ class QuoteController extends AbstractController
      * Quote confirmation page
      */
     #[Route('/confirmation/{order_number}', name: 'app_quote_confirmation', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function confirmation(Request $request, string $orderNumber): Response
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $orderNumber]);
         
         if (!$order) {
             throw $this->createNotFoundException($this->translator->trans('controller.order.not_found'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access this order.');
         }
 
         $paymentInfo = null;
@@ -173,12 +185,18 @@ class QuoteController extends AbstractController
      * Upload payment proof
      */
     #[Route('/{order_number}/upload-payment', name: 'app_quote_upload_payment', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
     public function uploadPaymentProof(Request $request, string $orderNumber): Response
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $orderNumber]);
         
         if (!$order) {
             throw $this->createNotFoundException($this->translator->trans('controller.order.not_found'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access this order.');
         }
 
         /** @var UploadedFile $paymentFile */
@@ -267,12 +285,18 @@ class QuoteController extends AbstractController
      * Track order progress
      */
     #[Route('/{order_number}/track', name: 'app_quote_track', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function trackOrder(Request $request, string $orderNumber): Response
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $orderNumber]);
         
         if (!$order) {
             throw $this->createNotFoundException($this->translator->trans('controller.order.not_found'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('You cannot access this order.');
         }
 
         // Define status progression
