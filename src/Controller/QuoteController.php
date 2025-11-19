@@ -292,7 +292,97 @@ class QuoteController extends AbstractController
     }
 
     /**
-     * Track order progress
+     * Track order page - redirects based on authentication status
+     * - If logged in: redirects to user's orders list or specific order
+     * - If not logged in: shows tracking form
+     */
+    #[Route('/track', name: 'app_order_track', methods: ['GET', 'POST'])]
+    public function trackOrderPage(Request $request): Response
+    {
+        // If user is logged in, redirect to their orders page
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_user_orders', ['_locale' => $request->getLocale()]);
+        }
+
+        // For non-authenticated users, handle tracking form
+        if ($request->isMethod('POST')) {
+            $orderNumber = $request->request->get('order_number');
+            $email = $request->request->get('email');
+
+            if (!$orderNumber || !$email) {
+                $this->addFlash('error', $this->translator->trans('controller.quote.tracking_required_fields'));
+                return $this->redirectToRoute('app_order_track', ['_locale' => $request->getLocale()]);
+            }
+
+            // Find order by order number and email
+            $order = $this->entityManager->getRepository(Order::class)->findOneBy([
+                'orderNumber' => $orderNumber,
+                'clientEmail' => $email
+            ]);
+
+            if (!$order) {
+                $this->addFlash('error', $this->translator->trans('controller.quote.tracking_not_found'));
+                return $this->redirectToRoute('app_order_track', ['_locale' => $request->getLocale()]);
+            }
+
+            // Store order number in session for tracking display
+            $request->getSession()->set('tracking_order_number', $orderNumber);
+            $request->getSession()->set('tracking_email', $email);
+
+            // Redirect to tracking display page
+            return $this->redirectToRoute('app_order_track_display', [
+                '_locale' => $request->getLocale(),
+                'orderNumber' => $orderNumber
+            ]);
+        }
+
+        // Show tracking form
+        return $this->render('@theme/quote/track_form.html.twig');
+    }
+
+    /**
+     * Display tracking information for non-authenticated users
+     */
+    #[Route('/track/{orderNumber}', name: 'app_order_track_display', methods: ['GET'])]
+    public function trackOrderDisplay(Request $request, string $orderNumber): Response
+    {
+        // If user is logged in, redirect to authenticated tracking
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_quote_track', [
+                '_locale' => $request->getLocale(),
+                'orderNumber' => $orderNumber
+            ]);
+        }
+
+        // For non-authenticated users, verify session data
+        $sessionOrderNumber = $request->getSession()->get('tracking_order_number');
+        $sessionEmail = $request->getSession()->get('tracking_email');
+
+        if ($sessionOrderNumber !== $orderNumber || !$sessionEmail) {
+            $this->addFlash('error', $this->translator->trans('controller.quote.tracking_session_expired'));
+            return $this->redirectToRoute('app_order_track', ['_locale' => $request->getLocale()]);
+        }
+
+        // Find order with session verification
+        $order = $this->entityManager->getRepository(Order::class)->findOneBy([
+            'orderNumber' => $orderNumber,
+            'clientEmail' => $sessionEmail
+        ]);
+
+        if (!$order) {
+            $request->getSession()->remove('tracking_order_number');
+            $request->getSession()->remove('tracking_email');
+            $this->addFlash('error', $this->translator->trans('controller.quote.tracking_not_found'));
+            return $this->redirectToRoute('app_order_track', ['_locale' => $request->getLocale()]);
+        }
+
+        return $this->render('@theme/quote/track.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    /**
+     * Track order progress (for authenticated users)
      */
     #[Route('/{orderNumber}/track', name: 'app_quote_track', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]

@@ -1,0 +1,104 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'quote.track_form.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+  <section class="section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="text-center mb-5">
+            <h1 class="mb-3">{{ 'quote.track_form.title'|trans({}, 'default') }}</h1>
+            <p class="text-muted">{{ 'quote.track_form.subtitle'|trans({}, 'default') }}</p>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+
+              <form method="POST" action="{{ path('app_order_track', {'_locale': app.request.locale}) }}">
+                <div class="mb-4">
+                  <label for="order_number" class="form-label">
+                    {{ 'quote.track_form.order_number'|trans({}, 'default') }}
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="order_number" 
+                    name="order_number" 
+                    placeholder="{{ 'quote.track_form.order_number_placeholder'|trans({}, 'default') }}"
+                    required
+                  >
+                  <div class="form-text">{{ 'quote.track_form.order_number_help'|trans({}, 'default') }}</div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="email" class="form-label">
+                    {{ 'quote.track_form.email'|trans({}, 'default') }}
+                    <span class="text-danger">*</span>
+                  </label>
+                  <input 
+                    type="email" 
+                    class="form-control form-control-lg" 
+                    id="email" 
+                    name="email" 
+                    placeholder="{{ 'quote.track_form.email_placeholder'|trans({}, 'default') }}"
+                    required
+                  >
+                  <div class="form-text">{{ 'quote.track_form.email_help'|trans({}, 'default') }}</div>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <svg width="20" height="20" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                      <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg>
+                    {{ 'quote.track_form.submit'|trans({}, 'default') }}
+                  </button>
+                </div>
+              </form>
+
+              <hr class="my-4">
+
+              <div class="text-center">
+                <p class="text-muted mb-2">{{ 'quote.track_form.have_account'|trans({}, 'default') }}</p>
+                <a href="{{ path('app_user_login', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+                  {{ 'quote.track_form.login_link'|trans({}, 'default') }}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <a href="{{ path('app_homepage', {'_locale': app.request.locale}) }}" class="text-muted">
+              <svg width="16" height="16" fill="currentColor" class="me-1" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+              </svg>
+              {{ 'common.back_home'|trans({}, 'default') }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <style>
+    .card {
+      border: none;
+      border-radius: 1rem;
+    }
+    .form-control-lg {
+      border-radius: 0.5rem;
+    }
+    .btn-lg {
+      border-radius: 0.5rem;
+      padding: 0.75rem 1.5rem;
+    }
+  </style>
+{% endblock %}
