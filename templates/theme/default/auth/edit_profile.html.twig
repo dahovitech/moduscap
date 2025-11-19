@@ -3,58 +3,64 @@
 {% block title %}{{ setting('siteName') }} - {{ 'auth.edit_profile.title'|trans({}, 'default') }}{% endblock %}
 
 {% block body %}
-  <section class="section">
+<section class="section">
     <div class="container">
-      <div class="row">
-        <div class="col-lg-6 mx-auto">
-          <h1 class="mb-4">{{ 'auth.edit_profile.title'|trans({}, 'default') }}</h1>
-
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <form method="post">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="first_name" class="form-label">{{ 'auth.edit_profile.first_name'|trans({}, 'default') }}</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" 
-                           value="{{ user.firstName }}" required>
-                  </div>
-
-                  <div class="col-md-6 mb-3">
-                    <label for="last_name" class="form-label">{{ 'auth.edit_profile.last_name'|trans({}, 'default') }}</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" 
-                           value="{{ user.lastName }}" required>
-                  </div>
-                </div>
-
-                <hr class="my-4">
-
-                <h5 class="mb-3">{{ 'auth.edit_profile.change_password'|trans({}, 'default') }}</h5>
-                <p class="text-muted small">{{ 'auth.edit_profile.password_help'|trans({}, 'default') }}</p>
-
-                <div class="mb-3">
-                  <label for="new_password" class="form-label">{{ 'auth.edit_profile.new_password'|trans({}, 'default') }}</label>
-                  <input type="password" class="form-control" id="new_password" name="new_password" minlength="8">
-                </div>
-
-                <div class="mb-3">
-                  <label for="confirm_password" class="form-label">{{ 'auth.edit_profile.confirm_password'|trans({}, 'default') }}</label>
-                  <input type="password" class="form-control" id="confirm_password" name="confirm_password">
-                </div>
-
-                <div class="d-grid gap-2 d-md-flex">
-                  <button type="submit" class="btn btn-primary">
-                    {{ 'auth.edit_profile.save_button'|trans({}, 'default') }}
-                  </button>
-                  <a href="{{ path('app_user_profile', {'_locale': app.request.locale}) }}" 
-                     class="btn btn-outline-secondary">
-                    {{ 'common.cancel'|trans({}, 'default') }}
-                  </a>
-                </div>
-              </form>
+        <h1 class="mb-4">{{ 'auth.edit_profile.title'|trans({}, 'default') }}</h1>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                {% include '@theme/auth/_sidebar.html.twig' %}
             </div>
-          </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">{{ 'auth.edit_profile.first_name'|trans({}, 'default') }}</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                                           value="{{ user.firstName }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">{{ 'auth.edit_profile.last_name'|trans({}, 'default') }}</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                                           value="{{ user.lastName }}" required>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h5 class="mb-3">{{ 'auth.edit_profile.change_password'|trans({}, 'default') }}</h5>
+                            <p class="text-muted small">{{ 'auth.edit_profile.password_help'|trans({}, 'default') }}</p>
+
+                            <div class="mb-3">
+                                <label for="new_password" class="form-label">{{ 'auth.edit_profile.new_password'|trans({}, 'default') }}</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password" minlength="8">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">{{ 'auth.edit_profile.confirm_password'|trans({}, 'default') }}</label>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save me-2"></i>{{ 'auth.edit_profile.save_button'|trans({}, 'default') }}
+                                </button>
+                                <a href="{{ path('app_user_profile', {'_locale': app.request.locale}) }}" 
+                                   class="btn btn-outline-secondary">
+                                    {{ 'common.cancel'|trans({}, 'default') }}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 {% endblock %}

@@ -1,0 +1,146 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'client.orders.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <h1 class="mb-4">{{ 'client.orders.title'|trans({}, 'default') }}</h1>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                {% include '@theme/auth/_sidebar.html.twig' %}
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Filters -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <form method="get" action="{{ path('app_user_orders', {'_locale': app.request.locale}) }}">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label for="search" class="form-label">{{ 'client.orders.search'|trans({}, 'default') }}</label>
+                                    <input type="text" class="form-control" id="search" name="search" 
+                                           value="{{ searchTerm }}" 
+                                           placeholder="{{ 'client.orders.search_placeholder'|trans({}, 'default') }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="status" class="form-label">{{ 'client.orders.filter_status'|trans({}, 'default') }}</label>
+                                    <select class="form-select" id="status" name="status">
+                                        <option value="">{{ 'client.orders.all_status'|trans({}, 'default') }}</option>
+                                        <option value="pending" {% if currentStatus == 'pending' %}selected{% endif %}>{{ 'order.status.pending'|trans({}, 'admin') }}</option>
+                                        <option value="approved" {% if currentStatus == 'approved' %}selected{% endif %}>{{ 'order.status.approved'|trans({}, 'admin') }}</option>
+                                        <option value="rejected" {% if currentStatus == 'rejected' %}selected{% endif %}>{{ 'order.status.rejected'|trans({}, 'admin') }}</option>
+                                        <option value="paid" {% if currentStatus == 'paid' %}selected{% endif %}>{{ 'order.status.paid'|trans({}, 'admin') }}</option>
+                                        <option value="processing" {% if currentStatus == 'processing' %}selected{% endif %}>{{ 'order.status.processing'|trans({}, 'admin') }}</option>
+                                        <option value="shipped" {% if currentStatus == 'shipped' %}selected{% endif %}>{{ 'order.status.shipped'|trans({}, 'admin') }}</option>
+                                        <option value="delivered" {% if currentStatus == 'delivered' %}selected{% endif %}>{{ 'order.status.delivered'|trans({}, 'admin') }}</option>
+                                        <option value="cancelled" {% if currentStatus == 'cancelled' %}selected{% endif %}>{{ 'order.status.cancelled'|trans({}, 'admin') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-primary me-2">
+                                        <i class="bi bi-funnel me-1"></i>{{ 'client.orders.filter'|trans({}, 'default') }}
+                                    </button>
+                                    <a href="{{ path('app_user_orders', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+                                        <i class="bi bi-x-circle me-1"></i>{{ 'client.orders.reset'|trans({}, 'default') }}
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Orders List -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-ul me-2"></i>
+                            {{ 'client.orders.list'|trans({}, 'default') }}
+                            <span class="badge bg-secondary ms-2">{{ orders|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if orders|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>{{ 'client.orders.number'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.date'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.status'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.items'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.total'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.actions'|trans({}, 'default') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ order.orderNumber }}</strong>
+                                                    {% if order.status == 'approved' and not order.paymentProof %}
+                                                        <span class="badge bg-warning text-dark ms-1">
+                                                            <i class="bi bi-exclamation-triangle"></i>
+                                                        </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                                <td>
+                                                    {% set statusColors = {
+                                                        'pending': 'warning',
+                                                        'approved': 'info',
+                                                        'rejected': 'danger',
+                                                        'paid': 'success',
+                                                        'processing': 'primary',
+                                                        'shipped': 'info',
+                                                        'delivered': 'success',
+                                                        'cancelled': 'secondary'
+                                                    } %}
+                                                    <span class="badge bg-{{ statusColors[order.status] ?? 'secondary' }}">
+                                                        {{ ('order.status.' ~ order.status)|trans({}, 'admin') }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ order.orderItems|length }} {{ 'client.orders.items_count'|trans({}, 'default') }}</td>
+                                                <td><strong>{{ order.total|number_format(0, ',', ' ') }} €</strong></td>
+                                                <td>
+                                                    <div class="btn-group" role="group">
+                                                        <a href="{{ path('app_user_order_detail', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" 
+                                                           class="btn btn-sm btn-outline-primary" title="{{ 'client.orders.view_detail'|trans({}, 'default') }}">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                        <a href="{{ path('app_user_order_track', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" 
+                                                           class="btn btn-sm btn-outline-info" title="{{ 'client.orders.track'|trans({}, 'default') }}">
+                                                            <i class="bi bi-geo-alt"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+                                <p class="text-muted mb-3">
+                                    {% if searchTerm or currentStatus %}
+                                        {{ 'client.orders.no_results'|trans({}, 'default') }}
+                                    {% else %}
+                                        {{ 'client.orders.no_orders'|trans({}, 'default') }}
+                                    {% endif %}
+                                </p>
+                                <a href="{{ path('app_quote_create', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>{{ 'client.orders.create_quote'|trans({}, 'default') }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

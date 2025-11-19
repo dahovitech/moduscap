@@ -1,0 +1,164 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'client.dashboard.title'|trans({}, 'default') }}{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <h1 class="mb-4">{{ 'client.dashboard.title'|trans({}, 'default') }}</h1>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                {% include '@theme/auth/_sidebar.html.twig' %}
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm border-primary">
+                            <div class="card-body text-center">
+                                <i class="bi bi-receipt fs-1 text-primary mb-2"></i>
+                                <h3 class="mb-0">{{ totalOrders }}</h3>
+                                <small class="text-muted">{{ 'client.dashboard.total_orders'|trans({}, 'default') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm border-warning">
+                            <div class="card-body text-center">
+                                <i class="bi bi-hourglass-split fs-1 text-warning mb-2"></i>
+                                <h3 class="mb-0">{{ pendingOrders }}</h3>
+                                <small class="text-muted">{{ 'client.dashboard.pending_orders'|trans({}, 'default') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm border-success">
+                            <div class="card-body text-center">
+                                <i class="bi bi-check-circle fs-1 text-success mb-2"></i>
+                                <h3 class="mb-0">{{ completedOrders }}</h3>
+                                <small class="text-muted">{{ 'client.dashboard.completed_orders'|trans({}, 'default') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow-sm border-info">
+                            <div class="card-body text-center">
+                                <i class="bi bi-currency-euro fs-1 text-info mb-2"></i>
+                                <h3 class="mb-0">{{ totalSpent|number_format(0, ',', ' ') }}</h3>
+                                <small class="text-muted">{{ 'client.dashboard.total_spent'|trans({}, 'default') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Awaiting Payment Alert -->
+                {% if awaitingPayment|length > 0 %}
+                <div class="alert alert-warning mb-4">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ 'client.dashboard.payment_required'|trans({}, 'default') }}
+                    </h5>
+                    <p class="mb-2">{{ 'client.dashboard.payment_required_message'|trans({'%count%': awaitingPayment|length}, 'default') }}</p>
+                    <hr>
+                    {% for order in awaitingPayment %}
+                        <div class="mb-2">
+                            <strong>{{ order.orderNumber }}</strong> - {{ order.total|number_format(0, ',', ' ') }} €
+                            <a href="{{ path('app_user_order_detail', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" class="btn btn-sm btn-warning ms-2">
+                                <i class="bi bi-upload me-1"></i>{{ 'client.dashboard.upload_payment'|trans({}, 'default') }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <!-- Recent Orders -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clock-history me-2"></i>
+                            {{ 'client.dashboard.recent_orders'|trans({}, 'default') }}
+                        </h5>
+                        <a href="{{ path('app_user_orders', {'_locale': app.request.locale}) }}" class="btn btn-sm btn-outline-primary">
+                            {{ 'client.dashboard.view_all'|trans({}, 'default') }}
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        {% if recentOrders|length > 0 %}
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'client.orders.number'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.date'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.status'|trans({}, 'default') }}</th>
+                                            <th>{{ 'client.orders.total'|trans({}, 'default') }}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in recentOrders %}
+                                            <tr>
+                                                <td><strong>{{ order.orderNumber }}</strong></td>
+                                                <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                                                <td>
+                                                    <span class="badge bg-{{ order.status == 'delivered' ? 'success' : (order.status == 'rejected' ? 'danger' : (order.status == 'approved' ? 'info' : 'warning')) }}">
+                                                        {{ ('order.status.' ~ order.status)|trans({}, 'admin') }}
+                                                    </span>
+                                                </td>
+                                                <td><strong>{{ order.total|number_format(0, ',', ' ') }} €</strong></td>
+                                                <td>
+                                                    <a href="{{ path('app_user_order_detail', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="bi bi-inbox fs-1 text-muted mb-3"></i>
+                                <p class="text-muted">{{ 'client.dashboard.no_orders'|trans({}, 'default') }}</p>
+                                <a href="{{ path('app_quote_create', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                                    <i class="bi bi-plus-circle me-2"></i>{{ 'client.dashboard.create_first_quote'|trans({}, 'default') }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-lightning-fill me-2"></i>
+                            {{ 'client.dashboard.quick_actions'|trans({}, 'default') }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2 d-md-flex">
+                            <a href="{{ path('app_quote_create', {'_locale': app.request.locale}) }}" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-2"></i>{{ 'client.dashboard.new_quote'|trans({}, 'default') }}
+                            </a>
+                            <a href="{{ path('app_user_orders', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-box-seam me-2"></i>{{ 'client.dashboard.view_orders'|trans({}, 'default') }}
+                            </a>
+                            <a href="{{ path('app_user_profile_edit', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-person-gear me-2"></i>{{ 'client.dashboard.edit_profile'|trans({}, 'default') }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -67,7 +67,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
         // Default redirect for regular users - use locale from request
         $locale = $request->getLocale();
-        return new RedirectResponse($this->urlGenerator->generate('app_user_profile', ['_locale' => $locale]));
+        return new RedirectResponse($this->urlGenerator->generate('app_user_dashboard', ['_locale' => $locale]));
     }
 
     protected function getLoginUrl(Request $request): string

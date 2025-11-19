@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\User;
+use App\Repository\OrderRepository;
 use App\Service\EmailService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +24,8 @@ class AuthController extends AbstractController
         private UserPasswordHasherInterface $passwordHasher,
         private EmailService $emailService,
         private ValidatorInterface $validator,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
+        private OrderRepository $orderRepository
     ) {}
 
     #[Route('/login', name: 'app_user_login')]
@@ -30,7 +33,7 @@ class AuthController extends AbstractController
     {
         // Redirect if already logged in
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_user_profile', ['_locale' => $request->getLocale()]);
+            return $this->redirectToRoute('app_user_dashboard', ['_locale' => $request->getLocale()]);
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -47,7 +50,7 @@ class AuthController extends AbstractController
     {
         // Redirect if already logged in
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_user_profile', ['_locale' => $request->getLocale()]);
+            return $this->redirectToRoute('app_user_dashboard', ['_locale' => $request->getLocale()]);
         }
 
         if ($request->isMethod('POST')) {
@@ -99,6 +102,171 @@ class AuthController extends AbstractController
         }
 
         return $this->render('@theme/auth/register.html.twig');
+    }
+
+    #[Route('/dashboard', name: 'app_user_dashboard')]
+    public function dashboard(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        $user = $this->getUser();
+        
+        // Get user's orders by email
+        $orders = $this->orderRepository->findBy(
+            ['clientEmail' => $user->getEmail()],
+            ['createdAt' => 'DESC']
+        );
+
+        // Calculate statistics
+        $totalOrders = count($orders);
+        $pendingOrders = count(array_filter($orders, fn($o) => in_array($o->getStatus(), ['pending', 'approved'])));
+        $completedOrders = count(array_filter($orders, fn($o) => $o->getStatus() === 'delivered'));
+        $totalSpent = array_reduce($orders, fn($sum, $o) => $sum + ($o->getStatus() === 'delivered' ? $o->getTotal() : 0), 0);
+
+        // Get recent orders (last 5)
+        $recentOrders = array_slice($orders, 0, 5);
+
+        // Get orders awaiting payment
+        $awaitingPayment = array_filter($orders, fn($o) => $o->getStatus() === 'approved' && !$o->getPaymentProof());
+
+        return $this->render('@theme/auth/dashboard.html.twig', [
+            'user' => $user,
+            'totalOrders' => $totalOrders,
+            'pendingOrders' => $pendingOrders,
+            'completedOrders' => $completedOrders,
+            'totalSpent' => $totalSpent,
+            'recentOrders' => $recentOrders,
+            'awaitingPayment' => $awaitingPayment,
+        ]);
+    }
+
+    #[Route('/my-orders', name: 'app_user_orders')]
+    public function myOrders(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        $user = $this->getUser();
+        
+        // Get filter parameters
+        $status = $request->query->get('status');
+        $search = $request->query->get('search');
+
+        // Build query
+        $queryBuilder = $this->orderRepository->createQueryBuilder('o')
+            ->where('o.clientEmail = :email')
+            ->setParameter('email', $user->getEmail())
+            ->orderBy('o.createdAt', 'DESC');
+
+        if ($status) {
+            $queryBuilder->andWhere('o.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($search) {
+            $queryBuilder->andWhere('o.orderNumber LIKE :search OR o.clientName LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        $orders = $queryBuilder->getQuery()->getResult();
+
+        return $this->render('@theme/auth/orders/index.html.twig', [
+            'orders' => $orders,
+            'currentStatus' => $status,
+            'searchTerm' => $search,
+        ]);
+    }
+
+    #[Route('/my-orders/{orderNumber}', name: 'app_user_order_detail')]
+    public function orderDetail(string $orderNumber): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        $user = $this->getUser();
+        
+        $order = $this->orderRepository->findOneBy(['orderNumber' => $orderNumber]);
+
+        if (!$order) {
+            throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getClientEmail() !== $user->getEmail()) {
+            throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
+        }
+
+        return $this->render('@theme/auth/orders/show.html.twig', [
+            'order' => $order,
+            'order_items' => $order->getOrderItems(),
+        ]);
+    }
+
+    #[Route('/my-orders/{orderNumber}/track', name: 'app_user_order_track')]
+    public function trackOrder(string $orderNumber): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        $user = $this->getUser();
+        
+        $order = $this->orderRepository->findOneBy(['orderNumber' => $orderNumber]);
+
+        if (!$order) {
+            throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getClientEmail() !== $user->getEmail()) {
+            throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
+        }
+
+        // Build status timeline
+        $timeline = [
+            ['status' => 'pending', 'date' => $order->getCreatedAt(), 'completed' => true],
+            ['status' => 'approved', 'date' => $order->getApprovedAt(), 'completed' => $order->getApprovedAt() !== null],
+            ['status' => 'paid', 'date' => $order->getPaidAt(), 'completed' => $order->getPaidAt() !== null],
+            ['status' => 'processing', 'date' => null, 'completed' => in_array($order->getStatus(), ['processing', 'shipped', 'delivered'])],
+            ['status' => 'shipped', 'date' => null, 'completed' => in_array($order->getStatus(), ['shipped', 'delivered'])],
+            ['status' => 'delivered', 'date' => null, 'completed' => $order->getStatus() === 'delivered'],
+        ];
+
+        return $this->render('@theme/auth/orders/track.html.twig', [
+            'order' => $order,
+            'timeline' => $timeline,
+        ]);
+    }
+
+    #[Route('/my-orders/{orderNumber}/cancel', name: 'app_user_order_cancel', methods: ['POST'])]
+    public function cancelOrder(Request $request, string $orderNumber): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+        
+        $user = $this->getUser();
+        
+        $order = $this->orderRepository->findOneBy(['orderNumber' => $orderNumber]);
+
+        if (!$order) {
+            throw $this->createNotFoundException($this->translator->trans('client.order.not_found', [], 'default'));
+        }
+
+        // Security: Check if order belongs to this user
+        if ($order->getClientEmail() !== $user->getEmail()) {
+            throw $this->createAccessDeniedException($this->translator->trans('client.order.access_denied', [], 'default'));
+        }
+
+        // Only pending orders can be cancelled by client
+        if ($order->getStatus() !== 'pending') {
+            $this->addFlash('error', $this->translator->trans('client.order.cannot_cancel', [], 'default'));
+            return $this->redirectToRoute('app_user_order_detail', [
+                '_locale' => $request->getLocale(),
+                'orderNumber' => $orderNumber
+            ]);
+        }
+
+        $order->setStatus('cancelled');
+        $this->entityManager->flush();
+
+        $this->addFlash('success', $this->translator->trans('client.order.cancelled_success', [], 'default'));
+        
+        return $this->redirectToRoute('app_user_orders', ['_locale' => $request->getLocale()]);
     }
 
     #[Route('/profile', name: 'app_user_profile')]

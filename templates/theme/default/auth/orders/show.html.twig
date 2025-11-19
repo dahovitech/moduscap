@@ -1,0 +1,223 @@
+{% extends '@theme/base.html.twig' %}
+
+{% block title %}{{ setting('siteName') }} - {{ 'client.order.detail_title'|trans({'%number%': order.orderNumber}, 'default') }}{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{{ 'client.order.detail_title'|trans({'%number%': order.orderNumber}, 'default') }}</h1>
+            <a href="{{ path('app_user_orders', {'_locale': app.request.locale}) }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>{{ 'client.order.back_to_list'|trans({}, 'default') }}
+            </a>
+        </div>
+        
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 mb-4">
+                {% include '@theme/auth/_sidebar.html.twig' %}
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="row">
+                    <!-- Order Info -->
+                    <div class="col-lg-8 mb-4">
+                        <!-- Status Card -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-info-circle me-2"></i>{{ 'client.order.status_info'|trans({}, 'default') }}
+                                </h5>
+                                {% set statusColors = {
+                                    'pending': 'warning',
+                                    'approved': 'info',
+                                    'rejected': 'danger',
+                                    'paid': 'success',
+                                    'processing': 'primary',
+                                    'shipped': 'info',
+                                    'delivered': 'success',
+                                    'cancelled': 'secondary'
+                                } %}
+                                <span class="badge bg-{{ statusColors[order.status] ?? 'secondary' }} fs-6">
+                                    {{ ('order.status.' ~ order.status)|trans({}, 'admin') }}
+                                </span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong>{{ 'client.order.number'|trans({}, 'default') }}:</strong> {{ order.orderNumber }}</p>
+                                        <p><strong>{{ 'client.order.created_at'|trans({}, 'default') }}:</strong> {{ order.createdAt|date('d/m/Y à H:i') }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        {% if order.approvedAt %}
+                                            <p><strong>{{ 'client.order.approved_at'|trans({}, 'default') }}:</strong> {{ order.approvedAt|date('d/m/Y à H:i') }}</p>
+                                        {% endif %}
+                                        {% if order.paidAt %}
+                                            <p><strong>{{ 'client.order.paid_at'|trans({}, 'default') }}:</strong> {{ order.paidAt|date('d/m/Y à H:i') }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                {% if order.rejectionReason %}
+                                    <div class="alert alert-danger mt-3">
+                                        <strong><i class="bi bi-x-circle me-2"></i>{{ 'client.order.rejection_reason'|trans({}, 'default') }}:</strong><br>
+                                        {{ order.rejectionReason }}
+                                    </div>
+                                {% endif %}
+                                
+                                {% if order.clientNotes %}
+                                    <div class="alert alert-info mt-3">
+                                        <strong><i class="bi bi-sticky-note me-2"></i>{{ 'client.order.your_notes'|trans({}, 'default') }}:</strong><br>
+                                        {{ order.clientNotes|nl2br }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Order Items -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h5 class="mb-0">
+                                    <i class="bi bi-box-seam me-2"></i>{{ 'client.order.items'|trans({}, 'default') }}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>{{ 'client.order.product'|trans({}, 'default') }}</th>
+                                                <th>{{ 'client.order.quantity'|trans({}, 'default') }}</th>
+                                                <th>{{ 'client.order.unit_price'|trans({}, 'default') }}</th>
+                                                <th>{{ 'client.order.options'|trans({}, 'default') }}</th>
+                                                <th class="text-end">{{ 'client.order.total'|trans({}, 'default') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order_items %}
+                                                <tr>
+                                                    <td>
+                                                        <strong>{{ item.productName }}</strong>
+                                                        {% if item.productDescription %}
+                                                            <br><small class="text-muted">{{ item.productDescription }}</small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ item.quantity }}</td>
+                                                    <td>{{ item.unitPrice|number_format(0, ',', ' ') }} €</td>
+                                                    <td>
+                                                        {% if item.selectedOptions %}
+                                                            <small>{{ item.selectedOptions|nl2br }}</small>
+                                                        {% else %}
+                                                            <small class="text-muted">{{ 'client.order.no_options'|trans({}, 'default') }}</small>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-end"><strong>{{ item.totalPrice|number_format(0, ',', ' ') }} €</strong></td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="4" class="text-end"><strong>{{ 'client.order.subtotal'|trans({}, 'default') }}:</strong></td>
+                                                <td class="text-end"><strong>{{ order.subtotal|number_format(0, ',', ' ') }} €</strong></td>
+                                            </tr>
+                                            <tr class="table-success">
+                                                <td colspan="4" class="text-end"><strong>{{ 'client.order.total'|trans({}, 'default') }}:</strong></td>
+                                                <td class="text-end"><strong>{{ order.total|number_format(0, ',', ' ') }} €</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions Sidebar -->
+                    <div class="col-lg-4">
+                        <!-- Payment Proof -->
+                        {% if order.status == 'approved' %}
+                            <div class="card shadow-sm mb-4 border-warning">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>{{ 'client.order.payment_required'|trans({}, 'default') }}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    {% if order.paymentProof %}
+                                        <div class="alert alert-success">
+                                            <i class="bi bi-check-circle me-2"></i>{{ 'client.order.payment_uploaded'|trans({}, 'default') }}
+                                        </div>
+                                    {% else %}
+                                        <p>{{ 'client.order.payment_message'|trans({}, 'default') }}</p>
+                                        <form action="{{ path('app_quote_upload_payment', {'_locale': app.request.locale, 'order_number': order.orderNumber}) }}" 
+                                              method="POST" enctype="multipart/form-data">
+                                            <div class="mb-3">
+                                                <label for="payment_proof" class="form-label">{{ 'client.order.payment_proof'|trans({}, 'default') }}</label>
+                                                <input type="file" class="form-control" id="payment_proof" name="payment_proof" required accept="image/*,.pdf">
+                                                <small class="form-text text-muted">{{ 'client.order.payment_formats'|trans({}, 'default') }}</small>
+                                            </div>
+                                            <button type="submit" class="btn btn-warning w-100">
+                                                <i class="bi bi-upload me-2"></i>{{ 'client.order.upload_payment'|trans({}, 'default') }}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% elseif order.paymentProof %}
+                            <div class="card shadow-sm mb-4 border-success">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">
+                                        <i class="bi bi-check-circle me-2"></i>{{ 'client.order.payment_confirmed'|trans({}, 'default') }}
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-0">{{ 'client.order.payment_received'|trans({}, 'default') }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Quick Actions -->
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-header bg-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-lightning-fill me-2"></i>{{ 'client.order.quick_actions'|trans({}, 'default') }}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a href="{{ path('app_user_order_track', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" 
+                                       class="btn btn-primary">
+                                        <i class="bi bi-geo-alt me-2"></i>{{ 'client.order.track_order'|trans({}, 'default') }}
+                                    </a>
+                                    
+                                    {% if order.status == 'pending' %}
+                                        <form action="{{ path('app_user_order_cancel', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" 
+                                              method="POST" 
+                                              onsubmit="return confirm('{{ 'client.order.confirm_cancel'|trans({}, 'default') }}')">
+                                            <button type="submit" class="btn btn-danger w-100">
+                                                <i class="bi bi-x-circle me-2"></i>{{ 'client.order.cancel_order'|trans({}, 'default') }}
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Info -->
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-question-circle me-2"></i>{{ 'client.order.need_help'|trans({}, 'default') }}
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="small mb-0">{{ 'client.order.help_message'|trans({}, 'default') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
