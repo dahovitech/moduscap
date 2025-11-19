@@ -19,13 +19,8 @@ security:
             lazy: true
             provider: app_user_provider
             
-            form_login:
-                login_path: app_user_login
-                check_path: app_user_login
-                enable_csrf: true
-                default_target_path: app_user_profile
-                always_use_default_target_path: false
-                use_referer: true
+            custom_authenticators:
+                - App\Security\AppAuthenticator
             
             logout:
                 path: app_user_logout

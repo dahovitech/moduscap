@@ -22,7 +22,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'app_user_login';
 
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
@@ -60,10 +60,14 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        if($token->getUser()->hasRole("ROLE_ADMIN")) return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
-        return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
+        // Redirect based on user role
+        if ($user instanceof User && in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+            return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
+        }
+
+        // Default redirect for regular users - use locale from request
+        $locale = $request->getLocale();
+        return new RedirectResponse($this->urlGenerator->generate('app_user_profile', ['_locale' => $locale]));
     }
 
     protected function getLoginUrl(Request $request): string
