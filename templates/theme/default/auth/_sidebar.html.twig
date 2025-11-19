@@ -2,10 +2,10 @@
     <div class="card-body">
         <div class="text-center mb-3">
             <div class="avatar bg-primary text-white rounded-circle mx-auto mb-2" style="width: 60px; height: 60px; line-height: 60px; font-size: 24px;">
-                {{ user.firstName|slice(0, 1)|upper }}{{ user.lastName|slice(0, 1)|upper }}
+                {{ app.user.firstName|slice(0, 1)|upper }}{{ app.user.lastName|slice(0, 1)|upper }}
             </div>
-            <h5 class="mb-0">{{ user.fullName }}</h5>
-            <small class="text-muted">{{ user.email }}</small>
+            <h5 class="mb-0">{{ app.user.fullName }}</h5>
+            <small class="text-muted">{{ app.user.email }}</small>
         </div>
         
         <hr>
