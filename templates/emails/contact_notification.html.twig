@@ -20,26 +20,26 @@
         </div>
         
         <div class="content">
-            <h2>Nouveau message de contact</h2>
+            <h2>{{ 'email.contact_notification.title'|trans({}, 'default') }}</h2>
             
             <div class="info-box">
-                <p><strong>De:</strong> {{ contact.fullName }}</p>
-                <p><strong>Email:</strong> {{ contact.email }}</p>
+                <p><strong>{{ 'email.contact_notification.from'|trans({}, 'default') }}:</strong> {{ contact.fullName }}</p>
+                <p><strong>{{ 'email.contact_notification.email'|trans({}, 'default') }}:</strong> {{ contact.email }}</p>
                 {% if contact.phone %}
-                    <p><strong>Téléphone:</strong> {{ contact.phone }}</p>
+                    <p><strong>{{ 'email.contact_notification.phone'|trans({}, 'default') }}:</strong> {{ contact.phone }}</p>
                 {% endif %}
-                <p><strong>Sujet:</strong> {{ contact.subject }}</p>
-                <p><strong>Date:</strong> {{ contact.createdAt|date('d/m/Y H:i') }}</p>
+                <p><strong>{{ 'email.contact_notification.subject'|trans({}, 'default') }}:</strong> {{ contact.subject }}</p>
+                <p><strong>{{ 'email.contact_notification.date'|trans({}, 'default') }}:</strong> {{ contact.createdAt|date('d/m/Y H:i') }}</p>
             </div>
             
-            <h3>Message:</h3>
+            <h3>{{ 'email.contact_notification.message'|trans({}, 'default') }}:</h3>
             <div class="info-box">
                 <p>{{ contact.message|nl2br }}</p>
             </div>
         </div>
         
         <div class="footer">
-            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. Tous droits réservés.</p>
+            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. {{ 'email.registration.all_rights_reserved'|trans({}, 'default') }}</p>
         </div>
     </div>
 </body>

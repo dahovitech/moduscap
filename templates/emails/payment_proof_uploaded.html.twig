@@ -108,66 +108,64 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>📄 Nouveau justificatif de paiement</h1>
+            <h1>📄 {{ 'email.payment_proof.title'|trans({}, 'default') }}</h1>
         </div>
 
         <div class="alert">
-            <strong>⚠️ Action requise</strong><br>
-            Un client vient de télécharger un justificatif de paiement pour sa commande. Veuillez le vérifier et valider le paiement.
+            {{ 'email.payment_proof.alert'|trans({}, 'default')|raw }}
         </div>
 
         <div class="info-box">
-            <h3>Informations de la commande</h3>
+            <h3>{{ 'email.payment_proof.order_info'|trans({}, 'default') }}</h3>
             <div class="info-row">
-                <span class="info-label">Numéro de commande :</span>
+                <span class="info-label">{{ 'email.payment_proof.order_number'|trans({}, 'default') }}</span>
                 <span class="info-value"><strong>{{ order_number }}</strong></span>
             </div>
             <div class="info-row">
-                <span class="info-label">Client :</span>
+                <span class="info-label">{{ 'email.payment_proof.client'|trans({}, 'default') }}</span>
                 <span class="info-value">{{ client_name }}</span>
             </div>
             <div class="info-row">
-                <span class="info-label">Email :</span>
+                <span class="info-label">{{ 'email.payment_proof.email'|trans({}, 'default') }}</span>
                 <span class="info-value">{{ client_email }}</span>
             </div>
             {% if client_phone %}
             <div class="info-row">
-                <span class="info-label">Téléphone :</span>
+                <span class="info-label">{{ 'email.payment_proof.phone'|trans({}, 'default') }}</span>
                 <span class="info-value">{{ client_phone }}</span>
             </div>
             {% endif %}
             <div class="info-row">
-                <span class="info-label">Montant total :</span>
+                <span class="info-label">{{ 'email.payment_proof.total'|trans({}, 'default') }}</span>
                 <span class="info-value"><strong>{{ total|number_format(0, ',', ' ') }} €</strong></span>
             </div>
             <div class="info-row">
-                <span class="info-label">Statut actuel :</span>
+                <span class="info-label">{{ 'email.payment_proof.current_status'|trans({}, 'default') }}</span>
                 <span class="info-value">
-                    <span class="badge badge-warning">En attente de validation</span>
+                    <span class="badge badge-warning">{{ 'email.payment_proof.status_awaiting'|trans({}, 'default') }}</span>
                 </span>
             </div>
         </div>
 
         <p style="margin: 20px 0;">
-            <strong>Prochaines étapes :</strong>
+            <strong>{{ 'email.payment_proof.next_steps_title'|trans({}, 'default') }}</strong>
         </p>
         <ol>
-            <li>Accédez à l'interface d'administration</li>
-            <li>Consultez le justificatif de paiement téléchargé</li>
-            <li>Vérifiez que le montant correspond</li>
-            <li>Validez le paiement ou contactez le client si nécessaire</li>
+            <li>{{ 'email.payment_proof.step1'|trans({}, 'default') }}</li>
+            <li>{{ 'email.payment_proof.step2'|trans({}, 'default') }}</li>
+            <li>{{ 'email.payment_proof.step3'|trans({}, 'default') }}</li>
+            <li>{{ 'email.payment_proof.step4'|trans({}, 'default') }}</li>
         </ol>
 
         <center>
             <a href="{{ url('admin_orders_index') }}" class="cta-button">
-                Consulter la commande
+                {{ 'email.payment_proof.view_order_admin'|trans({}, 'default') }}
             </a>
         </center>
 
         <div class="footer">
             <p>
-                Cet email a été envoyé automatiquement par {{ site_name }}<br>
-                Si vous avez des questions, contactez-nous à {{ site_email }}
+                {{ 'email.payment_proof.auto_sent'|trans({'%site_name%': site_name, '%email%': site_email}, 'default')|raw }}
             </p>
         </div>
     </div>

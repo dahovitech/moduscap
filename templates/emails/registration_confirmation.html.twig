@@ -24,29 +24,29 @@
         
         <div class="content">
             <div class="success-icon">✓</div>
-            <h2 style="text-align: center;">Bienvenue {{ user_name }} !</h2>
+            <h2 style="text-align: center;">{{ 'email.registration.welcome'|trans({'%name%': user_name}, 'default') }}</h2>
             
-            <p>Votre compte a été créé avec succès sur {{ site_name }}.</p>
+            <p>{{ 'email.registration.account_created'|trans({'%site_name%': site_name}, 'default') }}</p>
             
             <div class="info-box">
-                <p><strong>Email de connexion:</strong> {{ user_email }}</p>
+                <p><strong>{{ 'email.registration.login_email'|trans({}, 'default') }}:</strong> {{ user_email }}</p>
             </div>
             
-            <p>Vous pouvez dès maintenant vous connecter à votre espace client pour:</p>
+            <p>{{ 'email.registration.can_now_login'|trans({}, 'default') }}</p>
             <ul>
-                <li>Consulter nos produits</li>
-                <li>Demander des devis personnalisés</li>
-                <li>Suivre vos commandes</li>
-                <li>Gérer votre profil</li>
+                <li>{{ 'email.registration.feature_products'|trans({}, 'default') }}</li>
+                <li>{{ 'email.registration.feature_quotes'|trans({}, 'default') }}</li>
+                <li>{{ 'email.registration.feature_orders'|trans({}, 'default') }}</li>
+                <li>{{ 'email.registration.feature_profile'|trans({}, 'default') }}</li>
             </ul>
             
-            <p>Merci de votre confiance !</p>
+            <p>{{ 'email.registration.thank_you'|trans({}, 'default') }}</p>
             
-            <p>Cordialement,<br>L'équipe {{ site_name }}</p>
+            <p>{{ 'email.registration.regards'|trans({'%site_name%': site_name}, 'default')|raw }}</p>
         </div>
         
         <div class="footer">
-            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. Tous droits réservés.</p>
+            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. {{ 'email.registration.all_rights_reserved'|trans({}, 'default') }}</p>
         </div>
     </div>
 </body>

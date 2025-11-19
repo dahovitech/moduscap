@@ -141,75 +141,75 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>ℹ️ Information importante</h1>
+            <h1>ℹ️ {{ 'email.order_rejected.title'|trans({}, 'default') }}</h1>
             <p>{{ site_name }}</p>
         </div>
 
         <div class="content">
             <div class="warning-icon">⚠️</div>
             
-            <p>Bonjour <strong>{{ client_name }}</strong>,</p>
+            <p>{{ 'email.order_rejected.greeting'|trans({'%name%': client_name}, 'default')|raw }}</p>
 
-            <p>Suite à l'examen de votre commande <span class="highlight">{{ order_number }}</span>, nous devons vous informer d'une décision importante de notre équipe.</p>
+            <p>{{ 'email.order_rejected.intro'|trans({'%order_number%': order_number}, 'default')|raw }}</p>
 
             <div class="order-info">
-                <div class="order-number">Commande {{ order_number }}</div>
-                <p><strong>Montant :</strong> {{ total|number_format(0, ',', ' ') }} €</p>
-                <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+                <div class="order-number">{{ 'email.order_rejected.order_label'|trans({'%order_number%': order_number}, 'default') }}</div>
+                <p><strong>{{ 'email.order_rejected.amount'|trans({}, 'default') }}</strong> {{ total|number_format(0, ',', ' ') }} €</p>
+                <p><strong>{{ 'email.order_rejected.order_date'|trans({}, 'default') }}</strong> {{ order.createdAt|date('d/m/Y') }}</p>
             </div>
 
             <div class="rejection-reason">
-                <h3>🔍 Motif de cette décision</h3>
+                <h3>🔍 {{ 'email.order_rejected.reason_title'|trans({}, 'default') }}</h3>
                 <p>{{ rejection_reason|nl2br }}</p>
             </div>
 
             <div class="alternatives">
-                <h3>🔄 Comment pouvons-nous vous aider ?</h3>
-                <p>Nous comprenons que cette situation puisse être décevante. Nous sommes là pour vous proposer des alternatives :</p>
+                <h3>🔄 {{ 'email.order_rejected.alternatives_title'|trans({}, 'default') }}</h3>
+                <p>{{ 'email.order_rejected.alternatives_intro'|trans({}, 'default') }}</p>
                 <ul>
-                    <li><strong>Modification du projet :</strong> Nous pouvons évaluer d'autres solutions techniques</li>
-                    <li><strong>Produit différent :</strong> Nous proposons d'autres modèles adaptés à vos besoins</li>
-                    <li><strong>Projet personnalisé :</strong> Créons ensemble une solution sur mesure</li>
-                    <li><strong>Support technique :</strong> Notre équipe peut vous conseiller d'autres approches</li>
+                    <li>{{ 'email.order_rejected.alternative1'|trans({}, 'default')|raw }}</li>
+                    <li>{{ 'email.order_rejected.alternative2'|trans({}, 'default')|raw }}</li>
+                    <li>{{ 'email.order_rejected.alternative3'|trans({}, 'default')|raw }}</li>
+                    <li>{{ 'email.order_rejected.alternative4'|trans({}, 'default')|raw }}</li>
                 </ul>
             </div>
 
             <div class="refund-info">
-                <h3>💰 Remboursement (si applicable)</h3>
+                <h3>💰 {{ 'email.order_rejected.refund_title'|trans({}, 'default') }}</h3>
                 {% if order.paymentProof %}
-                    <p>Si un paiement a été effectué, un remboursement sera traité sous 5-10 jours ouvrés sur le compte utilisé pour le paiement initial.</p>
+                    <p>{{ 'email.order_rejected.refund_with_payment'|trans({}, 'default') }}</p>
                 {% else %}
-                    <p>Aucun paiement n'ayant été effectué, il n'y a rien à rembourser pour cette commande.</p>
+                    <p>{{ 'email.order_rejected.refund_no_payment'|trans({}, 'default') }}</p>
                 {% endif %}
             </div>
 
             <center>
                 <a href="mailto:{{ contact_email }}" class="cta-button cta-button-primary">
-                    💬 Discuter d'alternatives
+                    💬 {{ 'email.order_rejected.discuss_alternatives'|trans({}, 'default') }}
                 </a>
                 <a href="{{ path('app_products_index') }}" class="cta-button">
-                    🏠 Voir nos produits
+                    🏠 {{ 'email.order_rejected.see_products'|trans({}, 'default') }}
                 </a>
             </center>
 
             <div class="contact-info">
-                <p><strong>Nous sommes là pour vous accompagner</strong></p>
-                <p>N'hésitez pas à nous contacter pour discuter de solutions alternatives :</p>
+                <p><strong>{{ 'email.order_rejected.support_available'|trans({}, 'default') }}</strong></p>
+                <p>{{ 'email.order_rejected.contact_alternatives'|trans({}, 'default') }}</p>
                 <p>
                     📧 <a href="mailto:{{ contact_email }}">{{ contact_email }}</a><br>
                     📞 {{ setting.phone|default('+33 1 23 45 67 89') }}
                 </p>
-                <p><strong>Horaires d'ouverture :</strong> Du lundi au vendredi, 9h-18h</p>
+                <p><strong>{{ 'email.order_rejected.opening_hours'|trans({}, 'default') }}</strong> {{ 'email.order_rejected.opening_hours_value'|trans({}, 'default') }}</p>
             </div>
 
-            <p>Nous vous remercions pour votre compréhension et reste à votre disposition pour concrétiser votre projet d'habitat.</p>
+            <p>{{ 'email.order_rejected.thanks'|trans({}, 'default') }}</p>
 
-            <p>Cordialement,<br>L'équipe {{ site_name }}</p>
+            <p>{{ 'email.order_rejected.closing'|trans({'%site_name%': site_name}, 'default')|raw }}</p>
         </div>
 
         <div class="footer">
-            <p>Cet email a été envoyé automatiquement, merci de ne pas répondre à cette adresse.</p>
-            <p>© 2024 {{ site_name }} - Tous droits réservés</p>
+            <p>{{ 'email.contact_confirmation.auto_reply'|trans({}, 'default') }}</p>
+            <p>© 2024 {{ site_name }} - {{ 'email.all_rights_reserved'|trans({}, 'default') }}</p>
         </div>
     </div>
 </body>

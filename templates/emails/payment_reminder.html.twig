@@ -116,60 +116,60 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>🕰️ Rappel de paiement</h1>
+            <h1>🕰️ {{ 'email.payment_reminder.title'|trans({}, 'default') }}</h1>
             <p>{{ site_name }}</p>
         </div>
 
         <div class="content">
-            <p>Bonjour <strong>{{ client_name }}</strong>,</p>
+            <p>{{ 'email.payment_reminder.greeting'|trans({'%name%': client_name}, 'default')|raw }}</p>
 
-            <p>Nous hope vous rappler que votre commande <span class="highlight">{{ order_number }}</span> est en attente de paiement.</p>
+            <p>{{ 'email.payment_reminder.awaiting'|trans({'%order_number%': order_number}, 'default')|raw }}</p>
 
             <div class="order-info">
-                <div class="order-number">Commande {{ order_number }}</div>
-                <p><strong>Montant à payer :</strong></p>
+                <div class="order-number">{{ 'email.payment_reminder.order_label'|trans({'%order_number%': order_number}, 'default') }}</div>
+                <p><strong>{{ 'email.payment_reminder.amount_to_pay'|trans({}, 'default') }}</strong></p>
                 <div class="amount">{{ total|number_format(0, ',', ' ') }} €</div>
-                <p><strong>Date de commande :</strong> {{ order.createdAt|date('d/m/Y') }}</p>
+                <p><strong>{{ 'email.payment_reminder.order_date'|trans({}, 'default') }}</strong> {{ order.createdAt|date('d/m/Y') }}</p>
             </div>
 
-            <p>Pour finaliser votre commande et accélérer le processus de production, nous vous invitons à procéder au paiement selon les instructions ci-dessous :</p>
+            <p>{{ 'email.payment_reminder.finalize'|trans({}, 'default') }}</p>
 
             <div class="payment-info">
-                <h3>💳 Instructions de paiement</h3>
+                <h3>💳 {{ 'email.payment_reminder.instructions_title'|trans({}, 'default') }}</h3>
                 {{ payment_info|raw }}
             </div>
 
-            <p><strong>Prochaines étapes :</strong></p>
+            <p><strong>{{ 'email.payment_reminder.next_steps_title'|trans({}, 'default') }}</strong></p>
             <ul>
-                <li>Effectuez le paiement selon les instructions ci-dessus</li>
-                <li>Téléchargez votre justificatif de paiement sur votre espace client</li>
-                <li>Notre équipe validera votre paiement sous 24-48h</li>
-                <li>La production de votre habitat modulaire commencera</li>
+                <li>{{ 'email.payment_reminder.step1'|trans({}, 'default') }}</li>
+                <li>{{ 'email.payment_reminder.step2'|trans({}, 'default') }}</li>
+                <li>{{ 'email.payment_reminder.step3'|trans({}, 'default') }}</li>
+                <li>{{ 'email.payment_reminder.step4'|trans({}, 'default') }}</li>
             </ul>
 
             <center>
                 <a href="https://{{ app.request.host }}{{ path('app_quote_confirmation', {orderNumber: order.orderNumber}) }}" class="cta-button">
-                    📋 Voir ma commande
+                    📋 {{ 'email.payment_reminder.view_order'|trans({}, 'default') }}
                 </a>
             </center>
 
             <div class="contact-info">
-                <p><strong>Besoin d'aide ?</strong></p>
-                <p>Si vous avez des questions ou rencontrez des difficultés, n'hésitez pas à nous contacter :</p>
+                <p><strong>{{ 'email.payment_reminder.need_help'|trans({}, 'default') }}</strong></p>
+                <p>{{ 'email.payment_reminder.help_message'|trans({}, 'default') }}</p>
                 <p>
                     📧 <a href="mailto:{{ contact_email }}">{{ contact_email }}</a><br>
                     📞 {{ setting.phone|default('+33 1 23 45 67 89') }}
                 </p>
             </div>
 
-            <p>Nous restons à votre disposition pour toute question concernant votre projet.</p>
+            <p>{{ 'email.payment_reminder.available'|trans({}, 'default') }}</p>
 
-            <p>Cordialement,<br>L'équipe {{ site_name }}</p>
+            <p>{{ 'email.payment_reminder.closing'|trans({'%site_name%': site_name}, 'default')|raw }}</p>
         </div>
 
         <div class="footer">
-            <p>Cet email a été envoyé automatiquement, merci de ne pas répondre à cette adresse.</p>
-            <p>© 2024 {{ site_name }} - Tous droits réservés</p>
+            <p>{{ 'email.contact_confirmation.auto_reply'|trans({}, 'default') }}</p>
+            <p>© 2024 {{ site_name }} - {{ 'email.all_rights_reserved'|trans({}, 'default') }}</p>
         </div>
     </div>
 </body>

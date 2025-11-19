@@ -20,30 +20,30 @@
         
         <div class="content">
             <div class="success-icon">✓</div>
-            <h2 style="text-align: center;">Message reçu !</h2>
+            <h2 style="text-align: center;">{{ 'email.contact_confirmation.title'|trans({}, 'default') }}</h2>
             
-            <p>Bonjour {{ contact.firstName }},</p>
+            <p>{{ 'email.contact_confirmation.greeting'|trans({'%firstName%': contact.firstName}, 'default') }}</p>
             
-            <p>Nous avons bien reçu votre message concernant <strong>{{ contact.subject }}</strong>.</p>
+            <p>{{ 'email.contact_confirmation.received'|trans({'%subject%': contact.subject}, 'default')|raw }}</p>
             
-            <p>Notre équipe vous répondra dans les plus brefs délais, généralement sous 24-48 heures.</p>
+            <p>{{ 'email.contact_confirmation.response_time'|trans({}, 'default') }}</p>
             
-            <p>Votre demande a été enregistrée avec les informations suivantes:</p>
+            <p>{{ 'email.contact_confirmation.registered'|trans({}, 'default') }}</p>
             <ul>
-                <li><strong>Sujet:</strong> {{ contact.subject }}</li>
-                <li><strong>Date:</strong> {{ contact.createdAt|date('d/m/Y H:i') }}</li>
+                <li><strong>{{ 'email.contact_notification.subject'|trans({}, 'default') }}:</strong> {{ contact.subject }}</li>
+                <li><strong>{{ 'email.contact_notification.date'|trans({}, 'default') }}:</strong> {{ contact.createdAt|date('d/m/Y H:i') }}</li>
             </ul>
             
             {% if site_phone %}
-                <p>Pour une assistance immédiate, n'hésitez pas à nous contacter au <strong>{{ site_phone }}</strong>.</p>
+                <p>{{ 'email.contact_confirmation.immediate_assistance'|trans({'%phone%': site_phone}, 'default')|raw }}</p>
             {% endif %}
             
             <p>Cordialement,<br>L'équipe {{ site_name }}</p>
         </div>
         
         <div class="footer">
-            <p>Cet email a été envoyé automatiquement, merci de ne pas y répondre.</p>
-            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. Tous droits réservés.</p>
+            <p>{{ 'email.contact_confirmation.auto_reply'|trans({}, 'default') }}</p>
+            <p>&copy; {{ 'now'|date('Y') }} {{ site_name }}. {{ 'email.registration.all_rights_reserved'|trans({}, 'default') }}</p>
             {% if site_address %}
                 <p>{{ site_address }}</p>
             {% endif %}
