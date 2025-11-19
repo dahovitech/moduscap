@@ -79,7 +79,7 @@
                 {% if product.mainImage %}
                   <img src="{{ asset('uploads/media/' ~ product.mainImage.filename) }}" class="card-img-top" alt="{{ product.getName(app.request.locale) }}">
                 {% else %}
-                  <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop" class="card-img-top" alt="{{ product.getName(app.request.locale) }}">
+                  <img src="{{ asset('images/products/default.jpg') }}" class="card-img-top" alt="{{ product.getName(app.request.locale) }}">
                 {% endif %}
                 
                 <div class="card-body">

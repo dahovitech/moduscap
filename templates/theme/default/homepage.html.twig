@@ -24,13 +24,13 @@
             </div>
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+                <img src="{{ asset('images/hero/hero-1.jpg') }}" alt="{{ setting('siteName') }} - Maison modulaire moderne">
               </div>
               <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+                <img src="{{ asset('images/hero/hero-2.jpg') }}" alt="{{ setting('siteName') }} - Construction modulaire">
               </div>
               <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=500&fit=crop" alt="{{ setting('siteName') }}">
+                <img src="{{ asset('images/hero/hero-3.jpg') }}" alt="{{ setting('siteName') }} - Maison modulaire premium">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -157,7 +157,7 @@
               du début à la fin. Notre maison a été livrée en 85 jours exactement."
             </div>
             <div class="testimonial-author">
-              <img src="https://i.pravatar.cc/100?img=1" alt="Sophie Martin" class="testimonial-avatar">
+              <img src="{{ asset('images/testimonials/client-1.jpg') }}" alt="Sophie Martin" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>Sophie Martin</h5>
                 <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Family 90</p>
@@ -176,7 +176,7 @@
               proposée nous a permis d'avoir exactement la maison dont nous rêvions."
             </div>
             <div class="testimonial-author">
-              <img src="https://i.pravatar.cc/100?img=12" alt="Pierre Dubois" class="testimonial-avatar">
+              <img src="{{ asset('images/testimonials/client-2.jpg') }}" alt="Pierre Dubois" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>Pierre Dubois</h5>
                 <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Prestige 120</p>
@@ -195,7 +195,7 @@
               aidés à visualiser notre projet avant de nous engager. Je recommande !"
             </div>
             <div class="testimonial-author">
-              <img src="https://i.pravatar.cc/100?img=5" alt="Marie Lefebvre" class="testimonial-avatar">
+              <img src="{{ asset('images/testimonials/client-3.jpg') }}" alt="Marie Lefebvre" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>Marie Lefebvre</h5>
                 <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Urban 60</p>
@@ -240,8 +240,8 @@
           <a href="{{ path('app_quote', {'_locale': app.request.locale}) }}" class="btn btn-success btn-lg mt-3">{{ 'cta.get_quote_btn'|trans({}, 'default') }}</a>
         </div>
         <div class="col-lg-6 mt-4 mt-lg-0">
-          <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop" 
-               alt="{{ setting('siteName') }}" 
+          <img src="{{ asset('images/cta/family-home.jpg') }}" 
+               alt="{{ setting('siteName') }} - Votre projet de maison" 
                class="img-fluid rounded shadow">
         </div>
       </div>
