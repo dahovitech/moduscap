@@ -502,6 +502,11 @@ admin.errors:
     payment_proof_not_found: "Fichier de justificatif non trouvé"
     unsupported_export_format: "Format d'export non supporté."
     csv_headers: "Numéro de commande,Client,Email,Téléphone,Statut,Total,Date de création"
+    invalid_transition: "Transition invalide de '%current%' vers '%new%'. Transitions autorisées: %allowed%"
+    no_transitions_available: "Aucune transition disponible"
+    only_rejected_can_be_reopened: "Seules les commandes rejetées peuvent être réouvertes."
+    reopen_reason_required: "Un motif de réouverture est requis."
+    order_reopened_successfully: "Commande réouverte avec succès."
   
   # Utilisateurs
   user:

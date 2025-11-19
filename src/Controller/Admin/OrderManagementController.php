@@ -294,6 +294,7 @@ class OrderManagementController extends AbstractController
     {
         $newStatus = $request->request->get('status');
         
+        // Validate status value
         if (!in_array($newStatus, [
             Order::STATUS_PENDING,
             Order::STATUS_APPROVED, 
@@ -307,8 +308,56 @@ class OrderManagementController extends AbstractController
             return new JsonResponse(['error' => $this->translator->trans('admin.errors.order.invalid_status', [], 'admin')], 400);
         }
 
+        // Validate transition
+        if (!$order->canTransitionTo($newStatus)) {
+            $allowedStatuses = $order->getAllowedNextStatuses();
+            $allowedStatusesStr = !empty($allowedStatuses) ? implode(', ', $allowedStatuses) : $this->translator->trans('admin.errors.order.no_transitions_available', [], 'admin');
+            
+            return new JsonResponse([
+                'error' => $this->translator->trans('admin.errors.order.invalid_transition', [
+                    '%current%' => $order->getStatus(),
+                    '%new%' => $newStatus,
+                    '%allowed%' => $allowedStatusesStr
+                ], 'admin')
+            ], 400);
+        }
+
+        $oldStatus = $order->getStatus();
         $order->setStatus($newStatus);
+        
+        // Set additional fields based on status
+        switch ($newStatus) {
+            case Order::STATUS_APPROVED:
+                $order->setApprovedBy($this->getUser());
+                $order->setApprovedAt(new \DateTime());
+                $order->setRejectionReason(null);
+                break;
+            case Order::STATUS_PAID:
+                $order->setPaidAt(new \DateTime());
+                break;
+        }
+        
         $this->entityManager->flush();
+
+        // Send automatic email notifications
+        try {
+            switch ($newStatus) {
+                case Order::STATUS_APPROVED:
+                    $this->emailService->sendOrderApproval($order);
+                    break;
+                case Order::STATUS_PAID:
+                    $this->emailService->sendPaymentConfirmation($order);
+                    break;
+                case Order::STATUS_REJECTED:
+                    if ($order->getRejectionReason()) {
+                        $this->emailService->sendOrderRejection($order);
+                    }
+                    break;
+            }
+        } catch (\Exception $e) {
+            // Log error but don't interrupt the process
+            error_log('Error sending status change email: ' . $e->getMessage());
+        }
 
         return new JsonResponse([
             'success' => true,
@@ -317,9 +366,49 @@ class OrderManagementController extends AbstractController
                 'id' => $order->getId(),
                 'order_number' => $order->getOrderNumber(),
                 'status' => $order->getStatus(),
+                'old_status' => $oldStatus,
                 'updated_at' => $order->getUpdatedAt()->format('Y-m-d H:i:s')
             ]
         ]);
+    }
+
+    /**
+     * Reopen a rejected order
+     */
+    #[Route('/{id}/reopen', name: 'admin_order_reopen', methods: ['POST'])]
+    public function reopenOrder(Request $request, Order $order): Response
+    {
+        if ($order->getStatus() !== Order::STATUS_REJECTED) {
+            $this->addFlash('error', $this->translator->trans('admin.errors.order.only_rejected_can_be_reopened', [], 'admin'));
+            return $this->redirectToRoute('admin_order_show', ['id' => $order->getId()]);
+        }
+
+        $reopenReason = $request->request->get('reopen_reason');
+        
+        if (empty($reopenReason)) {
+            $this->addFlash('error', $this->translator->trans('admin.errors.order.reopen_reason_required', [], 'admin'));
+            return $this->redirectToRoute('admin_order_show', ['id' => $order->getId()]);
+        }
+
+        // Reopen order to pending status
+        $order->setStatus(Order::STATUS_PENDING);
+        $order->setRejectionReason(null);
+        $order->setApprovedBy(null);
+        $order->setApprovedAt(null);
+        
+        // Add a note to client notes about the reopen
+        $reopenNote = sprintf(
+            "\n\n[%s] Commande réouverte par l'administrateur.\nMotif : %s",
+            (new \DateTime())->format('Y-m-d H:i:s'),
+            $reopenReason
+        );
+        $order->setClientNotes(($order->getClientNotes() ?? '') . $reopenNote);
+
+        $this->entityManager->flush();
+
+        $this->addFlash('success', $this->translator->trans('admin.errors.order.order_reopened_successfully', [], 'admin'));
+        
+        return $this->redirectToRoute('admin_order_show', ['id' => $order->getId()]);
     }
 
     /**

@@ -352,6 +352,49 @@ class Order
         return in_array($this->status, [self::STATUS_APPROVED, self::STATUS_PENDING]);
     }
 
+    /**
+     * Validate status transition
+     * Returns true if the transition is valid, false otherwise
+     */
+    public function canTransitionTo(string $newStatus): bool
+    {
+        $validTransitions = [
+            self::STATUS_PENDING => [self::STATUS_APPROVED, self::STATUS_REJECTED, self::STATUS_CANCELLED],
+            self::STATUS_APPROVED => [self::STATUS_PAID, self::STATUS_REJECTED, self::STATUS_CANCELLED],
+            self::STATUS_REJECTED => [], // Rejected orders cannot transition (need reopen)
+            self::STATUS_PAID => [self::STATUS_PROCESSING],
+            self::STATUS_PROCESSING => [self::STATUS_SHIPPED, self::STATUS_CANCELLED],
+            self::STATUS_SHIPPED => [self::STATUS_DELIVERED],
+            self::STATUS_DELIVERED => [], // Delivered is final state
+            self::STATUS_CANCELLED => [], // Cancelled is final state
+        ];
+
+        if (!isset($validTransitions[$this->status])) {
+            return false;
+        }
+
+        return in_array($newStatus, $validTransitions[$this->status]);
+    }
+
+    /**
+     * Get allowed next statuses for current status
+     */
+    public function getAllowedNextStatuses(): array
+    {
+        $validTransitions = [
+            self::STATUS_PENDING => [self::STATUS_APPROVED, self::STATUS_REJECTED, self::STATUS_CANCELLED],
+            self::STATUS_APPROVED => [self::STATUS_PAID, self::STATUS_REJECTED, self::STATUS_CANCELLED],
+            self::STATUS_REJECTED => [],
+            self::STATUS_PAID => [self::STATUS_PROCESSING],
+            self::STATUS_PROCESSING => [self::STATUS_SHIPPED, self::STATUS_CANCELLED],
+            self::STATUS_SHIPPED => [self::STATUS_DELIVERED],
+            self::STATUS_DELIVERED => [],
+            self::STATUS_CANCELLED => [],
+        ];
+
+        return $validTransitions[$this->status] ?? [];
+    }
+
     private function generateOrderNumber(): string
     {
         return 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
