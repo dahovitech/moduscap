@@ -21,7 +21,7 @@
         <div class="col-lg-6">
           <h2>{{ 'about.our_story'|trans({}, 'default') }}</h2>
           <p>{{ 'about.our_story_content'|trans({}, 'default') }}</p>
-          <p>Avec plus de 500 maisons modulaires livrées et un taux de satisfaction client de 98%, nous sommes fiers d'être devenus la référence en matière de construction modulaire en France.</p>
+          <p>{{ 'about.stats.description'|trans({}, 'default') }}</p>
         </div>
       </div>
 
@@ -67,7 +67,7 @@
       <div class="row">
         <div class="col-12 text-center">
           <h2 class="mb-4">{{ 'about.our_team'|trans({}, 'default') }}</h2>
-          <p class="lead mb-5">Une équipe d'experts passionnés à votre service pour réaliser votre projet de A à Z.</p>
+          <p class="lead mb-5">{{ 'about.team.description'|trans({}, 'default') }}</p>
           <a href="{{ path('app_contact', {'_locale': app.request.locale}) }}" class="btn btn-primary btn-lg">{{ 'nav.contact'|trans({}, 'default') }}</a>
         </div>
       </div>

@@ -12,20 +12,20 @@
           <div class="content-block mb-5">
             <h2>{{ 'terms.intro'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.intro_content'|trans({}, 'default') }}</p>
-            <p>En passant commande auprès de {{ setting('siteName') }}, vous acceptez sans réserve les présentes conditions générales de vente.</p>
+            <p>{{ 'terms.intro.acceptance'|trans({}, 'default') }} {{ setting('siteName') }}, vous acceptez sans réserve les présentes conditions générales de vente.</p>
           </div>
 
           <div class="content-block mb-5">
             <h2>{{ 'terms.services'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.services_content'|trans({}, 'default') }}</p>
-            <p>Nos prestations incluent :</p>
+            <p>{{ 'terms.services.included'|trans({}, 'default') }}</p>
             <ul>
-              <li>Étude de faisabilité et conception architecturale</li>
-              <li>Fabrication des modules en atelier</li>
-              <li>Transport et livraison sur site</li>
-              <li>Installation et montage de la maison</li>
-              <li>Raccordements et finitions</li>
-              <li>Garantie décennale et service après-vente</li>
+              <li>{{ 'terms.services.feasibility'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.services.manufacturing'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.services.transport'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.services.installation'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.services.connections'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.services.warranty'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
@@ -33,10 +33,10 @@
             <h2>{{ 'terms.pricing'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.pricing_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Les prix sont indiqués en euros TTC (toutes taxes comprises)</li>
-              <li>Le devis est valable 3 mois à compter de sa date d'émission</li>
-              <li>Les prix peuvent varier en fonction des options et personnalisations choisies</li>
-              <li>Les frais de raccordement aux réseaux ne sont pas inclus sauf mention contraire</li>
+              <li>{{ 'terms.pricing.taxes'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.pricing.validity'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.pricing.customization'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.pricing.connections_excluded'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
@@ -44,22 +44,22 @@
             <h2>{{ 'terms.payment'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.payment_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Acompte de 30% à la signature du contrat</li>
-              <li>40% au démarrage de la fabrication</li>
-              <li>20% à la livraison sur site</li>
-              <li>10% à la réception définitive des travaux</li>
+              <li>{{ 'terms.payment.deposit'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.payment.manufacturing_start'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.payment.delivery'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.payment.final'|trans({}, 'default') }}</li>
             </ul>
-            <p>Les paiements peuvent être effectués par virement bancaire, chèque ou prélèvement selon accord préalable.</p>
+            <p>{{ 'terms.payment.methods'|trans({}, 'default') }}</p>
           </div>
 
           <div class="content-block mb-5">
             <h2>{{ 'terms.delivery'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.delivery_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Le délai standard de livraison est de 90 jours ouvrés à compter de la signature du contrat</li>
-              <li>Le client doit assurer l'accessibilité du terrain pour la livraison</li>
-              <li>Les travaux de préparation du terrain (terrassement, fondations) sont à la charge du client</li>
-              <li>Le client doit obtenir toutes les autorisations nécessaires (permis de construire, etc.)</li>
+              <li>{{ 'terms.delivery.standard_delay'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.delivery.accessibility'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.delivery.preparation'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.delivery.permits'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
@@ -67,41 +67,41 @@
             <h2>{{ 'terms.warranty'|trans({}, 'default') }}</h2>
             <p>{{ 'terms.warranty_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Garantie de parfait achèvement : 1 an</li>
-              <li>Garantie biennale : 2 ans sur les équipements</li>
-              <li>Garantie décennale : 10 ans sur la structure</li>
+              <li>{{ 'terms.warranty.one_year'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.warranty.two_years'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.warranty.ten_years'|trans({}, 'default') }}</li>
             </ul>
-            <p>Tous nos travaux sont couverts par une assurance décennale conforme à la réglementation française.</p>
+            <p>{{ 'terms.warranty.insurance'|trans({}, 'default') }}</p>
           </div>
 
           <div class="content-block mb-5">
-            <h2>Annulation et modification</h2>
-            <p>Toute annulation ou modification substantielle de la commande après signature du contrat peut entraîner des frais :</p>
+            <h2>{{ 'terms.cancellation.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'terms.cancellation.intro'|trans({}, 'default') }}</p>
             <ul>
-              <li>Avant le démarrage de la fabrication : retenue de 15% de l'acompte versé</li>
-              <li>Après le démarrage de la fabrication : retenue de 50% du montant total</li>
-              <li>Après livraison : aucun remboursement possible</li>
+              <li>{{ 'terms.cancellation.before_manufacturing'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.cancellation.after_manufacturing'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.cancellation.after_delivery'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
           <div class="content-block mb-5">
-            <h2>Responsabilité</h2>
-            <p>{{ setting('siteName') }} s'engage à réaliser les travaux conformément aux règles de l'art et aux normes en vigueur. Notre responsabilité ne peut être engagée en cas de :</p>
+            <h2>{{ 'terms.responsibility.title'|trans({}, 'default') }}</h2>
+            <p>{{ setting('siteName') }} {{ 'terms.responsibility.intro'|trans({}, 'default') }}</p>
             <ul>
-              <li>Force majeure (intempéries exceptionnelles, catastrophes naturelles, etc.)</li>
-              <li>Non-respect par le client de ses obligations (paiement, accessibilité du terrain, autorisations)</li>
-              <li>Modifications demandées par le client en cours de réalisation</li>
+              <li>{{ 'terms.responsibility.force_majeure'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.responsibility.client_obligations'|trans({}, 'default') }}</li>
+              <li>{{ 'terms.responsibility.modifications'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
           <div class="content-block mb-5">
-            <h2>Litiges</h2>
-            <p>En cas de litige, les parties s'engagent à rechercher une solution amiable. À défaut, le litige sera porté devant les tribunaux compétents du ressort du siège social de {{ setting('siteName') }}.</p>
+            <h2>{{ 'terms.disputes.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'terms.disputes.description'|trans({}, 'default') }} {{ setting('siteName') }}.</p>
           </div>
 
           <div class="content-block">
-            <h2>Acceptation</h2>
-            <p>La signature du devis ou du contrat vaut acceptation sans réserve des présentes conditions générales de vente.</p>
+            <h2>{{ 'terms.acceptance.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'terms.acceptance.description'|trans({}, 'default') }}</p>
             <p><strong>Date d'application :</strong> {{ 'now'|date('d/m/Y') }}</p>
           </div>
         </div>

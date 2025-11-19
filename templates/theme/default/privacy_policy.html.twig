@@ -12,19 +12,19 @@
           <div class="content-block mb-5">
             <h2>{{ 'privacy.intro'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.intro_content'|trans({}, 'default') }}</p>
-            <p>Cette politique de confidentialité s'applique au site web {{ setting('siteName') }} et décrit comment nous collectons, utilisons, partageons et protégeons vos informations personnelles.</p>
+            <p>{{ 'privacy.intro.description'|trans({}, 'default') }} {{ setting('siteName') }} et décrit comment nous collectons, utilisons, partageons et protégeons vos informations personnelles.</p>
           </div>
 
           <div class="content-block mb-5">
             <h2>{{ 'privacy.data_collected'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.data_collected_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Nom et prénom</li>
-              <li>Adresse email</li>
-              <li>Numéro de téléphone</li>
-              <li>Adresse postale (si applicable)</li>
-              <li>Informations sur votre projet (type de maison, budget, délai)</li>
-              <li>Données de navigation (cookies, adresse IP, type de navigateur)</li>
+              <li>{{ 'privacy.data.name'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.data.email'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.data.phone'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.data.address'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.data.project_info'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.data.navigation'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
@@ -32,11 +32,11 @@
             <h2>{{ 'privacy.data_usage'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.data_usage_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Traiter vos demandes de devis et répondre à vos questions</li>
-              <li>Vous contacter concernant nos produits et services</li>
-              <li>Améliorer notre site web et nos services</li>
-              <li>Vous envoyer des newsletters et des offres promotionnelles (avec votre consentement)</li>
-              <li>Respecter nos obligations légales et réglementaires</li>
+              <li>{{ 'privacy.usage.process_quotes'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.usage.contact'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.usage.improve'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.usage.newsletter'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.usage.legal'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
@@ -44,40 +44,40 @@
             <h2>{{ 'privacy.data_security'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.data_security_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Chiffrement SSL pour toutes les transmissions de données sensibles</li>
-              <li>Accès restreint aux données personnelles uniquement aux employés autorisés</li>
-              <li>Serveurs sécurisés et sauvegardés régulièrement</li>
-              <li>Mise à jour régulière de nos systèmes de sécurité</li>
+              <li>{{ 'privacy.security.ssl'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.security.restricted_access'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.security.secure_servers'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.security.updates'|trans({}, 'default') }}</li>
             </ul>
           </div>
 
           <div class="content-block mb-5">
-            <h2>Cookies</h2>
-            <p>Notre site utilise des cookies pour améliorer votre expérience de navigation. Les cookies sont de petits fichiers texte stockés sur votre appareil. Vous pouvez configurer votre navigateur pour refuser les cookies, mais cela peut limiter certaines fonctionnalités du site.</p>
+            <h2>{{ 'privacy.cookies.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'privacy.cookies.description'|trans({}, 'default') }}</p>
           </div>
 
           <div class="content-block mb-5">
             <h2>{{ 'privacy.your_rights'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.your_rights_content'|trans({}, 'default') }}</p>
             <ul>
-              <li>Droit d'accès à vos données personnelles</li>
-              <li>Droit de rectification de vos données inexactes</li>
-              <li>Droit de suppression de vos données</li>
-              <li>Droit d'opposition au traitement de vos données</li>
-              <li>Droit à la portabilité de vos données</li>
-              <li>Droit de retirer votre consentement à tout moment</li>
+              <li>{{ 'privacy.rights.access'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.rights.rectification'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.rights.deletion'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.rights.opposition'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.rights.portability'|trans({}, 'default') }}</li>
+              <li>{{ 'privacy.rights.withdrawal'|trans({}, 'default') }}</li>
             </ul>
             <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:{{ setting('email') }}">{{ setting('email') }}</a></p>
           </div>
 
           <div class="content-block">
-            <h2>Conservation des données</h2>
-            <p>Nous conservons vos données personnelles aussi longtemps que nécessaire pour les finalités pour lesquelles elles ont été collectées, ou conformément aux exigences légales.</p>
+            <h2>{{ 'privacy.retention.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'privacy.retention.description'|trans({}, 'default') }}</p>
           </div>
 
           <div class="content-block mt-5">
-            <h2>Modifications</h2>
-            <p>Nous nous réservons le droit de modifier cette politique de confidentialité à tout moment. Les modifications entreront en vigueur dès leur publication sur cette page.</p>
+            <h2>{{ 'privacy.modifications.title'|trans({}, 'default') }}</h2>
+            <p>{{ 'privacy.modifications.description'|trans({}, 'default') }}</p>
             <p><strong>Dernière mise à jour :</strong> {{ 'now'|date('d/m/Y') }}</p>
           </div>
         </div>

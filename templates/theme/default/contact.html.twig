@@ -91,7 +91,7 @@
 
           <div class="card shadow-sm">
             <div class="card-body">
-              <h3 class="h5 mb-3">WhatsApp</h3>
+              <h3 class="h5 mb-3">{{ 'contact.whatsapp.title'|trans({}, 'default') }}</h3>
               <p>{{ 'whatsapp.contact_us'|trans({}, 'default') }}</p>
               <a href="https://wa.me/{{ setting('whatsapp') }}?text={{ 'whatsapp.default_message'|trans({}, 'default')|url_encode }}" 
                  class="btn btn-success w-100" target="_blank" rel="noopener">
