@@ -840,3 +840,17 @@ email.support_team_accompany_you: 'Notre équipe d''assistance peut vous accompa
 email.production_timeline: 'Délai de production'
 email.production_timeline_description: 'Une fois le paiement confirmé, la production prendra 8-12 semaines selon le modèle'
 email.excited_to_create_home: 'Nous sommes ravis de créer votre futur habitat !'
+
+# Témoignages - Page d'accueil
+testimonials.client1.text: "Un projet clé en main parfaitement réalisé ! L'équipe ModusCap a été professionnelle du début à la fin. Notre maison a été livrée en 85 jours exactement."
+testimonials.client1.model: "Modèle Family 90"
+testimonials.client2.text: "Excellent rapport qualité-prix. Les finitions sont impeccables et la personnalisation proposée nous a permis d'avoir exactement la maison dont nous rêvions."
+testimonials.client2.model: "Modèle Prestige 120"
+testimonials.client3.text: "Processus très transparent avec un suivi constant. Le configurateur en ligne nous a aidés à visualiser notre projet avant de nous engager. Je recommande !"
+testimonials.client3.model: "Modèle Urban 60"
+
+# Alt images - Homepage
+homepage.alt.hero_modern: "Maison modulaire moderne"
+homepage.alt.hero_construction: "Construction modulaire"
+homepage.alt.hero_premium: "Maison modulaire premium"
+homepage.alt.cta_family_home: "Votre projet de maison"

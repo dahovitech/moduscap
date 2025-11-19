@@ -24,13 +24,13 @@
             </div>
             <div class="carousel-inner">
               <div class="carousel-item active">
-                <img src="{{ asset('images/hero/hero-1.jpg') }}" alt="{{ setting('siteName') }} - Maison modulaire moderne">
+                <img src="{{ asset('images/hero/hero-1.jpg') }}" alt="{{ setting('siteName') }} - {{ 'homepage.alt.hero_modern'|trans({}, 'default') }}">
               </div>
               <div class="carousel-item">
-                <img src="{{ asset('images/hero/hero-2.jpg') }}" alt="{{ setting('siteName') }} - Construction modulaire">
+                <img src="{{ asset('images/hero/hero-2.jpg') }}" alt="{{ setting('siteName') }} - {{ 'homepage.alt.hero_construction'|trans({}, 'default') }}">
               </div>
               <div class="carousel-item">
-                <img src="{{ asset('images/hero/hero-3.jpg') }}" alt="{{ setting('siteName') }} - Maison modulaire premium">
+                <img src="{{ asset('images/hero/hero-3.jpg') }}" alt="{{ setting('siteName') }} - {{ 'homepage.alt.hero_premium'|trans({}, 'default') }}">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
@@ -153,14 +153,13 @@
         <div class="col-lg-4 animate-on-scroll">
           <div class="testimonial-card">
             <div class="testimonial-text">
-              "Un projet clé en main parfaitement réalisé ! L'équipe ModusCap a été professionnelle 
-              du début à la fin. Notre maison a été livrée en 85 jours exactement."
+              "{{ 'testimonials.client1.text'|trans({}, 'default') }}"
             </div>
             <div class="testimonial-author">
               <img src="{{ asset('images/testimonials/client-1.jpg') }}" alt="Sophie Martin" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>{{ 'testimonials.client1.name'|trans({}, 'default') }}</h5>
-                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Family 90</p>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - {{ 'testimonials.client1.model'|trans({}, 'default') }}</p>
                 <div class="testimonial-rating">
                   ★★★★★
                 </div>
@@ -172,14 +171,13 @@
         <div class="col-lg-4 animate-on-scroll">
           <div class="testimonial-card">
             <div class="testimonial-text">
-              "Excellent rapport qualité-prix. Les finitions sont impeccables et la personnalisation 
-              proposée nous a permis d'avoir exactement la maison dont nous rêvions."
+              "{{ 'testimonials.client2.text'|trans({}, 'default') }}"
             </div>
             <div class="testimonial-author">
               <img src="{{ asset('images/testimonials/client-2.jpg') }}" alt="Pierre Dubois" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>{{ 'testimonials.client2.name'|trans({}, 'default') }}</h5>
-                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Prestige 120</p>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - {{ 'testimonials.client2.model'|trans({}, 'default') }}</p>
                 <div class="testimonial-rating">
                   ★★★★★
                 </div>
@@ -191,14 +189,13 @@
         <div class="col-lg-4 animate-on-scroll">
           <div class="testimonial-card">
             <div class="testimonial-text">
-              "Processus très transparent avec un suivi constant. Le configurateur en ligne nous a 
-              aidés à visualiser notre projet avant de nous engager. Je recommande !"
+              "{{ 'testimonials.client3.text'|trans({}, 'default') }}"
             </div>
             <div class="testimonial-author">
               <img src="{{ asset('images/testimonials/client-3.jpg') }}" alt="Marie Lefebvre" class="testimonial-avatar">
               <div class="testimonial-info">
                 <h5>{{ 'testimonials.client3.name'|trans({}, 'default') }}</h5>
-                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - Modèle Urban 60</p>
+                <p>{{ 'testimonials.owner'|trans({}, 'default') }} - {{ 'testimonials.client3.model'|trans({}, 'default') }}</p>
                 <div class="testimonial-rating">
                   ★★★★★
                 </div>
@@ -241,7 +238,7 @@
         </div>
         <div class="col-lg-6 mt-4 mt-lg-0">
           <img src="{{ asset('images/cta/family-home.jpg') }}" 
-               alt="{{ setting('siteName') }} - Votre projet de maison" 
+               alt="{{ setting('siteName') }} - {{ 'homepage.alt.cta_family_home'|trans({}, 'default') }}" 
                class="img-fluid rounded shadow">
         </div>
       </div>
