@@ -262,6 +262,13 @@ common.previous: 'Previous'
 common.close: 'Close'
 common.confirm: 'Confirm'
 common.cancel: 'Cancel'
+common.back_home: 'Back to home'
+common.save: 'Save'
+common.delete: 'Delete'
+common.edit: 'Edit'
+common.view: 'View'
+common.yes: 'Yes'
+common.no: 'No'
 
 # Contact Form
 contact.success_message: 'Your message has been sent successfully. We will reply as soon as possible.'
@@ -387,21 +394,6 @@ products.show.phone: 'Phone'
 products.show.address: 'Address'
 products.show.notes: 'Remarks / Special requests'
 products.show.configure_quote: 'Create my custom quote'
-
-# Common
-common.previous: 'Previous'
-common.next: 'Next'
-common.back: 'Back'
-common.cancel: 'Cancel'
-common.back_home: 'Back to home'
-common.save: 'Save'
-common.delete: 'Delete'
-common.edit: 'Edit'
-common.view: 'View'
-common.close: 'Close'
-common.yes: 'Yes'
-common.no: 'No'
-
 
 # Controller Messages
 controller.quote.no_customization_found: 'No customization found. Please select a product.'

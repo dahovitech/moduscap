@@ -262,6 +262,13 @@ common.previous: 'Précédent'
 common.close: 'Fermer'
 common.confirm: 'Confirmer'
 common.cancel: 'Annuler'
+common.back_home: 'Retour à l''accueil'
+common.save: 'Enregistrer'
+common.delete: 'Supprimer'
+common.edit: 'Modifier'
+common.view: 'Voir'
+common.yes: 'Oui'
+common.no: 'Non'
 
 # Contact Form
 contact.success_message: 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.'
@@ -387,21 +394,6 @@ products.show.phone: 'Téléphone'
 products.show.address: 'Adresse'
 products.show.notes: 'Remarques / Demandes spéciales'
 products.show.configure_quote: 'Créer mon devis personnalisé'
-
-# Common
-common.previous: 'Précédent'
-common.next: 'Suivant'
-common.back: 'Retour'
-common.cancel: 'Annuler'
-common.back_home: 'Retour à l''accueil'
-common.save: 'Enregistrer'
-common.delete: 'Supprimer'
-common.edit: 'Modifier'
-common.view: 'Voir'
-common.close: 'Fermer'
-common.yes: 'Oui'
-common.no: 'Non'
-
 
 # Controller Messages
 controller.quote.no_customization_found: 'Aucune personnalisation trouvée. Veuillez sélectionner un produit.'
