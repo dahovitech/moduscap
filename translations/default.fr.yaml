@@ -4,6 +4,8 @@ nav.products: 'Produits'
 nav.services: 'Services'
 nav.about: 'À propos'
 nav.contact: 'Contact'
+nav.my_account: 'Mon Compte'
+nav.login: 'Connexion'
 nav.free_quote: 'Devis Gratuit'
 nav.toggle: 'Basculer la navigation'
 

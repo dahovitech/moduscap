@@ -4,6 +4,8 @@ nav.products: 'Products'
 nav.services: 'Services'
 nav.about: 'About'
 nav.contact: 'Contact'
+nav.my_account: 'My Account'
+nav.login: 'Login'
 nav.free_quote: 'Free Quote'
 nav.toggle: 'Toggle navigation'
 
