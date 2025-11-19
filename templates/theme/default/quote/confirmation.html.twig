@@ -67,7 +67,7 @@
                 <hr>
                 <p class="mb-0">{{ 'quote.confirmation.upload_payment_instruction'|trans({}, 'default') }}</p>
                 
-                <form method="post" action="{{ path('app_quote_upload_payment', {'order_number': order.orderNumber, '_locale': app.request.locale}) }}" 
+                <form method="post" action="{{ path('app_quote_upload_payment', {'orderNumber': order.orderNumber, '_locale': app.request.locale}) }}" 
                       enctype="multipart/form-data" class="mt-3">
                   <div class="mb-3">
                     <label for="payment_proof" class="form-label">{{ 'quote.confirmation.upload_label'|trans({}, 'default') }}</label>
@@ -84,7 +84,7 @@
           {% endif %}
 
           <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
-            <a href="{{ path('app_quote_track', {'order_number': order.orderNumber, '_locale': app.request.locale}) }}" 
+            <a href="{{ path('app_quote_track', {'orderNumber': order.orderNumber, '_locale': app.request.locale}) }}" 
                class="btn btn-outline-primary">
               {{ 'quote.confirmation.track_order'|trans({}, 'default') }}
             </a>

@@ -163,10 +163,10 @@
             </ul>
 
             <center>
-                <a href="https://{{ app.request.host }}{{ path('app_quote_confirmation', {order_number: order.orderNumber}) }}" class="cta-button">
+                <a href="https://{{ app.request.host }}{{ path('app_quote_confirmation', {orderNumber: order.orderNumber}) }}" class="cta-button">
                     📋 {{ 'email.view_order'|trans }}
                 </a>
-                <a href="https://{{ app.request.host }}{{ path('app_quote_track', {order_number: order.orderNumber}) }}" class="cta-button">
+                <a href="https://{{ app.request.host }}{{ path('app_quote_track', {orderNumber: order.orderNumber}) }}" class="cta-button">
                     📊 {{ 'email.track_order'|trans }}
                 </a>
             </center>

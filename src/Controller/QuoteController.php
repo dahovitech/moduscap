@@ -157,7 +157,7 @@ class QuoteController extends AbstractController
     /**
      * Quote confirmation page
      */
-    #[Route('/confirmation/{order_number}', name: 'app_quote_confirmation', methods: ['GET'])]
+    #[Route('/confirmation/{orderNumber}', name: 'app_quote_confirmation', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function confirmation(Request $request, string $orderNumber): Response
     {
@@ -187,7 +187,7 @@ class QuoteController extends AbstractController
     /**
      * Upload payment proof
      */
-    #[Route('/{order_number}/upload-payment', name: 'app_quote_upload_payment', methods: ['POST'])]
+    #[Route('/{orderNumber}/upload-payment', name: 'app_quote_upload_payment', methods: ['POST'])]
     #[IsGranted('ROLE_USER')]
     public function uploadPaymentProof(Request $request, string $orderNumber): Response
     {
@@ -207,19 +207,19 @@ class QuoteController extends AbstractController
         
         if (!$paymentFile) {
             $this->addFlash('error', $this->translator->trans('controller.quote.no_payment_file'));
-            return $this->redirectToRoute('app_quote_confirmation', ['order_number' => $orderNumber]);
+            return $this->redirectToRoute('app_quote_confirmation', ['orderNumber' => $orderNumber]);
         }
 
         // Validate file
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
         if (!in_array($paymentFile->getMimeType(), $allowedMimeTypes)) {
             $this->addFlash('error', $this->translator->trans('controller.quote.invalid_file_type'));
-            return $this->redirectToRoute('app_quote_confirmation', ['order_number' => $orderNumber]);
+            return $this->redirectToRoute('app_quote_confirmation', ['orderNumber' => $orderNumber]);
         }
 
         if ($paymentFile->getSize() > 5 * 1024 * 1024) { // 5MB limit
             $this->addFlash('error', $this->translator->trans('controller.quote.file_too_large'));
-            return $this->redirectToRoute('app_quote_confirmation', ['order_number' => $orderNumber]);
+            return $this->redirectToRoute('app_quote_confirmation', ['orderNumber' => $orderNumber]);
         }
 
         try {
@@ -255,14 +255,14 @@ class QuoteController extends AbstractController
             $this->addFlash('error', $this->translator->trans('controller.quote.upload_error', ['%error%' => $e->getMessage()]));
         }
 
-        return $this->redirectToRoute('app_quote_confirmation', ['order_number' => $orderNumber]);
+        return $this->redirectToRoute('app_quote_confirmation', ['orderNumber' => $orderNumber]);
     }
 
     /**
      * Check order status
      * SECURITY: Protected endpoint - user must be authenticated and own the order
      */
-    #[Route('/{order_number}/status', name: 'app_quote_status', methods: ['GET'])]
+    #[Route('/{orderNumber}/status', name: 'app_quote_status', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function getOrderStatus(Request $request, string $orderNumber): JsonResponse
     {
@@ -294,7 +294,7 @@ class QuoteController extends AbstractController
     /**
      * Track order progress
      */
-    #[Route('/{order_number}/track', name: 'app_quote_track', methods: ['GET'])]
+    #[Route('/{orderNumber}/track', name: 'app_quote_track', methods: ['GET'])]
     #[IsGranted('ROLE_USER')]
     public function trackOrder(Request $request, string $orderNumber): Response
     {

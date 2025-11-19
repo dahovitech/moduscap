@@ -149,7 +149,7 @@
                                         </div>
                                     {% else %}
                                         <p>{{ 'client.order.payment_message'|trans({}, 'default') }}</p>
-                                        <form action="{{ path('app_quote_upload_payment', {'_locale': app.request.locale, 'order_number': order.orderNumber}) }}" 
+                                        <form action="{{ path('app_quote_upload_payment', {'_locale': app.request.locale, 'orderNumber': order.orderNumber}) }}" 
                                               method="POST" enctype="multipart/form-data">
                                             <div class="mb-3">
                                                 <label for="payment_proof" class="form-label">{{ 'client.order.payment_proof'|trans({}, 'default') }}</label>
