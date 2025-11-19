@@ -854,3 +854,7 @@ homepage.alt.hero_modern: "Maison modulaire moderne"
 homepage.alt.hero_construction: "Construction modulaire"
 homepage.alt.hero_premium: "Maison modulaire premium"
 homepage.alt.cta_family_home: "Votre projet de maison"
+
+# Politique de confidentialité - Textes manquants
+privacy.rights.contact: "Pour exercer ces droits, contactez-nous à :"
+privacy.last_update: "Dernière mise à jour :"

@@ -67,7 +67,7 @@
               <li>{{ 'privacy.rights.portability'|trans({}, 'default') }}</li>
               <li>{{ 'privacy.rights.withdrawal'|trans({}, 'default') }}</li>
             </ul>
-            <p>Pour exercer ces droits, contactez-nous à : <a href="mailto:{{ setting('email') }}">{{ setting('email') }}</a></p>
+            <p>{{ 'privacy.rights.contact'|trans({}, 'default') }} <a href="mailto:{{ setting('email') }}">{{ setting('email') }}</a></p>
           </div>
 
           <div class="content-block">
@@ -78,7 +78,7 @@
           <div class="content-block mt-5">
             <h2>{{ 'privacy.modifications.title'|trans({}, 'default') }}</h2>
             <p>{{ 'privacy.modifications.description'|trans({}, 'default') }}</p>
-            <p><strong>Dernière mise à jour :</strong> {{ 'now'|date('d/m/Y') }}</p>
+            <p><strong>{{ 'privacy.last_update'|trans({}, 'default') }}</strong> {{ 'now'|date('d/m/Y') }}</p>
           </div>
         </div>
       </div>
