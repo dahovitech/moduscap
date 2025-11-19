@@ -26,11 +26,11 @@ class AuthController extends AbstractController
     ) {}
 
     #[Route('/login', name: 'app_user_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         // Redirect if already logged in
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_user_profile', ['_locale' => $this->getUser()->getUserIdentifier()]);
+            return $this->redirectToRoute('app_user_profile', ['_locale' => $request->getLocale()]);
         }
 
         $error = $authenticationUtils->getLastAuthenticationError();
