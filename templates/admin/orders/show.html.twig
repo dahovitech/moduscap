@@ -123,8 +123,8 @@
                                     <tr>
                                         <td>
                                             <strong>{{ item.productName }}</strong>
-                                            {% if item.productDescription %}
-                                                <br><small class="text-muted">{{ item.productDescription }}</small>
+                                            {% if item.product and item.product.description %}
+                                                <br><small class="text-muted">{{ item.product.description|slice(0, 100) }}{% if item.product.description|length > 100 %}...{% endif %}</small>
                                             {% endif %}
                                         </td>
                                         <td>{{ item.quantity }}</td>
