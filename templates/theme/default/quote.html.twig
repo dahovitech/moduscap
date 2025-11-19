@@ -54,10 +54,10 @@
                     <label for="model_type" class="form-label">{{ 'quote.form.model_type'|trans({}, 'default') }} *</label>
                     <select class="form-select" id="model_type" name="model_type" required>
                       <option value="">{{ 'quote.form.select_model'|trans({}, 'default') }}</option>
-                      <option value="urban">Urban 60</option>
-                      <option value="family">Family 90</option>
-                      <option value="prestige">Prestige 120</option>
-                      <option value="executive">Executive 150</option>
+                      <option value="urban">{{ 'quote.model.urban_60'|trans({}, 'default') }}</option>
+                      <option value="family">{{ 'quote.model.family_90'|trans({}, 'default') }}</option>
+                      <option value="prestige">{{ 'quote.model.prestige_120'|trans({}, 'default') }}</option>
+                      <option value="executive">{{ 'quote.model.executive_150'|trans({}, 'default') }}</option>
                       <option value="custom">{{ 'quote.form.custom_model'|trans({}, 'default') }}</option>
                     </select>
                   </div>
@@ -65,7 +65,7 @@
                   <div class="col-md-6 mb-3">
                     <label for="surface" class="form-label">{{ 'quote.form.surface'|trans({}, 'default') }} (m²) *</label>
                     <input type="number" class="form-control" id="surface" name="surface" 
-                           placeholder="Ex: 90" min="30" max="300" required>
+                           placeholder="{{ 'quote.form.surface_placeholder'|trans({}, 'default') }}" min="30" max="300" required>
                   </div>
                 </div>
 
