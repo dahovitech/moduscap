@@ -92,13 +92,15 @@
               
               <dl class="row">
                 <dt class="col-sm-3">{{ 'quote.create.name'|trans({}, 'default') }}</dt>
-                <dd class="col-sm-9">{{ customization.client_info.name }}</dd>
+                <dd class="col-sm-9">{{ app.user.firstName }} {{ app.user.lastName }}</dd>
 
                 <dt class="col-sm-3">{{ 'quote.create.email'|trans({}, 'default') }}</dt>
-                <dd class="col-sm-9">{{ customization.client_info.email }}</dd>
+                <dd class="col-sm-9">{{ app.user.email }}</dd>
 
-                <dt class="col-sm-3">{{ 'quote.create.phone'|trans({}, 'default') }}</dt>
-                <dd class="col-sm-9">{{ customization.client_info.phone }}</dd>
+                {% if customization.client_info.phone %}
+                  <dt class="col-sm-3">{{ 'quote.create.phone'|trans({}, 'default') }}</dt>
+                  <dd class="col-sm-9">{{ customization.client_info.phone }}</dd>
+                {% endif %}
 
                 {% if customization.client_info.address %}
                   <dt class="col-sm-3">{{ 'quote.create.address'|trans({}, 'default') }}</dt>

@@ -194,17 +194,27 @@
                   <!-- Client Information -->
                   <h5 class="mb-3">{{ 'products.show.client_info'|trans({}, 'default') }}</h5>
                   
+                  {% if app.user %}
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label for="client_name" class="form-label">{{ 'products.show.full_name'|trans({}, 'default') }}</label>
-                      <input type="text" class="form-control" id="client_name" name="client_name" required>
+                      <input type="text" class="form-control bg-light" id="client_name" 
+                             value="{{ app.user.firstName }} {{ app.user.lastName }}" readonly>
                     </div>
 
                     <div class="col-md-6 mb-3">
                       <label for="client_email" class="form-label">{{ 'products.show.email'|trans({}, 'default') }}</label>
-                      <input type="email" class="form-control" id="client_email" name="client_email" required>
+                      <input type="email" class="form-control bg-light" id="client_email" 
+                             value="{{ app.user.email }}" readonly>
                     </div>
                   </div>
+                  {% else %}
+                  <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ 'products.show.login_required'|trans({}, 'default') }}
+                    <a href="{{ path('app_user_login', {'_locale': app.request.locale}) }}" class="alert-link">{{ 'auth.login'|trans({}, 'default') }}</a>
+                  </div>
+                  {% endif %}
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
@@ -306,17 +316,27 @@
                   <!-- Client Information -->
                   <h5 class="mb-3">{{ 'products.show.client_info'|trans({}, 'default') }}</h5>
                   
+                  {% if app.user %}
                   <div class="row">
                     <div class="col-md-6 mb-3">
                       <label for="client_name_simple" class="form-label">{{ 'products.show.full_name'|trans({}, 'default') }}</label>
-                      <input type="text" class="form-control" id="client_name_simple" name="client_name" required>
+                      <input type="text" class="form-control bg-light" id="client_name_simple" 
+                             value="{{ app.user.firstName }} {{ app.user.lastName }}" readonly>
                     </div>
 
                     <div class="col-md-6 mb-3">
                       <label for="client_email_simple" class="form-label">{{ 'products.show.email'|trans({}, 'default') }}</label>
-                      <input type="email" class="form-control" id="client_email_simple" name="client_email" required>
+                      <input type="email" class="form-control bg-light" id="client_email_simple" 
+                             value="{{ app.user.email }}" readonly>
                     </div>
                   </div>
+                  {% else %}
+                  <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    {{ 'products.show.login_required'|trans({}, 'default') }}
+                    <a href="{{ path('app_user_login', {'_locale': app.request.locale}) }}" class="alert-link">{{ 'auth.login'|trans({}, 'default') }}</a>
+                  </div>
+                  {% endif %}
 
                   <div class="row">
                     <div class="col-md-6 mb-3">
