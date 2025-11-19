@@ -3,6 +3,7 @@
 # Navigation
 admin.navigation.dashboard: "Tableau de bord"
 admin.navigation.products: "Produits"
+admin.navigation.orders: "Commandes"
 admin.navigation.categories: "Catégories"
 admin.navigation.options: "Options"
 admin.navigation.medias: "Médias"
