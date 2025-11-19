@@ -199,10 +199,9 @@ class ProductController extends AbstractController
         $quantity = max(1, intval($formData['quantity'] ?? 1));
         $customizationNotes = $formData['customization_notes'] ?? null;
         
-        // Get user info to pre-fill
+        // Get client info - name/email ALWAYS from authenticated user
+        // phone/address can be provided in form
         $user = $this->getUser();
-        $clientName = $formData['client_name'] ?? ($user->getFirstName() . ' ' . $user->getLastName());
-        $clientEmail = $formData['client_email'] ?? $user->getEmail();
         $clientPhone = $formData['client_phone'] ?? '';
         $clientAddress = $formData['client_address'] ?? '';
 
@@ -218,14 +217,13 @@ class ProductController extends AbstractController
         }
 
         // Store customization in session for next step
+        // Note: name/email are not stored - they will be fetched from User at order creation
         $request->getSession()->set('product_customization', [
             'product_id' => $product->getId(),
             'selected_options' => $selectedOptions,
             'quantity' => $quantity,
             'customization_notes' => $customizationNotes,
             'client_info' => [
-                'name' => $clientName,
-                'email' => $clientEmail,
                 'phone' => $clientPhone,
                 'address' => $clientAddress
             ]

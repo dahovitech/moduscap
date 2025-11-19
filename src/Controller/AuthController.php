@@ -121,13 +121,16 @@ class AuthController extends AbstractController
         $totalOrders = count($orders);
         $pendingOrders = count(array_filter($orders, fn($o) => in_array($o->getStatus(), ['pending', 'approved'])));
         $completedOrders = count(array_filter($orders, fn($o) => $o->getStatus() === 'delivered'));
-        $totalSpent = array_reduce($orders, fn($sum, $o) => $sum + ($o->getStatus() === 'delivered' ? $o->getTotal() : 0), 0);
+        // FIX: Use floatval() to properly convert decimal strings to numbers
+        $totalSpent = array_reduce($orders, fn($sum, $o) => $sum + ($o->getStatus() === 'delivered' ? floatval($o->getTotal()) : 0), 0.0);
 
         // Get recent orders (last 5)
         $recentOrders = array_slice($orders, 0, 5);
 
-        // Get orders awaiting payment
-        $awaitingPayment = array_filter($orders, fn($o) => $o->getStatus() === 'approved' && !$o->getPaymentProof());
+        // Get orders awaiting payment (pending or approved without payment proof)
+        $awaitingPayment = array_filter($orders, fn($o) => 
+            in_array($o->getStatus(), ['pending', 'approved']) && !$o->getPaymentProof()
+        );
 
         return $this->render('@theme/auth/dashboard.html.twig', [
             'user' => $user,

@@ -416,6 +416,33 @@ class Order
         return 'ORD-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
     }
 
+    /**
+     * Get client full name - uses snapshot from order creation
+     * NOTE: clientName, clientEmail are "snapshots" taken at order creation time.
+     * They preserve the user's information even if the user profile changes later.
+     */
+    public function getClientFullName(): string
+    {
+        return $this->clientName ?? '';
+    }
+
+    /**
+     * Get the user who placed this order
+     * Use this for access control and relationship queries
+     */
+    public function getOrderOwner(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * Check if a user owns this order
+     */
+    public function isOwnedBy(User $user): bool
+    {
+        return $this->user !== null && $this->user->getId() === $user->getId();
+    }
+
     public function __toString(): string
     {
         return $this->orderNumber;

@@ -90,12 +90,12 @@ class QuoteController extends AbstractController
         $user = $this->getUser();
         $order->setUser($user);
         
-        // Set client information from customization or user profile
-        $clientInfo = $customization['client_info'];
-        $order->setClientName($clientInfo['name'] ?? ($user->getFirstName() . ' ' . $user->getLastName()));
-        $order->setClientEmail($clientInfo['email'] ?? $user->getEmail());
-        $order->setClientPhone($clientInfo['phone'] ?? '');
-        $order->setClientAddress($clientInfo['address'] ?? '');
+        // Set client information - ALWAYS from authenticated user profile
+        // These fields are "snapshots" at order creation time
+        $order->setClientName($user->getFirstName() . ' ' . $user->getLastName());
+        $order->setClientEmail($user->getEmail());
+        $order->setClientPhone($customization['client_info']['phone'] ?? '');
+        $order->setClientAddress($customization['client_info']['address'] ?? '');
         $order->setClientNotes($customization['customization_notes']);
 
         // Create order item
@@ -109,10 +109,13 @@ class QuoteController extends AbstractController
         $orderItem->setCustomizationNotes($customization['customization_notes']);
 
         // Add option details to selected options for order tracking
+        // Optimized: fetch all options in one query instead of N+1
         $selectedOptionsData = [];
-        foreach ($customization['selected_options'] as $optionCode) {
-            $option = $this->entityManager->getRepository(\App\Entity\ProductOption::class)->findOneBy(['code' => $optionCode]);
-            if ($option) {
+        if (!empty($customization['selected_options'])) {
+            $options = $this->entityManager->getRepository(\App\Entity\ProductOption::class)
+                ->findBy(['code' => $customization['selected_options']]);
+            
+            foreach ($options as $option) {
                 $selectedOptionsData[] = [
                     'id' => $option->getId(),
                     'code' => $option->getCode(),
@@ -257,14 +260,21 @@ class QuoteController extends AbstractController
 
     /**
      * Check order status
+     * SECURITY: Protected endpoint - user must be authenticated and own the order
      */
     #[Route('/{order_number}/status', name: 'app_quote_status', methods: ['GET'])]
+    #[IsGranted('ROLE_USER')]
     public function getOrderStatus(Request $request, string $orderNumber): JsonResponse
     {
         $order = $this->entityManager->getRepository(Order::class)->findOneBy(['orderNumber' => $orderNumber]);
         
         if (!$order) {
             return new JsonResponse(['error' => $this->translator->trans('controller.order.not_found')], 404);
+        }
+
+        // SECURITY CHECK: Verify order ownership
+        if ($order->getUser() !== $this->getUser()) {
+            return new JsonResponse(['error' => 'Access denied'], 403);
         }
 
         return new JsonResponse([
