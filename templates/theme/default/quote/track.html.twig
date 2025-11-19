@@ -16,7 +16,12 @@
               <div class="progress-tracker">
                 <div class="row text-center">
                   {% set statusOrder = ['pending', 'approved', 'paid', 'processing', 'shipped', 'delivered'] %}
-                  {% set currentIndex = statusOrder|keys|filter(k => statusOrder[k] == order.status)|first|default(0) %}
+                  {% set currentIndex = 0 %}
+                  {% for status in statusOrder %}
+                    {% if status == order.status %}
+                      {% set currentIndex = loop.index0 %}
+                    {% endif %}
+                  {% endfor %}
                   
                   {% for status in statusOrder %}
                     {% set statusIndex = loop.index0 %}
