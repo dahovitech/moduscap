@@ -394,6 +394,7 @@ products.show.phone: 'Téléphone'
 products.show.address: 'Adresse'
 products.show.notes: 'Remarques / Demandes spéciales'
 products.show.configure_quote: 'Créer mon devis personnalisé'
+products.show.login_required: 'Vous devez être connecté pour créer un devis.'
 
 # Controller Messages
 controller.quote.no_customization_found: 'Aucune personnalisation trouvée. Veuillez sélectionner un produit.'

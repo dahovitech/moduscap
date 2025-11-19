@@ -394,6 +394,7 @@ products.show.phone: 'Phone'
 products.show.address: 'Address'
 products.show.notes: 'Remarks / Special requests'
 products.show.configure_quote: 'Create my custom quote'
+products.show.login_required: 'You must be logged in to create a quote.'
 
 # Controller Messages
 controller.quote.no_customization_found: 'No customization found. Please select a product.'
