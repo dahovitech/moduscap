@@ -6,6 +6,7 @@ use App\Entity\Order;
 use App\Entity\Product;
 use App\Entity\Setting;
 use App\Entity\OrderItem;
+use App\Service\EmailService;
 use App\Service\PriceCalculatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,8 @@ class QuoteController extends AbstractController
         private EntityManagerInterface $entityManager,
         private PriceCalculatorService $priceCalculator,
         private ValidatorInterface $validator,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
+        private EmailService $emailService
     ) {}
 
     /**
@@ -217,6 +219,14 @@ class QuoteController extends AbstractController
             // Update order with payment proof filename
             $order->setPaymentProof($filename);
             $this->entityManager->flush();
+            
+            // Send notification to admin
+            try {
+                $this->emailService->sendPaymentProofUploadNotification($order);
+            } catch (\Exception $e) {
+                // Log error but don't interrupt the process
+                error_log('Error sending payment proof notification: ' . $e->getMessage());
+            }
             
             $this->addFlash('success', $this->translator->trans('controller.quote.payment_proof_uploaded_successfully'));
             

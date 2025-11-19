@@ -324,4 +324,44 @@ class EmailService
             return false;
         }
     }
+
+    /**
+     * Send payment proof upload notification to admin
+     */
+    public function sendPaymentProofUploadNotification(Order $order): bool
+    {
+        try {
+            $setting = $this->entityManager->getRepository(Setting::class)->findOneBy([]);
+            
+            if (!$setting) {
+                return false;
+            }
+
+            $receiverEmail = $setting->getEmailReceived() ?: $setting->getEmail() ?: 'contact@moduscap.com';
+
+            $emailData = [
+                'order' => $order,
+                'client_name' => $order->getClientName(),
+                'order_number' => $order->getOrderNumber(),
+                'total' => $order->getTotal(),
+                'client_email' => $order->getClientEmail(),
+                'client_phone' => $order->getClientPhone(),
+                'site_name' => $setting->getSiteName() ?: 'MODUSCAP',
+                'site_email' => $setting->getEmailSender() ?: 'noreply@moduscap.com'
+            ];
+
+            $email = (new Email())
+                ->from(new Address($setting->getEmailSender() ?: 'noreply@moduscap.com', $setting->getSiteName() ?: 'MODUSCAP'))
+                ->to($receiverEmail)
+                ->subject('Nouveau justificatif de paiement - Commande ' . $order->getOrderNumber())
+                ->html($this->twig->render('emails/payment_proof_uploaded.html.twig', $emailData));
+
+            $this->mailer->send($email);
+            
+            return true;
+        } catch (\Exception $e) {
+            error_log('Error sending payment proof notification: ' . $e->getMessage());
+            return false;
+        }
+    }
 }
