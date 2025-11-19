@@ -597,3 +597,113 @@ admin.errors:
     csrf_token_invalid: "Token de sécurité invalide !"
     reminder_sent: "Rappel envoyé avec succès"
     reminder_send_failed: "Erreur lors de l'envoi du rappel"
+
+# Orders management
+order:
+  title: "Commande"
+  details_title: "Détails de la commande %order_number%"
+  breadcrumb:
+    dashboard: "Tableau de bord"
+    orders: "Commandes"
+  back_to_list: "Retour à la liste"
+  
+  # Status labels
+  status:
+    label: "Statut"
+    pending: "En attente"
+    approved: "Approuvée"
+    rejected: "Rejetée"
+    paid: "Payée"
+    processing: "En production"
+    shipped: "Expédiée"
+    delivered: "Livrée"
+    cancelled: "Annulée"
+  
+  # Information sections
+  info:
+    status_and_info: "Statut et informations"
+    order_number: "Numéro de commande"
+    created_at: "Date de création"
+    updated_at: "Dernière mise à jour"
+    approved_at: "Approuvée le"
+    approved_by: "Approuvée par"
+    paid_at: "Payée le"
+    rejection_reason: "Motif de rejet"
+    client_notes: "Notes du client"
+  
+  # Client information
+  client:
+    title: "Informations client"
+    name: "Nom"
+    email: "Email"
+    phone: "Téléphone"
+    address: "Adresse"
+  
+  # Order items
+  items:
+    title: "Articles commandés"
+    product: "Produit"
+    quantity: "Quantité"
+    unit_price: "Prix unitaire"
+    options: "Options"
+    total: "Total"
+    none: "Aucune"
+    subtotal: "Sous-total"
+  
+  # Payment
+  payment:
+    title: "Justificatif de paiement"
+    proof_uploaded: "Un justificatif de paiement a été téléchargé."
+    download_proof: "Télécharger le justificatif"
+    mark_as_paid: "Marquer comme payée"
+    confirm_paid: "Confirmer que le paiement a été reçu et validé ?"
+    waiting_title: "En attente de paiement"
+    waiting_message: "Le client n'a pas encore téléchargé de justificatif de paiement."
+  
+  # Actions
+  actions:
+    title: "Actions rapides"
+    approve: "Approuver la commande"
+    confirm_approve: "Approuver cette commande ?"
+    reject: "Rejeter la commande"
+    reopen: "Réouvrir la commande"
+    send_reminder: "Envoyer rappel de paiement"
+    confirm_reminder: "Envoyer un rappel de paiement à %email% ?"
+    rejected_warning: "Cette commande a été rejetée."
+  
+  # Status change
+  status_change:
+    title: "Changer le statut"
+    new_status: "Nouveau statut"
+    select: "-- Sélectionner --"
+    update: "Mettre à jour le statut"
+    updating: "Mise à jour..."
+    confirm: "Êtes-vous sûr de vouloir changer le statut de cette commande ?"
+    success: "Statut mis à jour avec succès"
+    error: "Une erreur est survenue"
+    select_status: "Veuillez sélectionner un statut"
+    connection_error: "Erreur de connexion au serveur"
+  
+  # Final status
+  final_status:
+    title: "Statut final"
+    message: "Cette commande est dans un état final. Aucune transition n'est possible."
+  
+  # Reject modal
+  reject_modal:
+    title: "Rejeter la commande"
+    warning: "Attention : Cette action enverra un email au client."
+    reason_label: "Motif du rejet"
+    reason_placeholder: "Expliquez au client pourquoi sa commande est rejetée..."
+    cancel: "Annuler"
+    confirm: "Rejeter la commande"
+  
+  # Reopen modal
+  reopen_modal:
+    title: "Réouvrir la commande"
+    info: "La commande sera remise en statut \"En attente\"."
+    reason_label: "Motif de la réouverture"
+    reason_placeholder: "Pourquoi réouvrez-vous cette commande ?"
+    reason_help: "Ce motif sera ajouté aux notes internes de la commande."
+    cancel: "Annuler"
+    confirm: "Réouvrir la commande"
