@@ -24,6 +24,7 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction('get_languages', [AppRuntime::class, 'onLanguages']),
+            new TwigFunction('get_option_groups', [AppRuntime::class, 'onOptionGroups']),
             new TwigFunction('setting', [AppRuntime::class, 'onSetting']),
         ];
     }

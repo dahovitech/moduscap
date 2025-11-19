@@ -4,6 +4,7 @@ namespace App\Twig\Runtime;
 
 use App\Entity\Language;
 use App\Entity\Setting;
+use App\Entity\ProductOptionGroup;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -19,6 +20,11 @@ class AppRuntime implements RuntimeExtensionInterface
         return $this->entityManager->getRepository(Language::class)->findActiveLanguages();
     }
 
+    public function onOptionGroups()
+    {
+        return $this->entityManager->getRepository(ProductOptionGroup::class)
+            ->findBy(['isActive' => true], ['sortOrder' => 'ASC']);
+    }
 
     public function onSetting($property, $isBoolean = false)
     {

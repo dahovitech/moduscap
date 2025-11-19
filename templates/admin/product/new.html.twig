@@ -318,13 +318,115 @@
                     </h6>
                 </div>
                 <div class="card-body">
-                    {{ form_row(form.availableOptions, {
-                        'attr': {'class': 'form-select', 'size': '8'},
-                        'label_attr': {'class': 'form-label fw-bold'}
-                    }) }}
-                    <div class="form-text">{{ 'admin.product.select_available_options_info'|trans({}, 'admin') }}</div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        {{ 'admin.product.available_options_description'|trans({}, 'admin') }}
+                    </div>
+                    
+                    {% set optionGroups = get_option_groups() %}
+                    
+                    {% if optionGroups|length > 0 %}
+                        <div class="accordion" id="optionGroupsAccordion">
+                            {% for group in optionGroups %}
+                                {% set groupOptions = group.options|filter(o => o.isActive) %}
+                                {% if groupOptions|length > 0 %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="heading-group-{{ group.id }}">
+                                            <button class="accordion-button {{ loop.first ? '' : 'collapsed' }}" type="button" 
+                                                    data-bs-toggle="collapse" data-bs-target="#collapse-group-{{ group.id }}" 
+                                                    aria-expanded="{{ loop.first ? 'true' : 'false' }}">
+                                                <strong>{{ group.getName(app.request.locale) }}</strong>
+                                                <span class="badge bg-primary ms-2">{{ groupOptions|length }} {{ 'admin.product.options_count'|trans({}, 'admin') }}</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse-group-{{ group.id }}" 
+                                             class="accordion-collapse collapse {{ loop.first ? 'show' : '' }}" 
+                                             aria-labelledby="heading-group-{{ group.id }}">
+                                            <div class="accordion-body">
+                                                {% if group.getDescription(app.request.locale) %}
+                                                    <p class="text-muted small mb-3">{{ group.getDescription(app.request.locale) }}</p>
+                                                {% endif %}
+                                                <div class="row">
+                                                    {% for option in groupOptions %}
+                                                        <div class="col-md-6 mb-2">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" 
+                                                                       name="product[availableOptions][]" 
+                                                                       value="{{ option.id }}" 
+                                                                       id="option_{{ option.id }}">
+                                                                <label class="form-check-label d-flex justify-content-between align-items-center w-100" 
+                                                                       for="option_{{ option.id }}">
+                                                                    <span>
+                                                                        {{ option.getName(app.request.locale) }}
+                                                                        {% if option.getDescription(app.request.locale) %}
+                                                                            <i class="fas fa-info-circle text-muted" 
+                                                                               data-bs-toggle="tooltip" 
+                                                                               title="{{ option.getDescription(app.request.locale) }}"></i>
+                                                                        {% endif %}
+                                                                    </span>
+                                                                    <span class="badge bg-success">+{{ option.price|number_format(0, ',', ' ') }}€</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            {{ 'admin.product.no_options_available'|trans({}, 'admin') }}
+                            <a href="{{ path('admin_option_index') }}" class="alert-link">
+                                {{ 'admin.product.create_options_first'|trans({}, 'admin') }}
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                    {# Hidden field to preserve form structure #}
+                    <div style="display: none;">
+                        {{ form_widget(form.availableOptions, {'attr': {'id': 'hidden-available-options'}}) }}
+                    </div>
                 </div>
             </div>
+            
+            <script>
+                // Sync checkboxes with hidden select field
+                document.addEventListener('DOMContentLoaded', function() {
+                    const checkboxes = document.querySelectorAll('input[name="product[availableOptions][]"]');
+                    const hiddenSelect = document.getElementById('hidden-available-options');
+                    
+                    if (hiddenSelect) {
+                        checkboxes.forEach(checkbox => {
+                            checkbox.addEventListener('change', function() {
+                                updateHiddenSelect();
+                            });
+                        });
+                        
+                        function updateHiddenSelect() {
+                            // Deselect all options first
+                            Array.from(hiddenSelect.options).forEach(opt => opt.selected = false);
+                            
+                            // Select checked options
+                            checkboxes.forEach(checkbox => {
+                                if (checkbox.checked) {
+                                    const option = Array.from(hiddenSelect.options).find(opt => opt.value == checkbox.value);
+                                    if (option) option.selected = true;
+                                }
+                            });
+                        }
+                    }
+                    
+                    // Initialize tooltips
+                    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                });
+            </script>
 
             <!-- Images du produit -->
             <div class="card mb-4">
