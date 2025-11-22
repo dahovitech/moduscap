@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Psr\Log\LoggerInterface;
 
 #[Route('/admin/products')]
 #[IsGranted('ROLE_ADMIN')]
@@ -24,7 +25,8 @@ class ProductController extends AbstractController
         private EntityManagerInterface $entityManager,
         private LanguageRepository $languageRepository,
         private MediaRepository $mediaRepository,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -73,41 +75,85 @@ class ProductController extends AbstractController
         $form = $this->createForm(\App\Form\ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Traiter les images
-            $this->handleProductMedia($request, $product);
-            
-            // Traiter les traductions manuellement depuis les données du formulaire
-            $translationsData = $request->request->get('product', [])['translations'] ?? [];
-            
-            if ($translationsData) {
-                foreach ($translationsData as $translationData) {
-                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
-                    
-                    if ($language) {
-                        $translation = new ProductTranslation();
-                        $translation->setProduct($product);
-                        $translation->setLanguage($language);
-                        $translation->setName($translationData['name'] ?? '');
-                        $translation->setDescription($translationData['description'] ?? '');
-                        $translation->setConcept($translationData['concept'] ?? '');
-                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
-                        $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
-                        $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
-                        $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
-                        $translation->setSpecifications($translationData['specifications'] ?? '');
-                        $translation->setAdvantages($translationData['advantages'] ?? '');
-                        
-                        $product->addTranslation($translation);
-                    }
-                }
-            }
-            
-            $this->entityManager->persist($product);
-            $this->entityManager->flush();
+        if ($form->isSubmitted()) {
+            $this->logger->info('Formulaire produit soumis', [
+                'code' => $request->request->get('product')['code'] ?? 'N/A',
+                'category' => $request->request->get('product')['category'] ?? 'N/A',
+            ]);
 
-            $this->addFlash('success', $this->translator->trans('admin.errors.product.created_successfully', [], 'admin'));
-            return $this->redirectToRoute('admin_product_index');
+            if ($form->isValid()) {
+                try {
+                    // Vérifier que la catégorie est bien assignée
+                    if (!$product->getCategory()) {
+                        $this->addFlash('error', 'La catégorie du produit est obligatoire.');
+                        $this->logger->error('Catégorie produit manquante');
+                        
+                        return $this->render('admin/product/new.html.twig', [
+                            'product' => $product,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+
+                    // Traiter les images
+                    $this->handleProductMedia($request, $product);
+                    
+                    // Traiter les traductions manuellement depuis les données du formulaire
+                    $translationsData = $request->request->get('product', [])['translations'] ?? [];
+                    
+                    if ($translationsData) {
+                        $translationCount = 0;
+                        foreach ($translationsData as $translationData) {
+                            $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                            
+                            if ($language) {
+                                $translation = new ProductTranslation();
+                                $translation->setProduct($product);
+                                $translation->setLanguage($language);
+                                $translation->setName($translationData['name'] ?? '');
+                                $translation->setDescription($translationData['description'] ?? '');
+                                $translation->setConcept($translationData['concept'] ?? '');
+                                $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                                $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
+                                $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
+                                $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
+                                $translation->setSpecifications($translationData['specifications'] ?? '');
+                                $translation->setAdvantages($translationData['advantages'] ?? '');
+                                
+                                $product->addTranslation($translation);
+                                $translationCount++;
+                            }
+                        }
+                        $this->logger->info("Traductions ajoutées: $translationCount");
+                    } else {
+                        $this->logger->warning('Aucune traduction soumise');
+                    }
+                    
+                    // Persister le produit
+                    $this->entityManager->persist($product);
+                    $this->entityManager->flush();
+
+                    $this->logger->info('Produit créé avec succès', ['id' => $product->getId()]);
+                    $this->addFlash('success', $this->translator->trans('admin.errors.product.created_successfully', [], 'admin'));
+                    return $this->redirectToRoute('admin_product_index');
+                    
+                } catch (\Exception $e) {
+                    $this->logger->error('Erreur lors de la création du produit', [
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                    
+                    $this->addFlash('error', 'Erreur lors de la sauvegarde du produit : ' . $e->getMessage());
+                }
+            } else {
+                // Formulaire invalide - logger les erreurs
+                $errors = [];
+                foreach ($form->getErrors(true) as $error) {
+                    $errors[] = $error->getMessage();
+                }
+                
+                $this->logger->error('Formulaire produit invalide', ['errors' => $errors]);
+                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez vérifier tous les champs obligatoires.');
+            }
         }
 
         return $this->render('admin/product/new.html.twig', [
@@ -133,47 +179,94 @@ class ProductController extends AbstractController
         $form = $this->createForm(\App\Form\ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Traiter les images
-            $this->handleProductMedia($request, $product);
-            
-            // Traiter les traductions manuellement depuis les données du formulaire
-            $translationsData = $request->request->get('product', [])['translations'] ?? [];
-            
-            if ($translationsData) {
-                // Supprimer toutes les traductions existantes
-                foreach ($product->getTranslations() as $translation) {
-                    $product->removeTranslation($translation);
-                    $this->entityManager->remove($translation);
+        if ($form->isSubmitted()) {
+            $this->logger->info('Formulaire produit édition soumis', [
+                'id' => $product->getId(),
+                'code' => $request->request->get('product')['code'] ?? 'N/A',
+            ]);
+
+            if ($form->isValid()) {
+                try {
+                    // Vérifier que la catégorie est bien assignée
+                    if (!$product->getCategory()) {
+                        $this->addFlash('error', 'La catégorie du produit est obligatoire.');
+                        $this->logger->error('Catégorie produit manquante');
+                        
+                        return $this->render('admin/product/edit.html.twig', [
+                            'product' => $product,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+
+                    // Traiter les images
+                    $this->handleProductMedia($request, $product);
+                    
+                    // Traiter les traductions manuellement depuis les données du formulaire
+                    $translationsData = $request->request->get('product', [])['translations'] ?? [];
+                    
+                    if ($translationsData) {
+                        // Supprimer toutes les traductions existantes
+                        foreach ($product->getTranslations() as $translation) {
+                            $product->removeTranslation($translation);
+                            $this->entityManager->remove($translation);
+                        }
+                        
+                        // Ajouter les nouvelles traductions
+                        $translationCount = 0;
+                        foreach ($translationsData as $translationData) {
+                            $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                            
+                            if ($language) {
+                                $translation = new ProductTranslation();
+                                $translation->setProduct($product);
+                                $translation->setLanguage($language);
+                                $translation->setName($translationData['name'] ?? '');
+                                $translation->setDescription($translationData['description'] ?? '');
+                                $translation->setConcept($translationData['concept'] ?? '');
+                                $translation->setShortDescription($translationData['shortDescription'] ?? '');
+                                $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
+                                $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
+                                $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
+                                $translation->setSpecifications($translationData['specifications'] ?? '');
+                                $translation->setAdvantages($translationData['advantages'] ?? '');
+                                
+                                $product->addTranslation($translation);
+                                $translationCount++;
+                            }
+                        }
+                        $this->logger->info("Traductions mises à jour: $translationCount");
+                    } else {
+                        $this->logger->warning('Aucune traduction soumise lors de la modification');
+                    }
+                    
+                    $this->entityManager->flush();
+
+                    $this->logger->info('Produit mis à jour avec succès', ['id' => $product->getId()]);
+                    $this->addFlash('success', $this->translator->trans('admin.errors.product.updated_successfully', [], 'admin'));
+                    return $this->redirectToRoute('admin_product_index');
+                    
+                } catch (\Exception $e) {
+                    $this->logger->error('Erreur lors de la mise à jour du produit', [
+                        'id' => $product->getId(),
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+                    
+                    $this->addFlash('error', 'Erreur lors de la sauvegarde du produit : ' . $e->getMessage());
+                }
+            } else {
+                // Formulaire invalide - logger les erreurs
+                $errors = [];
+                foreach ($form->getErrors(true) as $error) {
+                    $errors[] = $error->getMessage();
                 }
                 
-                // Ajouter les nouvelles traductions
-                foreach ($translationsData as $translationData) {
-                    $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
-                    
-                    if ($language) {
-                        $translation = new ProductTranslation();
-                        $translation->setProduct($product);
-                        $translation->setLanguage($language);
-                        $translation->setName($translationData['name'] ?? '');
-                        $translation->setDescription($translationData['description'] ?? '');
-                        $translation->setConcept($translationData['concept'] ?? '');
-                        $translation->setShortDescription($translationData['shortDescription'] ?? '');
-                        $translation->setMaterialsDetail($translationData['materialsDetail'] ?? '');
-                        $translation->setEquipmentDetail($translationData['equipmentDetail'] ?? '');
-                        $translation->setPerformanceDetails($translationData['performanceDetails'] ?? '');
-                        $translation->setSpecifications($translationData['specifications'] ?? '');
-                        $translation->setAdvantages($translationData['advantages'] ?? '');
-                        
-                        $product->addTranslation($translation);
-                    }
-                }
+                $this->logger->error('Formulaire produit édition invalide', [
+                    'id' => $product->getId(),
+                    'errors' => $errors
+                ]);
+                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez vérifier tous les champs obligatoires.');
             }
-            
-            $this->entityManager->flush();
-
-            $this->addFlash('success', $this->translator->trans('admin.errors.product.updated_successfully', [], 'admin'));
-            return $this->redirectToRoute('admin_product_index');
         }
 
         return $this->render('admin/product/edit.html.twig', [
