@@ -16,6 +16,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Psr\Log\LoggerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\ORMException;
 
 #[Route('/admin/products')]
 #[IsGranted('ROLE_ADMIN')]
@@ -76,34 +78,29 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->logger->info('Formulaire produit soumis', [
-                'code' => $request->request->get('product')['code'] ?? 'N/A',
-                'category' => $request->request->get('product')['category'] ?? 'N/A',
+            $productData = $request->request->all('product');
+            $this->logger->info('Product form submitted', [
+                'code' => $productData['code'] ?? 'N/A',
+                'category' => $productData['category'] ?? 'N/A',
             ]);
 
             if ($form->isValid()) {
                 try {
-                    // Vérifier que la catégorie est bien assignée
-                    if (!$product->getCategory()) {
-                        $this->addFlash('error', 'La catégorie du produit est obligatoire.');
-                        $this->logger->error('Catégorie produit manquante');
-                        
-                        return $this->render('admin/product/new.html.twig', [
-                            'product' => $product,
-                            'form' => $form->createView(),
-                        ]);
-                    }
-
                     // Traiter les images
                     $this->handleProductMedia($request, $product);
                     
                     // Traiter les traductions manuellement depuis les données du formulaire
-                    $translationsData = $request->request->get('product', [])['translations'] ?? [];
+                    $translationsData = $productData['translations'] ?? [];
                     
                     if ($translationsData) {
                         $translationCount = 0;
                         foreach ($translationsData as $translationData) {
-                            $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                            $languageCode = $translationData['language'] ?? '';
+                            if (!$languageCode) {
+                                continue;
+                            }
+                            
+                            $language = $this->languageRepository->findOneBy(['code' => $languageCode]);
                             
                             if ($language) {
                                 $translation = new ProductTranslation();
@@ -123,26 +120,35 @@ class ProductController extends AbstractController
                                 $translationCount++;
                             }
                         }
-                        $this->logger->info("Traductions ajoutées: $translationCount");
+                        $this->logger->info('Translations added', ['count' => $translationCount]);
                     } else {
-                        $this->logger->warning('Aucune traduction soumise');
+                        $this->logger->warning('No translations submitted');
                     }
                     
                     // Persister le produit
                     $this->entityManager->persist($product);
                     $this->entityManager->flush();
 
-                    $this->logger->info('Produit créé avec succès', ['id' => $product->getId()]);
+                    $this->logger->info('Product created successfully', ['id' => $product->getId()]);
                     $this->addFlash('success', $this->translator->trans('admin.errors.product.created_successfully', [], 'admin'));
                     return $this->redirectToRoute('admin_product_index');
                     
-                } catch (\Exception $e) {
-                    $this->logger->error('Erreur lors de la création du produit', [
-                        'message' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
+                } catch (UniqueConstraintViolationException $e) {
+                    $this->logger->error('Product code already exists', [
+                        'code' => $product->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
                     ]);
                     
-                    $this->addFlash('error', 'Erreur lors de la sauvegarde du produit : ' . $e->getMessage());
+                    $this->addFlash('error', $this->translator->trans('admin.errors.product.code_already_exists', [], 'admin'));
+                } catch (ORMException | \Exception $e) {
+                    $this->logger->error('Error creating product', [
+                        'message' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
+                    ]);
+                    
+                    $this->addFlash('error', $this->translator->trans('admin.errors.product.save_error', [], 'admin'));
                 }
             } else {
                 // Formulaire invalide - logger les erreurs
@@ -151,8 +157,8 @@ class ProductController extends AbstractController
                     $errors[] = $error->getMessage();
                 }
                 
-                $this->logger->error('Formulaire produit invalide', ['errors' => $errors]);
-                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez vérifier tous les champs obligatoires.');
+                $this->logger->warning('Product form validation failed', ['errors' => $errors]);
+                $this->addFlash('error', $this->translator->trans('admin.errors.product.validation_failed', [], 'admin'));
             }
         }
 
@@ -180,29 +186,19 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $this->logger->info('Formulaire produit édition soumis', [
+            $productData = $request->request->all('product');
+            $this->logger->info('Product edit form submitted', [
                 'id' => $product->getId(),
-                'code' => $request->request->get('product')['code'] ?? 'N/A',
+                'code' => $productData['code'] ?? 'N/A',
             ]);
 
             if ($form->isValid()) {
                 try {
-                    // Vérifier que la catégorie est bien assignée
-                    if (!$product->getCategory()) {
-                        $this->addFlash('error', 'La catégorie du produit est obligatoire.');
-                        $this->logger->error('Catégorie produit manquante');
-                        
-                        return $this->render('admin/product/edit.html.twig', [
-                            'product' => $product,
-                            'form' => $form->createView(),
-                        ]);
-                    }
-
                     // Traiter les images
                     $this->handleProductMedia($request, $product);
                     
                     // Traiter les traductions manuellement depuis les données du formulaire
-                    $translationsData = $request->request->get('product', [])['translations'] ?? [];
+                    $translationsData = $productData['translations'] ?? [];
                     
                     if ($translationsData) {
                         // Supprimer toutes les traductions existantes
@@ -214,7 +210,12 @@ class ProductController extends AbstractController
                         // Ajouter les nouvelles traductions
                         $translationCount = 0;
                         foreach ($translationsData as $translationData) {
-                            $language = $this->languageRepository->findOneBy(['code' => $translationData['language'] ?? '']);
+                            $languageCode = $translationData['language'] ?? '';
+                            if (!$languageCode) {
+                                continue;
+                            }
+                            
+                            $language = $this->languageRepository->findOneBy(['code' => $languageCode]);
                             
                             if ($language) {
                                 $translation = new ProductTranslation();
@@ -234,25 +235,35 @@ class ProductController extends AbstractController
                                 $translationCount++;
                             }
                         }
-                        $this->logger->info("Traductions mises à jour: $translationCount");
+                        $this->logger->info('Translations updated', ['count' => $translationCount]);
                     } else {
-                        $this->logger->warning('Aucune traduction soumise lors de la modification');
+                        $this->logger->warning('No translations submitted during update');
                     }
                     
                     $this->entityManager->flush();
 
-                    $this->logger->info('Produit mis à jour avec succès', ['id' => $product->getId()]);
+                    $this->logger->info('Product updated successfully', ['id' => $product->getId()]);
                     $this->addFlash('success', $this->translator->trans('admin.errors.product.updated_successfully', [], 'admin'));
                     return $this->redirectToRoute('admin_product_index');
                     
-                } catch (\Exception $e) {
-                    $this->logger->error('Erreur lors de la mise à jour du produit', [
+                } catch (UniqueConstraintViolationException $e) {
+                    $this->logger->error('Product code already exists', [
                         'id' => $product->getId(),
-                        'message' => $e->getMessage(),
-                        'trace' => $e->getTraceAsString()
+                        'code' => $product->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
                     ]);
                     
-                    $this->addFlash('error', 'Erreur lors de la sauvegarde du produit : ' . $e->getMessage());
+                    $this->addFlash('error', $this->translator->trans('admin.errors.product.code_already_exists', [], 'admin'));
+                } catch (ORMException | \Exception $e) {
+                    $this->logger->error('Error updating product', [
+                        'id' => $product->getId(),
+                        'message' => $e->getMessage(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine()
+                    ]);
+                    
+                    $this->addFlash('error', $this->translator->trans('admin.errors.product.save_error', [], 'admin'));
                 }
             } else {
                 // Formulaire invalide - logger les erreurs
@@ -261,11 +272,11 @@ class ProductController extends AbstractController
                     $errors[] = $error->getMessage();
                 }
                 
-                $this->logger->error('Formulaire produit édition invalide', [
+                $this->logger->warning('Product edit form validation failed', [
                     'id' => $product->getId(),
                     'errors' => $errors
                 ]);
-                $this->addFlash('error', 'Le formulaire contient des erreurs. Veuillez vérifier tous les champs obligatoires.');
+                $this->addFlash('error', $this->translator->trans('admin.errors.product.validation_failed', [], 'admin'));
             }
         }
 

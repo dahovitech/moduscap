@@ -22,7 +22,9 @@
     {# Affichage des erreurs de formulaire #}
     {% if form.vars.submitted and not form.vars.valid %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <h5 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Erreurs de validation</h5>
+            <h5 class="alert-heading">
+                <i class="fas fa-exclamation-triangle me-2"></i>{{ 'admin.errors.product.validation_failed'|trans({}, 'admin') }}
+            </h5>
             <hr>
             <ul class="mb-0">
                 {% for error in form.vars.errors %}

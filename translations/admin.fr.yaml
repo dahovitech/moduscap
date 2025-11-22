@@ -720,3 +720,21 @@ order:
     reason_help: "Ce motif sera ajouté aux notes internes de la commande."
     cancel: "Annuler"
     confirm: "Réouvrir la commande"
+
+
+# Messages d'erreur produit
+admin.errors.product.created_successfully: "Produit créé avec succès"
+admin.errors.product.updated_successfully: "Produit mis à jour avec succès"
+admin.errors.product.deleted_successfully: "Produit supprimé avec succès"
+admin.errors.product.code_already_exists: "Ce code produit existe déjà. Veuillez en choisir un autre."
+admin.errors.product.save_error: "Erreur lors de la sauvegarde du produit. Veuillez réessayer."
+admin.errors.product.validation_failed: "Le formulaire contient des erreurs. Veuillez vérifier tous les champs obligatoires."
+admin.errors.product.not_found: "Produit introuvable"
+admin.errors.product.csrf_token_invalid: "Token CSRF invalide"
+admin.errors.product.data_invalid: "Données invalides"
+admin.errors.product.field_invalid: "Champ invalide"
+admin.errors.product.duplicated_successfully: "Produit dupliqué avec succès"
+admin.errors.product.image_added_successfully: "Image ajoutée avec succès"
+admin.errors.product.image_deleted_successfully: "Image supprimée avec succès"
+admin.errors.product.image_updated_successfully: "Image mise à jour avec succès"
+admin.errors.product.action_invalid: "Action invalide"
